@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\assets\controls.res.cpp">
+      <Filter>source\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="source\assets\graphics.res.cpp">
+      <Filter>source\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="source\assets\xaml.res.cpp">
+      <Filter>source\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="source\states\app_state.cpp">
+      <Filter>source\states</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\globals.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="source\states\app_state.h">
+      <Filter>source\states</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\globals.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResJson Include="assets\controls.res.json">
+      <Filter>assets</Filter>
+    </ResJson>
+    <ResJson Include="assets\graphics.res.json">
+      <Filter>assets</Filter>
+    </ResJson>
+    <ResJson Include="assets\xaml.res.json">
+      <Filter>assets</Filter>
+    </ResJson>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="assets">
+      <UniqueIdentifier>{95c949a2-413e-4ad4-8200-77d656de6b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{3865c5fa-f37c-4762-a844-5a4c43776d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\assets">
+      <UniqueIdentifier>{e11d4ec2-38c4-4062-9160-8ad10da13950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\states">
+      <UniqueIdentifier>{4a1e5533-d803-41f1-85c6-baaa5e0f96cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\core">
+      <UniqueIdentifier>{f220505d-ef78-4b7e-85c3-c1595f042aa9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="source\resource.rc">
+      <Filter>source</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

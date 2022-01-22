@@ -1,0 +1,6 @@
+MainPackage=C:\dev\fox-shared\out\release_x64_uwp\fox_uwp\bin\fox_uwp\fox_uwp_1.0.5.0_x64.msix
+SymbolPackage=C:\dev\fox-shared\out\release_x64_uwp\fox_uwp\obj\Symbols\fox_uwp_1.0.5.0_x64.appxsym
+ResourcePack=C:\dev\fox-shared\out\release_x64_uwp\fox_uwp\bin\fox_uwp\fox_uwp_1.0.5.0_scale-100.msix
+ResourcePack=C:\dev\fox-shared\out\release_x64_uwp\fox_uwp\bin\fox_uwp\fox_uwp_1.0.5.0_scale-125.msix
+ResourcePack=C:\dev\fox-shared\out\release_x64_uwp\fox_uwp\bin\fox_uwp\fox_uwp_1.0.5.0_scale-150.msix
+ResourcePack=C:\dev\fox-shared\out\release_x64_uwp\fox_uwp\bin\fox_uwp\fox_uwp_1.0.5.0_scale-400.msix
