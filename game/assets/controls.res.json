@@ -1,0 +1,66 @@
+{
+  "res:namespace": "assets::controls",
+
+  "game_controls":
+  {
+    "res:type": "input",
+    "events":
+    {
+      "up": [ "up", "gamepad_left_up", "gamepad_dpad_up" ],
+      "down": [ "down", "gamepad_left_down", "gamepad_dpad_down" ],
+      "left": [ "left", "gamepad_left_left", "gamepad_dpad_left" ],
+      "right": [ "right", "gamepad_left_right", "gamepad_dpad_right" ],
+      "action": [ "return", "space", "gamepad_a" ],
+      "cancel": "escape",
+      "pause": "p",
+      "start": "gamepad_start"
+    },
+    "values":
+    {
+      "up": [ "up", "gamepad_left_up", "gamepad_dpad_up" ],
+      "down": [ "down", "gamepad_left_down", "gamepad_dpad_down" ],
+      "left": [ "left", "gamepad_left_left", "gamepad_dpad_left" ],
+      "right": [ "right", "gamepad_left_right", "gamepad_dpad_right" ],
+      "action": [ "return", "space", "gamepad_a" ]
+    }
+  },
+
+  "player_controls":
+  {
+    "res:type": "input",
+    "events":
+    {
+      "up": [ "w", "gamepad_left_up", "gamepad_dpad_up" ],
+      "down": [ "s", "gamepad_left_down", "gamepad_dpad_down" ],
+      "left": [ "a", "gamepad_left_left", "gamepad_dpad_left" ],
+      "right": [ "d", "gamepad_left_right", "gamepad_dpad_right" ],
+      "shoot_up": [ "up", "i", "gamepad_right_up" ],
+      "shoot_down": [ "down", "k", "gamepad_right_down" ],
+      "shoot_left": [ "left", "j", "gamepad_right_left" ],
+      "shoot_right": [ "right", "l", "gamepad_right_right" ]
+    },
+    "values":
+    {
+      "up": [ "w", "gamepad_left_up", "gamepad_dpad_up" ],
+      "down": [ "s", "gamepad_left_down", "gamepad_dpad_down" ],
+      "left": [ "a", "gamepad_left_left", "gamepad_dpad_left" ],
+      "right": [ "d", "gamepad_left_right", "gamepad_dpad_right" ],
+      "shoot_up": [ "up", "i", "gamepad_right_up" ],
+      "shoot_down": [ "down", "k", "gamepad_right_down" ],
+      "shoot_left": [ "left", "j", "gamepad_right_left" ],
+      "shoot_right": [ "right", "l", "gamepad_right_right" ]
+    }
+  },
+
+  "game.debug_input":
+  {
+    "res:type": "input",
+    "events":
+    {
+      "debug_render_toggle": "minus",
+      "invincible_toggle": "0",
+      "complete_level": "9",
+      "ff.game.show_custom_debug": "mouse_right"
+    }
+  }
+}

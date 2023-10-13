@@ -1,0 +1,18 @@
+{
+  "res:namespace": "assets::graphics",
+
+  "palette":
+  {
+    "res:type": "palette",
+    "file": "file:graphics/palette.png",
+    "remaps":
+    {
+      "player_0":
+      [
+      ],
+      "player_1":
+      [
+      ]
+    }
+  }
+}
