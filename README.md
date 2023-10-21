@@ -1,4 +1,4 @@
-# GameName
+# Fox
 
 Four places to update GameName:
 
