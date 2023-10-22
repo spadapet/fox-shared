@@ -6,6 +6,9 @@ namespace game
     {
     public:
         app_state();
+        virtual ~app_state() override;
+
+        static game::app_state& get();
 
         // ff::game_state_base
         virtual bool debug_command_override(size_t command_id) override;
