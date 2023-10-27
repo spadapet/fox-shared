@@ -29,6 +29,18 @@
     <ClCompile Include="source\states\play_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\game.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\game_render.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\game_update.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\levels.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -43,6 +55,18 @@
     </ClInclude>
     <ClInclude Include="source\states\play_state.h">
       <Filter>source\states</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\game.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\game_render.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\game_update.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\levels.h">
+      <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,11 @@
     <ClCompile Include="source\assets\controls.res.cpp" />
     <ClCompile Include="source\assets\graphics.res.cpp" />
     <ClCompile Include="source\assets\xaml.res.cpp" />
+    <ClCompile Include="source\core\game.cpp" />
+    <ClCompile Include="source\core\game_render.cpp" />
+    <ClCompile Include="source\core\game_update.cpp" />
     <ClCompile Include="source\core\globals.cpp" />
+    <ClCompile Include="source\core\levels.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\states\app_state.cpp" />
     <ClCompile Include="source\states\level_state.cpp" />
@@ -22,7 +26,11 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="source\core\game.h" />
+    <ClInclude Include="source\core\game_render.h" />
+    <ClInclude Include="source\core\game_update.h" />
     <ClInclude Include="source\core\globals.h" />
+    <ClInclude Include="source\core\levels.h" />
     <ClInclude Include="source\states\app_state.h" />
     <ClInclude Include="source\states\level_state.h" />
     <ClInclude Include="source\states\play_state.h" />

@@ -8,7 +8,7 @@ static game::app_state* global_app{};
 
 game::app_state::app_state()
     : ff::game::app_state_base(
-        ff::render_target(game::constants::RENDER_SIZE.cast<size_t>(), &ff::dxgi::color_black(), ::PALETTE_BLACK),
+        ff::render_target(game::constants::RENDER_SIZE, &ff::dxgi::color_black(), ::PALETTE_BLACK),
         {
             { "palette", "player_0", ::PALETTE_CYCLES_PER_SECOND },
             { "palette", "player_1", ::PALETTE_CYCLES_PER_SECOND },
@@ -50,5 +50,5 @@ bool game::app_state::debug_command_override(size_t command_id)
 
 std::shared_ptr<ff::state> game::app_state::create_initial_game_state()
 {
-    return std::make_shared<game::play_state>();
+    return std::make_shared<game::play_state>(game::game_type::one_player, game::game_diff::normal);
 }
