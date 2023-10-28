@@ -41,6 +41,9 @@
     <ClCompile Include="source\core\levels.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
+    <ClCompile Include="source\ui\title_page.xaml.cpp">
+      <Filter>source\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="source\core\levels.h">
       <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\title_page.xaml.h">
+      <Filter>source\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +101,9 @@
     </Filter>
     <Filter Include="source\core">
       <UniqueIdentifier>{f220505d-ef78-4b7e-85c3-c1595f042aa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\ui">
+      <UniqueIdentifier>{8e3b6ed4-1af9-4caa-b2b4-8e51a3b5ac7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

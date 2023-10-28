@@ -4,6 +4,7 @@ namespace game
 {
     enum class game_type
     {
+        none,
         one_player,
         two_player,
         coop,
@@ -11,6 +12,7 @@ namespace game
 
     enum class game_diff
     {
+        none,
         baby,
         easy,
         normal,
@@ -21,6 +23,7 @@ namespace game
     {
         none,
         title,
+        play,
         playing,
         paused,
     };
@@ -36,6 +39,7 @@ namespace game
 
     enum class level_type
     {
+        none,
         normal,
         challenge,
         bonus,
@@ -54,15 +58,17 @@ namespace game
         none,
         panel0,
         panel1,
+        bomb,
     };
 
     using tile_array = typename std::array<game::tile_type, game::constants::TILE_COUNT_MEM>;
 
-    struct player
+    struct player_data
     {
         size_t index{};
         size_t score{};
         size_t lives{};
+        size_t level{};
         size_t counter{};
         game::player_state state{};
         ff::point_fixed pos{};
@@ -71,9 +77,9 @@ namespace game
         bool shoot{};
     };
 
-    using player_array = typename std::array<game::player, game::constants::MAX_PLAYERS>;
+    using player_array = typename std::array<game::player_data, game::constants::MAX_PLAYERS>;
 
-    struct level
+    struct level_data
     {
         game::tile_type tile(ff::point_size pos) const;
         void tile(ff::point_size pos, game::tile_type value);
@@ -82,24 +88,24 @@ namespace game
         size_t counter{};
         size_t max_timer{};
         game::level_type level_type{};
-        game::tile_array tiles{};
         game::level_state state{};
+        game::tile_array tiles{};
     };
 
-    using level_array = typename std::array<game::level, game::constants::MAX_PLAYERS>;
+    using level_array = typename std::array<game::level_data, game::constants::MAX_PLAYERS>;
 
     struct game_data
     {
         game::game_type game_type{};
         game::game_diff game_diff{};
-        game::player_array players{};
         game::game_state state{};
-        size_t counter{};
+        game::player_array players{};
+        size_t current_player{};
     };
 
     struct play_level
     {
-        game::game_data& game_data;
-        game::level& level;
+        game::game_data* game_data{};
+        game::level_data* level{};
     };
 }
