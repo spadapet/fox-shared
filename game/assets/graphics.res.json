@@ -1,18 +1,43 @@
 {
   "res:namespace": "assets::graphics",
 
-  "palette":
-  {
+  "palette": {
     "res:type": "palette",
     "file": "file:graphics/palette.png",
-    "remaps":
-    {
-      "player_0":
-      [
+    "remaps": {
+      "player_0": [
       ],
-      "player_1":
-      [
+      "player_1": [
       ]
+    }
+  },
+
+  "sprites": {
+    "res:type": "sprites",
+    "format": "pal",
+    "mips": 1,
+    "sprites": {
+      "player": {
+        "file": "file:graphics/sprites.png",
+        "pos": [ 0, 0 ],
+        "size": [ 30, 18 ],
+        "handle": [ 15, 9 ],
+        "repeat": 4
+      },
+      "panel0": {
+        "file": "file:graphics/sprites.png",
+        "pos": [ 120, 0 ],
+        "size": [ 30, 18 ],
+        "handle": [ 15, 9 ],
+        "repeat": 2
+      },
+      "panel1": {
+        "file": "file:graphics/sprites.png",
+        "pos": [ 180, 0 ],
+        "size": [ 30, 18 ],
+        "handle": [ 15, 9 ],
+        "repeat": 2
+      }
     }
   }
 }

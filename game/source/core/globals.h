@@ -37,3 +37,8 @@ namespace game::constants
     const ff::point_size RENDER_SIZE(RENDER_SIZE_X, RENDER_SIZE_Y);
     const ff::point_size TILE_SIZE(TILE_SIZE_X, TILE_SIZE_Y);
 }
+
+namespace game::math
+{
+    size_t dir_to_index(const ff::point_fixed& dir);
+}

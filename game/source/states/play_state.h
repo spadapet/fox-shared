@@ -1,6 +1,8 @@
 #pragma once
 
 #include "source/core/game.h"
+#include "source/core/game_render.h"
+#include "source/core/game_update.h"
 
 namespace game
 {
@@ -27,6 +29,8 @@ namespace game
         game::game_data game_data;
         game::level_array levels;
         game::play_level play_level;
+        game::game_update game_update;
+        game::game_render game_render;
 
         std::unique_ptr<ff::input_event_provider> player_input[game::constants::MAX_PLAYERS];
         ff::signal_connection resource_connection;
