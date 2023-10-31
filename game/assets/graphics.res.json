@@ -17,23 +17,22 @@
     "format": "pal",
     "mips": 1,
     "sprites": {
-      "player": {
+      "ship": {
         "file": "file:graphics/sprites.png",
         "pos": [ 0, 0 ],
         "size": [ 30, 18 ],
-        "handle": [ 15, 9 ],
-        "repeat": 4
+        "handle": [ 15, 9 ]
       },
       "panel0": {
         "file": "file:graphics/sprites.png",
-        "pos": [ 120, 0 ],
+        "pos": [ 0, 18 ],
         "size": [ 30, 18 ],
         "handle": [ 15, 9 ],
         "repeat": 2
       },
       "panel1": {
         "file": "file:graphics/sprites.png",
-        "pos": [ 180, 0 ],
+        "pos": [ 0, 36 ],
         "size": [ 30, 18 ],
         "handle": [ 15, 9 ],
         "repeat": 2

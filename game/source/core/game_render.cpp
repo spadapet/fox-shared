@@ -9,10 +9,7 @@ game::game_render::game_render()
 
 void game::game_render::init_resources()
 {
-    this->player[0] = "sprites.player[0]"sv;
-    this->player[1] = "sprites.player[1]"sv;
-    this->player[2] = "sprites.player[2]"sv;
-    this->player[3] = "sprites.player[3]"sv;
+    this->ship = "sprites.ship"sv;
 
     this->panel[0][0] = "sprites.panel0[0]"sv;
     this->panel[0][1] = "sprites.panel0[1]"sv;
@@ -70,13 +67,14 @@ void game::game_render::render(ff::dxgi::draw_base & draw, game::play_level & pl
         switch (player.state)
         {
             case game::player_state::playing:
-                sprite = this->player[game::math::dir_to_index(player.dir)].object().get();
+                sprite = this->ship.object().get(); // [game::math::dir_to_index(player.dir)] .object().get();
                 break;
         }
 
         if (sprite)
         {
             transform.position = player.pos.cast<float>();
+            transform.rotation = game::math::dir_to_index(player.dir) * 90.0f;
             draw.draw_sprite(sprite->sprite_data(), transform);
         }
     }
