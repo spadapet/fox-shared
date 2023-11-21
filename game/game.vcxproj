@@ -18,6 +18,7 @@
     <ClCompile Include="source\core\game_update.cpp" />
     <ClCompile Include="source\core\globals.cpp" />
     <ClCompile Include="source\core\levels.cpp" />
+    <ClCompile Include="source\core\particles.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\states\app_state.cpp" />
     <ClCompile Include="source\states\level_state.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="source\core\game_update.h" />
     <ClInclude Include="source\core\globals.h" />
     <ClInclude Include="source\core\levels.h" />
+    <ClInclude Include="source\core\particles.h" />
     <ClInclude Include="source\states\app_state.h" />
     <ClInclude Include="source\states\level_state.h" />
     <ClInclude Include="source\states\play_state.h" />

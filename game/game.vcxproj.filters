@@ -44,6 +44,9 @@
     <ClCompile Include="source\ui\title_page.xaml.cpp">
       <Filter>source\ui</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\particles.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="source\ui\title_page.xaml.h">
       <Filter>source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\particles.h">
+      <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
