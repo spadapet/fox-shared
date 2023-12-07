@@ -17,7 +17,7 @@ void game::game_render::init_resources()
     this->panel[1][1] = "sprites.panel1[1]"sv;
 }
 
-void game::game_render::render(ff::dxgi::draw_base & draw, game::play_level & play)
+void game::game_render::render(ff::dxgi::draw_base& draw, game::play_level& play)
 {
     if (!play.game_data || !play.level)
     {
@@ -74,7 +74,7 @@ void game::game_render::render(ff::dxgi::draw_base & draw, game::play_level & pl
         if (sprite)
         {
             transform.position = player.pos.cast<float>();
-            transform.rotation = game::math::dir_to_index(player.dir) * 90.0f;
+            transform.rotation = game::dir_to_degrees<float>(player.dir);
             draw.draw_sprite(sprite->sprite_data(), transform);
         }
     }

@@ -47,6 +47,9 @@
     <ClCompile Include="source\core\particles.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\game_audio.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -78,6 +81,9 @@
       <Filter>source\ui</Filter>
     </ClInclude>
     <ClInclude Include="source\core\particles.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\game_audio.h">
       <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>

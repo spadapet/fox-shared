@@ -1,6 +1,7 @@
 #pragma once
 
 #include "source/core/game.h"
+#include "source/core/game_audio.h"
 #include "source/core/game_render.h"
 #include "source/core/game_update.h"
 
@@ -26,6 +27,7 @@ namespace game
         void init_playing();
         void init_resources();
 
+        game::game_audio game_audio;
         game::game_data game_data;
         game::level_array levels;
         game::play_level play_level;

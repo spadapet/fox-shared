@@ -14,6 +14,7 @@
     <ClCompile Include="source\assets\graphics.res.cpp" />
     <ClCompile Include="source\assets\xaml.res.cpp" />
     <ClCompile Include="source\core\game.cpp" />
+    <ClCompile Include="source\core\game_audio.cpp" />
     <ClCompile Include="source\core\game_render.cpp" />
     <ClCompile Include="source\core\game_update.cpp" />
     <ClCompile Include="source\core\globals.cpp" />
@@ -29,6 +30,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClInclude Include="source\core\game.h" />
+    <ClInclude Include="source\core\game_audio.h" />
     <ClInclude Include="source\core\game_render.h" />
     <ClInclude Include="source\core\game_update.h" />
     <ClInclude Include="source\core\globals.h" />

@@ -31,12 +31,71 @@ void game::play_state::advance_input()
         for (auto& player : this->game_data.players)
         {
             ff::input_event_provider& input = *this->player_input[player.index];
-            player.shoot = input.event_hit(game::input_events::ID_SHOOT);
-            player.press =
+            bool press_left = input.digital_value(game::input_events::ID_LEFT);
+            bool press_right = input.digital_value(game::input_events::ID_RIGHT);
+            bool press_up = input.digital_value(game::input_events::ID_UP);
+            bool press_down = input.digital_value(game::input_events::ID_DOWN);
+
+            if (press_left && press_right)
             {
-                input.digital_value(game::input_events::ID_RIGHT) ? 1_f : (input.digital_value(game::input_events::ID_LEFT) ? -1_f : 0_f),
-                input.digital_value(game::input_events::ID_DOWN) ? 1_f : (input.digital_value(game::input_events::ID_UP) ? -1_f : 0_f)
-            };
+                if (player.ignore_press_x)
+                {
+                    press_left = false;
+                    press_right = false;
+                }
+                else
+                {
+                    player.ignore_press_x = true;
+
+                    if (player.dir == game::dir::right)
+                    {
+                        press_right = false;
+                    }
+                    else
+                    {
+                        press_left = false;
+                    }
+                }
+            }
+            else
+            {
+                player.ignore_press_x = false;
+            }
+
+            if (press_up && press_down)
+            {
+                if (player.ignore_press_y)
+                {
+                    press_up = false;
+                    press_down = false;
+                }
+                else
+                {
+                    player.ignore_press_y = true;
+
+                    if (player.dir == game::dir::down)
+                    {
+                        press_down = false;
+                    }
+                    else
+                    {
+                        press_up = false;
+                    }
+                }
+            }
+            else
+            {
+                player.ignore_press_y = false;
+            }
+
+            player.fast = input.digital_value(game::input_events::ID_SPEED);
+
+            // Keep what was pressed before, unless a new direction is pressed
+            ff::point_int press(press_right ? 1 : (press_left ? -1 : 0), press_down ? 1 : (press_up ? -1 : 0));
+            if (press)
+            {
+                player.press = press;
+            }
         }
     }
 
@@ -111,7 +170,14 @@ void game::play_state::init_playing()
         game::player_data& player = this->game_data.players[i];
         game::level_data& level = this->levels[i];
 
-        player.counter = 0;
+        player.counter = {};
+        player.press = {};
+        player.speed = {};
+        player.fast = {};
+        player.turned = {};
+        player.collected = {};
+        player.ignore_press_x = {};
+        player.ignore_press_y = {};
 
         if (coop || i == this->game_data.current_player)
         {
@@ -120,12 +186,12 @@ void game::play_state::init_playing()
             if (!coop || !i)
             {
                 player.pos = { 255, 126 };
-                player.dir = { 0, -1 };
+                player.dir = game::dir::up;
             }
             else
             {
                 player.pos = { 225, 126 };
-                player.dir = { 0, 1 };
+                player.dir = game::dir::down;
             }
         }
         else
@@ -136,7 +202,12 @@ void game::play_state::init_playing()
         level = game::get_level(this->game_data.game_type, this->game_data.game_diff, player.level);
     }
 
-    this->play_level = { &this->game_data, &this->levels[this->game_data.current_player] };
+    this->play_level =
+    {
+        &this->game_data,
+        &this->levels[this->game_data.current_player],
+        &this->game_audio
+    };
 }
 
 void game::play_state::init_resources()

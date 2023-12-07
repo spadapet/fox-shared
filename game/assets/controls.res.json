@@ -22,48 +22,39 @@
   "player_controls":
   {
     "res:type": "input",
-    "events":
-    {
-      "shoot": [ "shift", "control", "gamepad_a" ]
-    },
     "values":
     {
       "up": [ "up", "w", "gamepad_left_up", "gamepad_dpad_up" ],
       "down": [ "down", "s", "gamepad_left_down", "gamepad_dpad_down" ],
       "left": [ "left", "a", "gamepad_left_left", "gamepad_dpad_left" ],
-      "right": [ "right", "d", "gamepad_left_right", "gamepad_dpad_right" ]
+      "right": [ "right", "d", "gamepad_left_right", "gamepad_dpad_right" ],
+      "speed": [ "shift", "control", "gamepad_a" ]
     }
   },
 
   "player_controls_left":
   {
     "res:type": "input",
-    "events":
-    {
-      "shoot": [ "left_shift", "left_control", "gamepad_a" ]
-    },
     "values":
     {
       "up": [ "w", "gamepad_left_up", "gamepad_dpad_up" ],
       "down": [ "s", "gamepad_left_down", "gamepad_dpad_down" ],
       "left": [ "a", "gamepad_left_left", "gamepad_dpad_left" ],
-      "right": [ "d", "gamepad_left_right", "gamepad_dpad_right" ]
+      "right": [ "d", "gamepad_left_right", "gamepad_dpad_right" ],
+      "speed": [ "left_shift", "left_control", "gamepad_a" ]
     }
   },
 
   "player_controls_right":
   {
     "res:type": "input",
-    "events":
-    {
-      "shoot": [ "right_shift", "right_control", "gamepad_a" ]
-    },
     "values":
     {
       "up": [ "up", "gamepad_left_up", "gamepad_dpad_up" ],
       "down": [ "down", "gamepad_left_down", "gamepad_dpad_down" ],
       "left": [ "left", "gamepad_left_left", "gamepad_dpad_left" ],
-      "right": [ "right", "gamepad_left_right", "gamepad_dpad_right" ]
+      "right": [ "right", "gamepad_left_right", "gamepad_dpad_right" ],
+      "speed": [ "right_shift", "right_control", "gamepad_a" ]
     }
   },
 
