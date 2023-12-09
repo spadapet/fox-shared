@@ -1,9 +1,9 @@
 #pragma once
 
+#include "source/core/audio.h"
 #include "source/core/game.h"
-#include "source/core/game_audio.h"
-#include "source/core/game_render.h"
-#include "source/core/game_update.h"
+#include "source/core/renderer.h"
+#include "source/core/updater.h"
 
 namespace game
 {
@@ -27,12 +27,12 @@ namespace game
         void init_playing();
         void init_resources();
 
-        game::game_audio game_audio;
+        game::audio audio;
         game::game_data game_data;
         game::level_array levels;
         game::play_level play_level;
-        game::game_update game_update;
-        game::game_render game_render;
+        game::updater updater;
+        game::renderer renderer;
 
         std::unique_ptr<ff::input_event_provider> player_input[game::constants::MAX_PLAYERS];
         ff::signal_connection resource_connection;

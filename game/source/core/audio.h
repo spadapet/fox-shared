@@ -4,10 +4,10 @@
 
 namespace game
 {
-    class game_audio
+    class audio
     {
     public:
-        game_audio();
+        audio();
 
         void play_collect(game::tile_type type);
 

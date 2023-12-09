@@ -1,33 +1,35 @@
 #include "pch.h"
+#include "source/core/audio.h"
 #include "source/core/game.h"
-#include "source/core/game_audio.h"
-#include "source/core/game_update.h"
+#include "source/core/updater.h"
 
-game::game_update::game_update()
+game::updater::updater()
 {}
 
-void game::game_update::update(game::play_level& play)
+void game::updater::update(game::play_level& play)
 {
-    if (!play.game_data || !play.level || play.game_data->state != game::game_state::playing)
+    if (play.game_data->state != game::game_state::playing)
     {
         return;
     }
 
-    play.level->counter++;
+    play.level->state.advance_time();
 
     for (game::player_data& player : play.game_data->players)
     {
-        player.counter++;
-        player.speed += player.fast ? game::constants::PLAYER_SPEED_FAST : game::constants::PLAYER_SPEED_SLOW;
+        player.state.advance_time();
+        player.speed_bank += player.flags.fast ? game::constants::PLAYER_SPEED_FAST : game::constants::PLAYER_SPEED_SLOW;
 
-        for (; player.speed >= 1_f; player.speed--)
+        for (; player.speed_bank >= 1_f; player.speed_bank--)
         {
             this->update_player(play, player);
         }
     }
+
+    this->check_win(play);
 }
 
-void game::game_update::update_player(game::play_level& play, game::player_data& player)
+void game::updater::update_player(game::play_level& play, game::player_data& player)
 {
     const ff::point_int tile_count = ff::point_size(game::constants::TILE_COUNT_X, game::constants::TILE_COUNT_Y).cast<int>();
     const ff::point_int tile_size = game::constants::TILE_SIZE.cast<int>();
@@ -45,26 +47,26 @@ void game::game_update::update_player(game::play_level& play, game::player_data&
 
     // First check for turning 90 degrees, which is higher priority than turning around
     {
-        player.turned = player.turned && can_turn;
+        player.flags.turned = player.flags.turned && can_turn;
 
-        if (!set_dir && can_turn && was_facing_x && player.press.y && !player.turned)
+        if (!set_dir && can_turn && was_facing_x && player.press.y && !player.flags.turned)
         {
             int adjacent_row = (player.pos.y / tile_size.y) + player.press.y; // don't turn off the screen
             if (adjacent_row >= 0 && adjacent_row < tile_count.y)
             {
                 player.dir = player.press.y > 0 ? game::dir::down : game::dir::up;
-                player.turned = true;
+                player.flags.turned = true;
                 set_dir = true;
             }
         }
 
-        if (!set_dir && can_turn && was_facing_y && player.press.x && !player.turned)
+        if (!set_dir && can_turn && was_facing_y && player.press.x && !player.flags.turned)
         {
             int adjacent_col = (player.pos.x / tile_size.x) + player.press.x; // don't turn off the screen
             if (adjacent_col >= 0 && adjacent_col < tile_count.x)
             {
                 player.dir = player.press.x > 0 ? game::dir::right : game::dir::left;
-                player.turned = true;
+                player.flags.turned = true;
                 set_dir = true;
             }
         }
@@ -121,23 +123,23 @@ void game::game_update::update_player(game::play_level& play, game::player_data&
         if (center_distance.x <= game::constants::TILE_COLLECT_NEAR_CENTER &&
             center_distance.y <= game::constants::TILE_COLLECT_NEAR_CENTER)
         {
-            if (!player.collected)
+            if (!player.flags.collected)
             {
                 game::tile_type tile_type = play.level->tile(tile.cast<size_t>());
                 switch (tile_type)
                 {
                     case game::tile_type::panel0:
-                        player.collected = true;
+                        player.flags.collected = true;
                         play.level->tile(tile.cast<size_t>(), game::tile_type::none);
                         break;
 
                     case game::tile_type::panel1:
-                        player.collected = true;
+                        player.flags.collected = true;
                         play.level->tile(tile.cast<size_t>(), game::tile_type::panel0);
                         break;
                 }
 
-                if (player.collected)
+                if (player.flags.collected)
                 {
                     play.audio->play_collect(tile_type);
                     this->add_score(play, player, tile_type);
@@ -146,12 +148,12 @@ void game::game_update::update_player(game::play_level& play, game::player_data&
         }
         else
         {
-            player.collected = false;
+            player.flags.collected = false;
         }
     }
 }
 
-void game::game_update::add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type)
+void game::updater::add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type)
 {
     switch (tile_type)
     {
@@ -163,4 +165,19 @@ void game::game_update::add_score(game::play_level& play, game::player_data& pla
             player.score += 20;
             break;
     }
+}
+
+void game::updater::check_win(game::play_level& play)
+{
+    for (game::tile_type tile_type : play.level->tiles)
+    {
+        switch (tile_type)
+        {
+            case game::tile_type::panel0:
+            case game::tile_type::panel1:
+                return;
+        }
+    }
+
+    play.game_data->state = game::game_state::winning;
 }

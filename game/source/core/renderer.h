@@ -4,10 +4,10 @@ namespace game
 {
     struct play_level;
 
-    class game_render
+    class renderer
     {
     public:
-        game_render();
+        renderer();
 
         void init_resources();
         void render(ff::dxgi::draw_base& draw, game::play_level& play);

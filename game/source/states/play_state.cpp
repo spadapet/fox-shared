@@ -1,6 +1,4 @@
 #include "pch.h"
-#include "source/core/game_render.h"
-#include "source/core/game_update.h"
 #include "source/core/levels.h"
 #include "source/states/app_state.h"
 #include "source/states/play_state.h"
@@ -38,14 +36,14 @@ void game::play_state::advance_input()
 
             if (press_left && press_right)
             {
-                if (player.ignore_press_x)
+                if (player.flags.ignore_press_x)
                 {
                     press_left = false;
                     press_right = false;
                 }
                 else
                 {
-                    player.ignore_press_x = true;
+                    player.flags.ignore_press_x = true;
 
                     if (player.dir == game::dir::right)
                     {
@@ -59,19 +57,19 @@ void game::play_state::advance_input()
             }
             else
             {
-                player.ignore_press_x = false;
+                player.flags.ignore_press_x = false;
             }
 
             if (press_up && press_down)
             {
-                if (player.ignore_press_y)
+                if (player.flags.ignore_press_y)
                 {
                     press_up = false;
                     press_down = false;
                 }
                 else
                 {
-                    player.ignore_press_y = true;
+                    player.flags.ignore_press_y = true;
 
                     if (player.dir == game::dir::down)
                     {
@@ -85,10 +83,10 @@ void game::play_state::advance_input()
             }
             else
             {
-                player.ignore_press_y = false;
+                player.flags.ignore_press_y = false;
             }
 
-            player.fast = input.digital_value(game::input_events::ID_SPEED);
+            player.flags.fast = input.digital_value(game::input_events::ID_SPEED);
 
             // Keep what was pressed before, unless a new direction is pressed
             ff::point_int press(press_right ? 1 : (press_left ? -1 : 0), press_down ? 1 : (press_up ? -1 : 0));
@@ -104,14 +102,42 @@ void game::play_state::advance_input()
 
 std::shared_ptr<ff::state> game::play_state::advance_time()
 {
+    this->game_data.state.advance_time();
+
     switch (this->game_data.state)
     {
         case game::game_state::play:
             this->init_playing();
             break;
 
+        case game::game_state::play_ready:
+            if (this->game_data.state.counter >= 90)
+            {
+                this->game_data.state = game::game_state::playing;
+            }
+            break;
+
         case game::game_state::playing:
-            this->game_update.update(this->play_level);
+            this->updater.update(this->play_level);
+            break;
+
+        case game::game_state::winning:
+            if (this->game_data.state.counter >= 120)
+            {
+                this->game_data.state = game::game_state::win;
+            }
+            break;
+
+        case game::game_state::win:
+            this->game_data.state = game::game_state::play;
+
+            for (game::player_data& player : this->game_data.players)
+            {
+                if (player.state == game::player_state::playing)
+                {
+                    player.level++;
+                }
+            }
             break;
     }
 
@@ -120,17 +146,13 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
 
 void game::play_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    if (this->game_data.state == game::game_state::playing ||
-        this->game_data.state == game::game_state::paused)
-    {
-        ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
-        ff::dxgi::depth_base& depth = targets.depth(context);
-        ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, &depth);
+    ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
+    ff::dxgi::depth_base& depth = targets.depth(context);
+    ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, &depth);
 
-        if (draw)
-        {
-            this->game_render.render(*draw, this->play_level);
-        }
+    if (draw)
+    {
+        this->renderer.render(*draw, this->play_level);
     }
 
     ff::state::render(context, targets);
@@ -163,21 +185,16 @@ ff::state* game::play_state::child_state(size_t index)
 void game::play_state::init_playing()
 {
     const bool coop = this->game_data.game_type == game::game_type::coop;
-    this->game_data.state = game::game_state::playing;
+    this->game_data.state = game::game_state::play_ready;
 
     for (size_t i = 0; i < game::constants::MAX_PLAYERS; i++)
     {
         game::player_data& player = this->game_data.players[i];
         game::level_data& level = this->levels[i];
 
-        player.counter = {};
         player.press = {};
-        player.speed = {};
-        player.fast = {};
-        player.turned = {};
-        player.collected = {};
-        player.ignore_press_x = {};
-        player.ignore_press_y = {};
+        player.speed_bank = {};
+        player.flags.all = {};
 
         if (coop || i == this->game_data.current_player)
         {
@@ -206,7 +223,7 @@ void game::play_state::init_playing()
     {
         &this->game_data,
         &this->levels[this->game_data.current_player],
-        &this->game_audio
+        &this->audio
     };
 }
 
@@ -241,5 +258,5 @@ void game::play_state::init_resources()
         this->player_input[i] = std::make_unique<ff::input_event_provider>(mapping, std::move(devices));
     }
 
-    this->game_render.init_resources();
+    this->renderer.init_resources();
 }

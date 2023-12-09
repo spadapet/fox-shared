@@ -6,15 +6,16 @@ namespace game
     struct play_level;
     struct player_data;
 
-    class game_update
+    class updater
     {
     public:
-        game_update();
+        updater();
 
         void update(game::play_level& play);
 
     private:
         void update_player(game::play_level& play, game::player_data& player);
         void add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type);
+        void check_win(game::play_level& play);
     };
 }

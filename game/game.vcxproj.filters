@@ -23,19 +23,16 @@
     <ClCompile Include="source\core\globals.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\states\level_state.cpp">
-      <Filter>source\states</Filter>
-    </ClCompile>
     <ClCompile Include="source\states\play_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
     <ClCompile Include="source\core\game.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\game_render.cpp">
+    <ClCompile Include="source\core\renderer.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\game_update.cpp">
+    <ClCompile Include="source\core\updater.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
     <ClCompile Include="source\core\levels.cpp">
@@ -47,8 +44,11 @@
     <ClCompile Include="source\core\particles.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\game_audio.cpp">
+    <ClCompile Include="source\core\audio.cpp">
       <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\assets\particles.res.cpp">
+      <Filter>source\assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,19 +59,16 @@
     <ClInclude Include="source\core\globals.h">
       <Filter>source\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\states\level_state.h">
-      <Filter>source\states</Filter>
-    </ClInclude>
     <ClInclude Include="source\states\play_state.h">
       <Filter>source\states</Filter>
     </ClInclude>
     <ClInclude Include="source\core\game.h">
       <Filter>source\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\game_render.h">
+    <ClInclude Include="source\core\renderer.h">
       <Filter>source\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\game_update.h">
+    <ClInclude Include="source\core\updater.h">
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\levels.h">
@@ -83,7 +80,7 @@
     <ClInclude Include="source\core\particles.h">
       <Filter>source\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\game_audio.h">
+    <ClInclude Include="source\core\audio.h">
       <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -97,6 +94,7 @@
     <ResJson Include="assets\xaml.res.json">
       <Filter>assets</Filter>
     </ResJson>
+    <ResJson Include="assets\particles.res.json" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
