@@ -32,20 +32,21 @@ void game::renderer::render(ff::dxgi::draw_base& draw, game::play_level& play)
     }
 
     ff::dxgi::transform transform;
+    const game::level_data& level = play.game_data->level();
 
-    for (size_t i = 0; i < play.level->tiles.size(); i++)
+    for (size_t i = 0; i < level.tiles.size(); i++)
     {
-        const game::tile_type tile = play.level->tiles[i];
+        const game::tile_type tile = level.tiles[i];
         ff::sprite_base* sprite{};
 
         switch (tile)
         {
             case game::tile_type::panel0:
-                sprite = this->panel[0][play.level->state.counter / 32 % 2].object().get();
+                sprite = this->panel[0][level.state.counter / 32 % 2].object().get();
                 break;
 
             case game::tile_type::panel1:
-                sprite = this->panel[1][play.level->state.counter / 32 % 2].object().get();
+                sprite = this->panel[1][level.state.counter / 32 % 2].object().get();
                 break;
 
             case game::tile_type::bomb:
@@ -65,11 +66,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, game::play_level& play)
     switch (play.game_data->state)
     {
         case game::game_state::play_ready:
-            render_player = play.game_data->state.counter >= 45;
+            render_player = play.game_data->state.counter >= game::constants::STATE_PLAY_READY_TIME / 2;
             break;
 
         case game::game_state::winning:
-            render_player = play.game_data->state.counter < 60;
+            render_player = play.game_data->state.counter < game::constants::STATE_WINNING_TIME / 2;
             break;
     }
 

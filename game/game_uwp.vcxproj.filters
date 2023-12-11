@@ -17,7 +17,37 @@
     <ClCompile Include="source\states\app_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\globals.cpp">
+    <ClCompile Include="source\ui\title_page.xaml.cpp">
+      <Filter>source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\states\play_state.cpp">
+      <Filter>source\states</Filter>
+    </ClCompile>
+    <ClCompile Include="source\assets\particles.res.cpp">
+      <Filter>source\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\audio.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\game.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\levels.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\particles.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\renderer.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\updater.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\constants.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\dir.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +56,34 @@
     <ClInclude Include="source\states\app_state.h">
       <Filter>source\states</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\globals.h">
+    <ClInclude Include="source\ui\title_page.xaml.h">
+      <Filter>source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\states\play_state.h">
+      <Filter>source\states</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\audio.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\game.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\levels.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\particles.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\renderer.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\updater.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\constants.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\dir.h">
       <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,6 +95,9 @@
       <Filter>assets</Filter>
     </ResJson>
     <ResJson Include="assets\xaml.res.json">
+      <Filter>assets</Filter>
+    </ResJson>
+    <ResJson Include="assets\particles.res.json">
       <Filter>assets</Filter>
     </ResJson>
   </ItemGroup>
@@ -199,7 +259,8 @@
   <ItemGroup>
     <None Include="$(NoesisDll)" />
     <None Include="$(WinPixDll)" />
-    <None Include="game_TemporaryKey.pfx" />
+    <None Include="$(NoesisDll)" />
+    <None Include="$(WinPixDll)" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="assets">
@@ -219,6 +280,9 @@
     </Filter>
     <Filter Include="source\core">
       <UniqueIdentifier>{981296c0-fee3-43f7-a2f3-51b66626fdf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\ui">
+      <UniqueIdentifier>{ee360440-f8f2-4e7c-a5db-70bcc5c8b483}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

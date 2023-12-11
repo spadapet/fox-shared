@@ -6,6 +6,76 @@
 game::updater::updater()
 {}
 
+void game::updater::update_player_input(
+    game::player_data& player,
+    bool press_left,
+    bool press_right,
+    bool press_up,
+    bool press_down,
+    bool press_speed)
+{
+    if (press_left && press_right)
+    {
+        if (player.flags.ignore_press_x)
+        {
+            press_left = false;
+            press_right = false;
+        }
+        else
+        {
+            player.flags.ignore_press_x = true;
+
+            if (player.dir == game::dir::right)
+            {
+                press_right = false;
+            }
+            else
+            {
+                press_left = false;
+            }
+        }
+    }
+    else
+    {
+        player.flags.ignore_press_x = false;
+    }
+
+    if (press_up && press_down)
+    {
+        if (player.flags.ignore_press_y)
+        {
+            press_up = false;
+            press_down = false;
+        }
+        else
+        {
+            player.flags.ignore_press_y = true;
+
+            if (player.dir == game::dir::down)
+            {
+                press_down = false;
+            }
+            else
+            {
+                press_up = false;
+            }
+        }
+    }
+    else
+    {
+        player.flags.ignore_press_y = false;
+    }
+
+    player.flags.fast = press_speed;
+
+    // Keep what was pressed before, unless a new direction is pressed
+    ff::point_int press(press_right ? 1 : (press_left ? -1 : 0), press_down ? 1 : (press_up ? -1 : 0));
+    if (press)
+    {
+        player.press = press;
+    }
+}
+
 void game::updater::update(game::play_level& play)
 {
     if (play.game_data->state != game::game_state::playing)
@@ -13,10 +83,11 @@ void game::updater::update(game::play_level& play)
         return;
     }
 
-    play.level->state.advance_time();
+    play.game_data->level().state.advance_time();
 
-    for (game::player_data& player : play.game_data->players)
+    for (size_t i = 0; i < play.game_data->current_player_count(); i++)
     {
+        game::player_data& player = play.game_data->players[play.game_data->current_player + i];
         player.state.advance_time();
         player.speed_bank += player.flags.fast ? game::constants::PLAYER_SPEED_FAST : game::constants::PLAYER_SPEED_SLOW;
 
@@ -125,17 +196,17 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         {
             if (!player.flags.collected)
             {
-                game::tile_type tile_type = play.level->tile(tile.cast<size_t>());
+                game::tile_type tile_type = play.game_data->level().tile(tile.cast<size_t>());
                 switch (tile_type)
                 {
                     case game::tile_type::panel0:
                         player.flags.collected = true;
-                        play.level->tile(tile.cast<size_t>(), game::tile_type::none);
+                        play.game_data->level().tile(tile.cast<size_t>(), game::tile_type::none);
                         break;
 
                     case game::tile_type::panel1:
                         player.flags.collected = true;
-                        play.level->tile(tile.cast<size_t>(), game::tile_type::panel0);
+                        play.game_data->level().tile(tile.cast<size_t>(), game::tile_type::panel0);
                         break;
                 }
 
@@ -158,18 +229,18 @@ void game::updater::add_score(game::play_level& play, game::player_data& player,
     switch (tile_type)
     {
         case game::tile_type::panel0:
-            player.score += 10;
+            player.score->score += game::constants::SCORE_PANEL_0;
             break;
 
         case game::tile_type::panel1:
-            player.score += 20;
+            player.score->score += game::constants::SCORE_PANEL_1;
             break;
     }
 }
 
 void game::updater::check_win(game::play_level& play)
 {
-    for (game::tile_type tile_type : play.level->tiles)
+    for (game::tile_type tile_type : play.game_data->level().tiles)
     {
         switch (tile_type)
         {

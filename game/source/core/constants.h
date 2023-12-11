@@ -1,5 +1,7 @@
 #pragma once
 
+#include "source/core/dir.h"
+
 namespace game::strings
 {
     extern const std::string_view ID_GAME_OPTIONS;
@@ -42,34 +44,13 @@ namespace game::constants
     const ff::fixed_int PLAYER_SPEED_FAST = 2;
     constexpr int TILE_TURN_PAST_CENTER = 2;
     constexpr int TILE_COLLECT_NEAR_CENTER = 4;
-}
 
-namespace game
-{
-    enum class dir
-    {
-        none,
-        right,
-        up,
-        left,
-        down,
-    };
+    const ff::point_int PLAYER_START[2] = { { 255, 126 }, { 225, 126 } };
+    const game::dir PLAYER_START_DIR[2] = { game::dir::up, game::dir::down };
 
-    template<class T>
-    constexpr T dir_to_degrees(game::dir dir)
-    {
-        return (dir != game::dir::none) * (static_cast<int>(dir) - 1) * static_cast<T>(90.0);
-    }
+    constexpr size_t STATE_PLAY_READY_TIME = 90;
+    constexpr size_t STATE_WINNING_TIME = 120;
 
-    constexpr bool dir_is_horizontal(game::dir dir)
-    {
-        return dir == game::dir::left || dir == game::dir::right;
-    }
-
-    constexpr bool dir_is_vertical(game::dir dir)
-    {
-        return dir == game::dir::up || dir == game::dir::down;
-    }
-
-    ff::point_int dir_to_point(game::dir dir);
+    constexpr size_t SCORE_PANEL_0 = 10;
+    constexpr size_t SCORE_PANEL_1 = 20;
 }

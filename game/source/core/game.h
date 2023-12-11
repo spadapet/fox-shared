@@ -1,5 +1,7 @@
 #pragma once
 
+#include "source/core/constants.h"
+
 namespace game
 {
     class audio;
@@ -115,12 +117,30 @@ namespace game
         }
     };
 
-    struct player_data
+    struct level_data
     {
+        game::tile_type tile(ff::point_size pos) const;
+        void tile(ff::point_size pos, game::tile_type value);
+
         size_t index{};
+        size_t max_timer{};
+        game::level_type level_type{};
+        game::state_t<game::level_state> state{};
+        game::tile_array tiles{};
+    };
+
+    struct player_score
+    {
         size_t score{};
         size_t lives{};
         size_t level{};
+    };
+
+    struct player_data
+    {
+        size_t index{};
+        game::player_score* score{};
+        game::level_data* level{};
         game::state_t<game::player_state> state{};
         game::dir dir{};
         ff::point_int pos{};
@@ -142,27 +162,24 @@ namespace game
         } flags;
     };
 
+    using player_score_array = typename std::array<game::player_score, game::constants::MAX_PLAYERS>;
     using player_array = typename std::array<game::player_data, game::constants::MAX_PLAYERS>;
-
-    struct level_data
-    {
-        game::tile_type tile(ff::point_size pos) const;
-        void tile(ff::point_size pos, game::tile_type value);
-
-        size_t index{};
-        size_t max_timer{};
-        game::level_type level_type{};
-        game::state_t<game::level_state> state{};
-        game::tile_array tiles{};
-    };
-
     using level_array = typename std::array<game::level_data, game::constants::MAX_PLAYERS>;
 
     struct game_data
     {
+        bool coop() const;
+        size_t total_player_count() const;
+        size_t current_player_count() const;
+
+        game::player_score& score() const;
+        game::level_data& level() const;
+
         game::game_type game_type{};
         game::game_diff game_diff{};
         game::state_t<game::game_state> state{};
+        game::level_array levels{};
+        game::player_score_array scores{};
         game::player_array players{};
         size_t current_player{};
     };
@@ -170,7 +187,6 @@ namespace game
     struct play_level
     {
         game::game_data* game_data{};
-        game::level_data* level{};
         game::audio* audio{};
     };
 }

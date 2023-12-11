@@ -20,7 +20,7 @@
     <ClCompile Include="source\states\app_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\globals.cpp">
+    <ClCompile Include="source\core\constants.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
     <ClCompile Include="source\states\play_state.cpp">
@@ -50,13 +50,16 @@
     <ClCompile Include="source\assets\particles.res.cpp">
       <Filter>source\assets</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\dir.cpp">
+      <Filter>source\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="source\states\app_state.h">
       <Filter>source\states</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\globals.h">
+    <ClInclude Include="source\core\constants.h">
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\states\play_state.h">
@@ -81,6 +84,9 @@
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\audio.h">
+      <Filter>source\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\dir.h">
       <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>

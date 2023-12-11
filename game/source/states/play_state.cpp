@@ -11,11 +11,22 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
     , title_page(Noesis::MakePtr<game::title_page>(this->title_page_vm))
     , title_state(std::make_shared<ff::ui_view_state>(std::make_shared<ff::ui_view>(this->title_page)))
 {
+    for (size_t i = 0; i < this->game_data.total_player_count(); i++)
+    {
+        game::player_data& player = this->game_data.players[i];
+        player.index = i;
+        player.score = &this->game_data.scores[i * !this->game_data.coop()];
+        player.level = &this->game_data.levels[i * !this->game_data.coop()];
+        player.state = (i < this->game_data.total_player_count()) ? game::player_state::playing : game::player_state::none;
+    }
+
     this->init_resources();
 }
 
 game::play_state::~play_state()
-{}
+{
+    // Just needed because of include files for smart pointer destruction
+}
 
 void game::play_state::advance_input()
 {
@@ -26,74 +37,15 @@ void game::play_state::advance_input()
             input->advance();
         }
 
-        for (auto& player : this->game_data.players)
+        for (game::player_data& player : this->game_data.players)
         {
             ff::input_event_provider& input = *this->player_input[player.index];
-            bool press_left = input.digital_value(game::input_events::ID_LEFT);
-            bool press_right = input.digital_value(game::input_events::ID_RIGHT);
-            bool press_up = input.digital_value(game::input_events::ID_UP);
-            bool press_down = input.digital_value(game::input_events::ID_DOWN);
-
-            if (press_left && press_right)
-            {
-                if (player.flags.ignore_press_x)
-                {
-                    press_left = false;
-                    press_right = false;
-                }
-                else
-                {
-                    player.flags.ignore_press_x = true;
-
-                    if (player.dir == game::dir::right)
-                    {
-                        press_right = false;
-                    }
-                    else
-                    {
-                        press_left = false;
-                    }
-                }
-            }
-            else
-            {
-                player.flags.ignore_press_x = false;
-            }
-
-            if (press_up && press_down)
-            {
-                if (player.flags.ignore_press_y)
-                {
-                    press_up = false;
-                    press_down = false;
-                }
-                else
-                {
-                    player.flags.ignore_press_y = true;
-
-                    if (player.dir == game::dir::down)
-                    {
-                        press_down = false;
-                    }
-                    else
-                    {
-                        press_up = false;
-                    }
-                }
-            }
-            else
-            {
-                player.flags.ignore_press_y = false;
-            }
-
-            player.flags.fast = input.digital_value(game::input_events::ID_SPEED);
-
-            // Keep what was pressed before, unless a new direction is pressed
-            ff::point_int press(press_right ? 1 : (press_left ? -1 : 0), press_down ? 1 : (press_up ? -1 : 0));
-            if (press)
-            {
-                player.press = press;
-            }
+            this->updater.update_player_input(player,
+                input.digital_value(game::input_events::ID_LEFT),
+                input.digital_value(game::input_events::ID_RIGHT),
+                input.digital_value(game::input_events::ID_UP),
+                input.digital_value(game::input_events::ID_DOWN),
+                input.digital_value(game::input_events::ID_SPEED));
         }
     }
 
@@ -111,7 +63,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::play_ready:
-            if (this->game_data.state.counter >= 90)
+            if (this->game_data.state.counter >= game::constants::STATE_PLAY_READY_TIME)
             {
                 this->game_data.state = game::game_state::playing;
             }
@@ -122,7 +74,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::winning:
-            if (this->game_data.state.counter >= 120)
+            if (this->game_data.state.counter >= game::constants::STATE_WINNING_TIME)
             {
                 this->game_data.state = game::game_state::win;
             }
@@ -130,14 +82,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
 
         case game::game_state::win:
             this->game_data.state = game::game_state::play;
-
-            for (game::player_data& player : this->game_data.players)
-            {
-                if (player.state == game::player_state::playing)
-                {
-                    player.level++;
-                }
-            }
+            this->game_data.score().level++;
             break;
     }
 
@@ -184,47 +129,21 @@ ff::state* game::play_state::child_state(size_t index)
 
 void game::play_state::init_playing()
 {
-    const bool coop = this->game_data.game_type == game::game_type::coop;
     this->game_data.state = game::game_state::play_ready;
 
-    for (size_t i = 0; i < game::constants::MAX_PLAYERS; i++)
+    for (size_t i = 0; i < this->game_data.current_player_count(); i++)
     {
-        game::player_data& player = this->game_data.players[i];
-        game::level_data& level = this->levels[i];
-
+        game::player_data& player = this->game_data.players[this->game_data.current_player + i];
+        player.state = game::player_state::playing;
+        player.pos = game::constants::PLAYER_START[i];
+        player.dir = game::constants::PLAYER_START_DIR[i];
         player.press = {};
         player.speed_bank = {};
         player.flags.all = {};
-
-        if (coop || i == this->game_data.current_player)
-        {
-            player.state = game::player_state::playing;
-
-            if (!coop || !i)
-            {
-                player.pos = { 255, 126 };
-                player.dir = game::dir::up;
-            }
-            else
-            {
-                player.pos = { 225, 126 };
-                player.dir = game::dir::down;
-            }
-        }
-        else
-        {
-            player.state = game::player_state::none;
-        }
-
-        level = game::get_level(this->game_data.game_type, this->game_data.game_diff, player.level);
     }
 
-    this->play_level =
-    {
-        &this->game_data,
-        &this->levels[this->game_data.current_player],
-        &this->audio
-    };
+    this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, this->game_data.score().level);
+    this->play_level = { &this->game_data, &this->audio };
 }
 
 void game::play_state::init_resources()
@@ -236,13 +155,11 @@ void game::play_state::init_resources()
         "player_controls_right"sv
     };
 
-    const bool coop = this->game_data.game_type == game::game_type::coop;
-
     for (size_t i = 0; i < game::constants::MAX_PLAYERS; i++)
     {
         std::vector<const ff::input_vk*> devices{ &ff::input::keyboard() };
 
-        if (!coop)
+        if (!this->game_data.coop())
         {
             for (size_t h = 0; h < ff::input::gamepad_count(); h++)
             {
@@ -254,7 +171,7 @@ void game::play_state::init_resources()
             devices.push_back(&ff::input::gamepad(i));
         }
 
-        const ff::input_mapping& mapping = !coop ? *player_mapping[0].object() : *player_mapping[i ? 2 : 1].object();
+        const ff::input_mapping& mapping = !this->game_data.coop() ? *player_mapping[0].object() : *player_mapping[i ? 2 : 1].object();
         this->player_input[i] = std::make_unique<ff::input_event_provider>(mapping, std::move(devices));
     }
 

@@ -29,7 +29,6 @@ namespace game
 
         game::audio audio;
         game::game_data game_data;
-        game::level_array levels;
         game::play_level play_level;
         game::updater updater;
         game::renderer renderer;

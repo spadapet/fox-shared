@@ -11,6 +11,7 @@ namespace game
     public:
         updater();
 
+        void update_player_input(game::player_data& player, bool press_left, bool press_right, bool press_up, bool press_down, bool press_speed);
         void update(game::play_level& play);
 
     private:
