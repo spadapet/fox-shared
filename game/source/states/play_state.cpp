@@ -15,7 +15,7 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
     {
         game::player_data& player = this->game_data.players[i];
         player.index = i;
-        player.score = &this->game_data.scores[i * !this->game_data.coop()];
+        player.status = &this->game_data.statuses[i * !this->game_data.coop()];
         player.level = &this->game_data.levels[i * !this->game_data.coop()];
         player.state = (i < this->game_data.total_player_count()) ? game::player_state::playing : game::player_state::none;
     }
@@ -58,7 +58,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
 
     switch (this->game_data.state)
     {
-        case game::game_state::play:
+        case game::game_state::play_init:
             this->init_playing();
             break;
 
@@ -81,8 +81,24 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::win:
-            this->game_data.state = game::game_state::play;
-            this->game_data.score().level++;
+            this->game_data.state = game::game_state::play_init;
+            this->game_data.player_status().level++;
+            break;
+
+        case game::game_state::dying:
+            if (this->game_data.state.counter >= game::constants::STATE_DYING_TIME)
+            {
+                this->game_data.state = game::game_state::dead;
+            }
+            break;
+
+        case game::game_state::dead:
+            //if (this->game_data.player_status().lives)
+            //{
+            //    this->game_data.player_status().lives--;
+            //}
+
+            this->game_data.current_player = (this->game_data.current_player + 1) % this->game_data.player_turn_count();
             break;
     }
 
@@ -91,13 +107,14 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
 
 void game::play_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
-    ff::dxgi::depth_base& depth = targets.depth(context);
-    ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, &depth);
-
-    if (draw)
+    if (this->renderer.can_render(this->play_level))
     {
-        this->renderer.render(*draw, this->play_level);
+        ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
+        ff::dxgi::depth_base& depth = targets.depth(context);
+        if (ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, &depth))
+        {
+            this->renderer.render(*draw, this->play_level);
+        }
     }
 
     ff::state::render(context, targets);
@@ -133,16 +150,10 @@ void game::play_state::init_playing()
 
     for (size_t i = 0; i < this->game_data.current_player_count(); i++)
     {
-        game::player_data& player = this->game_data.players[this->game_data.current_player + i];
-        player.state = game::player_state::playing;
-        player.pos = game::constants::PLAYER_START[i];
-        player.dir = game::constants::PLAYER_START_DIR[i];
-        player.press = {};
-        player.speed_bank = {};
-        player.flags.all = {};
+        this->game_data.players[this->game_data.current_player + i].init_playing(this->game_data, i);
     }
 
-    this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, this->game_data.score().level);
+    this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, this->game_data.player_status().level);
     this->play_level = { &this->game_data, &this->audio };
 }
 

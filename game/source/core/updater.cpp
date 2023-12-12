@@ -66,7 +66,7 @@ void game::updater::update_player_input(
         player.flags.ignore_press_y = false;
     }
 
-    player.flags.fast = press_speed;
+    player.flags.press_speed = press_speed;
 
     // Keep what was pressed before, unless a new direction is pressed
     ff::point_int press(press_right ? 1 : (press_left ? -1 : 0), press_down ? 1 : (press_up ? -1 : 0));
@@ -78,18 +78,13 @@ void game::updater::update_player_input(
 
 void game::updater::update(game::play_level& play)
 {
-    if (play.game_data->state != game::game_state::playing)
-    {
-        return;
-    }
-
-    play.game_data->level().state.advance_time();
+    play.level().counter++;
 
     for (size_t i = 0; i < play.game_data->current_player_count(); i++)
     {
         game::player_data& player = play.game_data->players[play.game_data->current_player + i];
         player.state.advance_time();
-        player.speed_bank += player.flags.fast ? game::constants::PLAYER_SPEED_FAST : game::constants::PLAYER_SPEED_SLOW;
+        player.speed_bank += play.game_data->player_speed(player.flags.press_speed);
 
         for (; player.speed_bank >= 1_f; player.speed_bank--)
         {
@@ -98,6 +93,7 @@ void game::updater::update(game::play_level& play)
     }
 
     this->check_win(play);
+    this->check_dead(play);
 }
 
 void game::updater::update_player(game::play_level& play, game::player_data& player)
@@ -196,17 +192,17 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         {
             if (!player.flags.collected)
             {
-                game::tile_type tile_type = play.game_data->level().tile(tile.cast<size_t>());
+                game::tile_type tile_type = play.level().tile(tile.cast<size_t>());
                 switch (tile_type)
                 {
                     case game::tile_type::panel0:
                         player.flags.collected = true;
-                        play.game_data->level().tile(tile.cast<size_t>(), game::tile_type::none);
+                        play.level().tile(tile.cast<size_t>(), game::tile_type::none);
                         break;
 
                     case game::tile_type::panel1:
                         player.flags.collected = true;
-                        play.game_data->level().tile(tile.cast<size_t>(), game::tile_type::panel0);
+                        play.level().tile(tile.cast<size_t>(), game::tile_type::panel0);
                         break;
                 }
 
@@ -226,21 +222,12 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
 
 void game::updater::add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type)
 {
-    switch (tile_type)
-    {
-        case game::tile_type::panel0:
-            player.score->score += game::constants::SCORE_PANEL_0;
-            break;
-
-        case game::tile_type::panel1:
-            player.score->score += game::constants::SCORE_PANEL_1;
-            break;
-    }
+    player.status->score += play.game_data->score_for_tile(tile_type);
 }
 
 void game::updater::check_win(game::play_level& play)
 {
-    for (game::tile_type tile_type : play.game_data->level().tiles)
+    for (game::tile_type tile_type : play.level().tiles)
     {
         switch (tile_type)
         {
@@ -251,4 +238,27 @@ void game::updater::check_win(game::play_level& play)
     }
 
     play.game_data->state = game::game_state::winning;
+}
+
+void game::updater::check_dead(game::play_level& play)
+{
+    bool found_alive = false;
+
+    for (size_t i = 0; i < play.game_data->current_player_count(); i++)
+    {
+        game::player_data& player = play.game_data->players[play.game_data->current_player + i];
+
+        if (player.state == game::player_state::dead && play.game_data->coop() && play.player_status().lives > 0)
+        {
+            play.player_status().lives--;
+            player.init_playing(*play.game_data, i);
+        }
+
+        found_alive |= (player.state != game::player_state::dead);
+    }
+
+    if (!found_alive)
+    {
+        play.game_data->state = game::game_state::dying;
+    }
 }

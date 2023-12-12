@@ -10,7 +10,8 @@ namespace game
         renderer();
 
         void init_resources();
-        void render(ff::dxgi::draw_base& draw, game::play_level& play);
+        bool can_render(const game::play_level& play) const;
+        void render(ff::dxgi::draw_base& draw, const game::play_level& play);
 
     private:
         ff::auto_resource<ff::sprite_resource> ship;

@@ -17,22 +17,28 @@ void game::renderer::init_resources()
     this->panel[1][1] = "sprites.panel1[1]"sv;
 }
 
-void game::renderer::render(ff::dxgi::draw_base& draw, game::play_level& play)
+bool game::renderer::can_render(const game::play_level& play) const
 {
-    switch (play.game_data ? play.game_data->state : game::game_state::none)
+    if (play.game_data)
     {
-        case game::game_state::playing:
-        case game::game_state::play_ready:
-        case game::game_state::paused:
-        case game::game_state::winning:
-            break;
-
-        default:
-            return;
+        switch (play.game_data->state)
+        {
+            case game::game_state::play_ready:
+            case game::game_state::playing:
+            case game::game_state::paused:
+            case game::game_state::winning:
+            case game::game_state::dying:
+                return true;
+        }
     }
 
+    return false;
+}
+
+void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& play)
+{
     ff::dxgi::transform transform;
-    const game::level_data& level = play.game_data->level();
+    const game::level_data& level = play.level();
 
     for (size_t i = 0; i < level.tiles.size(); i++)
     {
@@ -42,11 +48,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, game::play_level& play)
         switch (tile)
         {
             case game::tile_type::panel0:
-                sprite = this->panel[0][level.state.counter / 32 % 2].object().get();
+                sprite = this->panel[0][play.level().counter / 32 % 2].object().get();
                 break;
 
             case game::tile_type::panel1:
-                sprite = this->panel[1][level.state.counter / 32 % 2].object().get();
+                sprite = this->panel[1][play.level().counter / 32 % 2].object().get();
                 break;
 
             case game::tile_type::bomb:

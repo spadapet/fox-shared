@@ -50,6 +50,7 @@ namespace game::constants
 
     constexpr size_t STATE_PLAY_READY_TIME = 90;
     constexpr size_t STATE_WINNING_TIME = 120;
+    constexpr size_t STATE_DYING_TIME = 120;
 
     constexpr size_t SCORE_PANEL_0 = 10;
     constexpr size_t SCORE_PANEL_1 = 20;

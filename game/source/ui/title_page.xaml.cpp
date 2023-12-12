@@ -18,7 +18,7 @@ void game::title_page_view_model::play_command(Noesis::BaseComponent* param)
 
     if (this->game_data->state == game::game_state::title)
     {
-        this->game_data->state = game::game_state::play;
+        this->game_data->state = game::game_state::play_init;
     }
 }
 

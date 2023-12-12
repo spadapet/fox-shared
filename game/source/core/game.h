@@ -5,6 +5,7 @@
 namespace game
 {
     class audio;
+    struct game_data;
 
     enum class game_type
     {
@@ -27,12 +28,15 @@ namespace game
     {
         none,
         title,
-        play,
+        play_init,
         play_ready,
         playing,
         paused,
         winning,
         win,
+        dying,
+        dead,
+        game_over,
     };
 
     enum class player_state
@@ -50,14 +54,6 @@ namespace game
         normal,
         challenge,
         bonus,
-    };
-
-    enum class level_state
-    {
-        none,
-        ready,
-        playing,
-        won,
     };
 
     enum class tile_type : uint8_t
@@ -123,13 +119,13 @@ namespace game
         void tile(ff::point_size pos, game::tile_type value);
 
         size_t index{};
+        size_t counter{};
         size_t max_timer{};
         game::level_type level_type{};
-        game::state_t<game::level_state> state{};
         game::tile_array tiles{};
     };
 
-    struct player_score
+    struct player_status
     {
         size_t score{};
         size_t lives{};
@@ -138,8 +134,10 @@ namespace game
 
     struct player_data
     {
+        void init_playing(const game::game_data& game, size_t current_index);
+
         size_t index{};
-        game::player_score* score{};
+        game::player_status* status{};
         game::level_data* level{};
         game::state_t<game::player_state> state{};
         game::dir dir{};
@@ -151,7 +149,7 @@ namespace game
         {
             struct
             {
-                bool fast : 1;
+                bool press_speed : 1;
                 bool turned : 1;
                 bool collected : 1;
                 bool ignore_press_x : 1;
@@ -162,7 +160,7 @@ namespace game
         } flags;
     };
 
-    using player_score_array = typename std::array<game::player_score, game::constants::MAX_PLAYERS>;
+    using player_status_array = typename std::array<game::player_status, game::constants::MAX_PLAYERS>;
     using player_array = typename std::array<game::player_data, game::constants::MAX_PLAYERS>;
     using level_array = typename std::array<game::level_data, game::constants::MAX_PLAYERS>;
 
@@ -171,21 +169,26 @@ namespace game
         bool coop() const;
         size_t total_player_count() const;
         size_t current_player_count() const;
-
-        game::player_score& score() const;
+        size_t player_turn_count() const;
+        size_t score_for_tile(game::tile_type tile_type) const;
+        ff::fixed_int player_speed(bool press_speed) const;
+        game::player_status& player_status() const;
         game::level_data& level() const;
 
         game::game_type game_type{};
         game::game_diff game_diff{};
         game::state_t<game::game_state> state{};
         game::level_array levels{};
-        game::player_score_array scores{};
+        game::player_status_array statuses{};
         game::player_array players{};
         size_t current_player{};
     };
 
     struct play_level
     {
+        game::player_status& player_status() const;
+        game::level_data& level() const;
+
         game::game_data* game_data{};
         game::audio* audio{};
     };

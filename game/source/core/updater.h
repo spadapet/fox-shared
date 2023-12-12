@@ -18,5 +18,6 @@ namespace game
         void update_player(game::play_level& play, game::player_data& player);
         void add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type);
         void check_win(game::play_level& play);
+        void check_dead(game::play_level& play);
     };
 }

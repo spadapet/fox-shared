@@ -43,7 +43,6 @@ static game::level_data get_normal(size_t index)
     game::level_data level{};
     level.index = index;
     level.level_type = game::level_type::normal;
-    level.state = game::level_state::ready;
     level.max_timer = 120;
 
     std::string_view tiles = ::level_tiles[index % _countof(::level_tiles)];
