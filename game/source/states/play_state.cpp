@@ -5,21 +5,17 @@
 #include "source/ui/title_page.xaml.h"
 
 game::play_state::play_state(game::game_type game_type, game::game_diff game_diff)
-    : game_data{ game_type, game_diff, game::game_state::title }
+    : game_data
+    {
+        game_type,
+        (game_diff == game::game_diff::none) ? game::game_diff::normal : game_diff,
+        (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
+    }
     , resource_connection(ff::game::app_state_base::get().reload_resources_sink().connect(std::bind(&game::play_state::init_resources, this)))
     , title_page_vm(Noesis::MakePtr<game::title_page_view_model>(this->game_data))
     , title_page(Noesis::MakePtr<game::title_page>(this->title_page_vm))
     , title_state(std::make_shared<ff::ui_view_state>(std::make_shared<ff::ui_view>(this->title_page)))
 {
-    for (size_t i = 0; i < this->game_data.total_player_count(); i++)
-    {
-        game::player_data& player = this->game_data.players[i];
-        player.index = i;
-        player.status = &this->game_data.statuses[i * !this->game_data.coop()];
-        player.level = &this->game_data.levels[i * !this->game_data.coop()];
-        player.state = (i < this->game_data.total_player_count()) ? game::player_state::playing : game::player_state::none;
-    }
-
     this->init_resources();
 }
 
@@ -58,15 +54,17 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
 
     switch (this->game_data.state)
     {
+        case game::game_state::play_init_from_title:
+            this->init_from_title();
+            this->game_data.state = game::game_state::play_init;
+            break;
+
         case game::game_state::play_init:
             this->init_playing();
             break;
 
         case game::game_state::play_ready:
-            if (this->game_data.state.counter >= game::constants::STATE_PLAY_READY_TIME)
-            {
-                this->game_data.state = game::game_state::playing;
-            }
+            this->game_data.state.set_at(game::game_state::playing, game::constants::STATE_PLAY_READY_TIME);
             break;
 
         case game::game_state::playing:
@@ -74,10 +72,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::winning:
-            if (this->game_data.state.counter >= game::constants::STATE_WINNING_TIME)
-            {
-                this->game_data.state = game::game_state::win;
-            }
+            this->game_data.state.set_at(game::game_state::win, game::constants::STATE_WINNING_TIME);
             break;
 
         case game::game_state::win:
@@ -86,19 +81,11 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::dying:
-            if (this->game_data.state.counter >= game::constants::STATE_DYING_TIME)
-            {
-                this->game_data.state = game::game_state::dead;
-            }
+            this->game_data.state.set_at(game::game_state::dead, game::constants::STATE_DYING_TIME);
             break;
 
         case game::game_state::dead:
-            //if (this->game_data.player_status().lives)
-            //{
-            //    this->game_data.player_status().lives--;
-            //}
-
-            this->game_data.current_player = (this->game_data.current_player + 1) % this->game_data.player_turn_count();
+            this->find_next_player();
             break;
     }
 
@@ -144,17 +131,60 @@ ff::state* game::play_state::child_state(size_t index)
     }
 }
 
+void game::play_state::find_next_player()
+{
+    if (!this->game_data.coop())
+    {
+        for (size_t i = 0; i < this->game_data.total_player_count(); i++)
+        {
+            size_t index = (this->game_data.current_player + i) % this->game_data.total_player_count();
+            game::player_data& player = this->game_data.players[index];
+
+            if (!player.status->lives)
+            {
+                player.state = game::player_state::game_over;
+            }
+
+            if (player.state != game::player_state::game_over)
+            {
+                player.status->lives--;
+                this->game_data.current_player = index;
+                this->game_data.state = game::game_state::play_init;
+                break;
+            }
+        }
+
+    }
+
+    if (this->game_data.state != game::game_state::play_init)
+    {
+        this->game_data.state = game::game_state::game_over;
+    }
+}
+
+void game::play_state::init_from_title()
+{
+    for (size_t i = 0; i < this->game_data.total_player_count(); i++)
+    {
+        game::player_data& player = this->game_data.players[i];
+        player.index = i;
+        player.status = &this->game_data.statuses[i * !this->game_data.coop()];
+        player.level = &this->game_data.levels[i * !this->game_data.coop()];
+        player.state = (i < this->game_data.total_player_count()) ? game::player_state::playing : game::player_state::none;
+    }
+}
+
 void game::play_state::init_playing()
 {
-    this->game_data.state = game::game_state::play_ready;
-
     for (size_t i = 0; i < this->game_data.current_player_count(); i++)
     {
-        this->game_data.players[this->game_data.current_player + i].init_playing(this->game_data, i);
+        game::player_data& player = this->game_data.players[this->game_data.current_player + i];
+        player.init_playing(this->game_data, i);
     }
 
     this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, this->game_data.player_status().level);
     this->play_level = { &this->game_data, &this->audio };
+    this->game_data.state = game::game_state::play_ready;
 }
 
 void game::play_state::init_resources()

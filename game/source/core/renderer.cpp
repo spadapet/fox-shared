@@ -48,11 +48,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         switch (tile)
         {
             case game::tile_type::panel0:
-                sprite = this->panel[0][play.level().counter / 32 % 2].object().get();
+                sprite = this->panel[0][play.total_counter() / 32 % 2].object().get();
                 break;
 
             case game::tile_type::panel1:
-                sprite = this->panel[1][play.level().counter / 32 % 2].object().get();
+                sprite = this->panel[1][play.total_counter() / 32 % 2].object().get();
                 break;
 
             case game::tile_type::bomb:
@@ -72,11 +72,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
     switch (play.game_data->state)
     {
         case game::game_state::play_ready:
-            render_player = play.game_data->state.counter >= game::constants::STATE_PLAY_READY_TIME / 2;
+            render_player = play.state_counter() >= game::constants::STATE_PLAY_READY_TIME / 2;
             break;
 
         case game::game_state::winning:
-            render_player = play.game_data->state.counter < game::constants::STATE_WINNING_TIME / 2;
+            render_player = play.state_counter() < game::constants::STATE_WINNING_TIME / 2;
             break;
     }
 

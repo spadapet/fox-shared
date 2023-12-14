@@ -13,7 +13,7 @@ namespace game
     class play_state : public ff::state
     {
     public:
-        play_state(game::game_type game_type, game::game_diff game_diff);
+        play_state(game::game_type game_type = game::game_type::none, game::game_diff game_diff = game::game_diff::none);
         virtual ~play_state() override;
 
         // ff::state
@@ -24,6 +24,8 @@ namespace game
         virtual ff::state* child_state(size_t index) override;
 
     private:
+        void find_next_player();
+        void init_from_title();
         void init_playing();
         void init_resources();
 

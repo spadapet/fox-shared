@@ -34,5 +34,5 @@ bool game::app_state::debug_command_override(size_t command_id)
 
 std::shared_ptr<ff::state> game::app_state::create_initial_game_state()
 {
-    return std::make_shared<game::play_state>(game::game_type::one_player, game::game_diff::normal);
+    return std::make_shared<game::play_state>();
 }

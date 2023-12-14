@@ -47,6 +47,7 @@ size_t game::game_data::total_player_count() const
             return 2;
 
         default:
+            debug_fail_msg("Invalid game_type");
             return 0;
     }
 }
@@ -63,22 +64,7 @@ size_t game::game_data::current_player_count() const
             return 2;
 
         default:
-            return 0;
-    }
-}
-
-size_t game::game_data::player_turn_count() const
-{
-    switch (this->game_type)
-    {
-        case game::game_type::one_player:
-        case game::game_type::coop:
-            return 1;
-
-        case game::game_type::two_player:
-            return 2;
-
-        default:
+            debug_fail_msg("Invalid game_type");
             return 0;
     }
 }
@@ -123,4 +109,14 @@ game::player_status& game::play_level::player_status() const
 game::level_data& game::play_level::level() const
 {
     return this->game_data->level();
+}
+
+size_t game::play_level::state_counter() const
+{
+    return this->game_data->state.state_counter;
+}
+
+size_t game::play_level::total_counter() const
+{
+    return this->game_data->state.total_counter;
 }

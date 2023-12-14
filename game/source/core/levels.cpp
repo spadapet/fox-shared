@@ -6,7 +6,7 @@ std::string_view level_tiles[] =
     // Level 0
     ". . . . . . . . . . . . . . . . "sv
     ". . . . . . . . . . . . . . . . "sv
-    ". . . . . . . x x . . . . . . . "sv
+    ". . . o . . . x x . . . o . . . "sv
     ". . . . . . . x x . . . . . . . "sv
     ". . . . . . . x x . . . . . . . "sv
     ". . . . . . . x x . . . . . . . "sv
@@ -16,7 +16,7 @@ std::string_view level_tiles[] =
     ". . . . . . . x x . . . . . . . "sv
     ". . . . . . . x x . . . . . . . "sv
     ". . . . . . . x x . . . . . . . "sv
-    ". . . . . . . x x . . . . . . . "sv
+    ". . . o . . . x x . . . o . . . "sv
     ". . . . . . . . . . . . . . . . "sv
     ". . . . . . . . . . . . . . . . "sv,
 
@@ -25,13 +25,13 @@ std::string_view level_tiles[] =
     ". . . . . . . . . . . . . . . . "sv
     ". . . x x x x x x x x x x . . . "sv
     ". . . x x x x x x x x x x . . . "sv
+    ". . . x x o . . . . o x x . . . "sv
     ". . . x x . . . . . . x x . . . "sv
     ". . . x x . . . . . . x x . . . "sv
     ". . . x x . . . . . . x x . . . "sv
     ". . . x x . . . . . . x x . . . "sv
     ". . . x x . . . . . . x x . . . "sv
-    ". . . x x . . . . . . x x . . . "sv
-    ". . . x x . . . . . . x x . . . "sv
+    ". . . x x o . . . . o x x . . . "sv
     ". . . x x x x x x x x x x . . . "sv
     ". . . x x x x x x x x x x . . . "sv
     ". . . . . . . . . . . . . . . . "sv

@@ -18,7 +18,28 @@ void game::title_page_view_model::play_command(Noesis::BaseComponent* param)
 
     if (this->game_data->state == game::game_state::title)
     {
-        this->game_data->state = game::game_state::play_init;
+        Noesis::String string_type = Noesis::Boxing::CanUnbox<Noesis::String>(param) ? Noesis::Boxing::Unbox<Noesis::String>(param) : 0;
+        game::game_type type = static_cast<game::game_type>(std::atoi(string_type.Str()));
+
+        switch (type)
+        {
+            case game::game_type::one_player:
+                this->game_data->game_type = game::game_type::one_player;
+                break;
+
+            case game::game_type::two_player:
+                this->game_data->game_type = game::game_type::two_player;
+                break;
+
+            case game::game_type::coop:
+                this->game_data->game_type = game::game_type::coop;
+                break;
+        }
+
+        if (this->game_data->game_type != game::game_type::none)
+        {
+            this->game_data->state = game::game_state::play_init_from_title;
+        }
     }
 }
 

@@ -78,8 +78,6 @@ void game::updater::update_player_input(
 
 void game::updater::update(game::play_level& play)
 {
-    play.level().counter++;
-
     for (size_t i = 0; i < play.game_data->current_player_count(); i++)
     {
         game::player_data& player = play.game_data->players[play.game_data->current_player + i];

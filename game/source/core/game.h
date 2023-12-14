@@ -28,6 +28,7 @@ namespace game
     {
         none,
         title,
+        play_init_from_title,
         play_init,
         play_ready,
         playing,
@@ -69,8 +70,9 @@ namespace game
     template<class T, class = std::enable_if_t<std::is_enum_v<T>>>
     struct state_t
     {
-        T state;
-        size_t counter;
+        T state{};
+        size_t state_counter{};
+        size_t total_counter{};
 
         state_t& operator=(T new_state)
         {
@@ -95,8 +97,11 @@ namespace game
 
         void set(T new_state)
         {
-            this->state = new_state;
-            this->counter = 0;
+            if (this->state != new_state)
+            {
+                this->state = new_state;
+                this->state_counter = 0;
+            }
         }
 
         void ensure(T new_state)
@@ -109,7 +114,16 @@ namespace game
 
         void advance_time()
         {
-            this->counter++;
+            this->state_counter++;
+            this->total_counter++;
+        }
+
+        void set_at(T new_state, size_t at_least_counter)
+        {
+            if (this->state_counter >= at_least_counter)
+            {
+                this->set(new_state);
+            }
         }
     };
 
@@ -119,7 +133,6 @@ namespace game
         void tile(ff::point_size pos, game::tile_type value);
 
         size_t index{};
-        size_t counter{};
         size_t max_timer{};
         game::level_type level_type{};
         game::tile_array tiles{};
@@ -169,7 +182,6 @@ namespace game
         bool coop() const;
         size_t total_player_count() const;
         size_t current_player_count() const;
-        size_t player_turn_count() const;
         size_t score_for_tile(game::tile_type tile_type) const;
         ff::fixed_int player_speed(bool press_speed) const;
         game::player_status& player_status() const;
@@ -188,6 +200,8 @@ namespace game
     {
         game::player_status& player_status() const;
         game::level_data& level() const;
+        size_t state_counter() const;
+        size_t total_counter() const;
 
         game::game_data* game_data{};
         game::audio* audio{};

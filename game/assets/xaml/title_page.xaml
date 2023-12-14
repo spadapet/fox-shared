@@ -7,7 +7,9 @@
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     DataContext="{Binding view_model, RelativeSource={RelativeSource Mode=Self}}">
-    <Grid>
-        <Button Content="Play" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="20,10" Command="{Binding play_command}" />
-    </Grid>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Content="One player" Padding="10" Margin="10" Command="{Binding play_command}" CommandParameter="1" />
+        <Button Content="Two players take turns" Padding="10" Margin="10" Command="{Binding play_command}" CommandParameter="2" />
+        <Button Content="Two players co-op" Padding="10" Margin="10" Command="{Binding play_command}" CommandParameter="3" />
+    </StackPanel>
 </UserControl>
