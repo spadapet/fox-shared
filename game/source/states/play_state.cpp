@@ -11,7 +11,7 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
         (game_diff == game::game_diff::none) ? game::game_diff::normal : game_diff,
         (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
     }
-    , resource_connection(ff::game::app_state_base::get().reload_resources_sink().connect(std::bind(&game::play_state::init_resources, this)))
+    , resource_connection(ff::game::app_state_base::get().reload_resources_sink().connect(std::bind(&game::play_state::on_reload_resources, this)))
     , title_page_vm(Noesis::MakePtr<game::title_page_view_model>(this->game_data))
     , title_page(Noesis::MakePtr<game::title_page>(this->title_page_vm))
     , title_state(std::make_shared<ff::ui_view_state>(std::make_shared<ff::ui_view>(this->title_page)))
@@ -72,7 +72,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::winning:
-            this->game_data.state.set_at(game::game_state::win, game::constants::STATE_WINNING_TIME);
+            this->game_data.state.set_at(game::game_state::win, game::constants::STATE_GAME_WINNING_TIME);
             break;
 
         case game::game_state::win:
@@ -81,11 +81,15 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::dying:
-            this->game_data.state.set_at(game::game_state::dead, game::constants::STATE_DYING_TIME);
+            this->game_data.state.set_at(game::game_state::dead, game::constants::STATE_GAME_DYING_TIME);
             break;
 
         case game::game_state::dead:
             this->find_next_player();
+            break;
+
+        case game::game_state::game_over:
+            this->game_data.state = game::game_state::title;
             break;
     }
 
@@ -135,7 +139,7 @@ void game::play_state::find_next_player()
 {
     if (!this->game_data.coop())
     {
-        for (size_t i = 0; i < this->game_data.total_player_count(); i++)
+        for (size_t i = 1; i <= this->game_data.total_player_count(); i++)
         {
             size_t index = (this->game_data.current_player + i) % this->game_data.total_player_count();
             game::player_data& player = this->game_data.players[index];
@@ -172,6 +176,15 @@ void game::play_state::init_from_title()
         player.level = &this->game_data.levels[i * !this->game_data.coop()];
         player.state = (i < this->game_data.total_player_count()) ? game::player_state::playing : game::player_state::none;
     }
+
+    for (game::player_status& status : this->game_data.statuses)
+    {
+        status.level = 0;
+        status.lives = this->game_data.default_lives() - 1;
+        status.score = 0;
+    }
+
+    this->init_playing_resources();
 }
 
 void game::play_state::init_playing()
@@ -187,13 +200,20 @@ void game::play_state::init_playing()
     this->game_data.state = game::game_state::play_ready;
 }
 
-void game::play_state::init_resources()
+void game::play_state::on_reload_resources()
+{
+    this->init_playing_resources();
+    this->init_resources();
+    this->renderer.init_resources();
+}
+
+void game::play_state::init_playing_resources()
 {
     ff::auto_resource<ff::input_mapping> player_mapping[]
     {
         "player_controls"sv,
+        "player_controls_right"sv,
         "player_controls_left"sv,
-        "player_controls_right"sv
     };
 
     for (size_t i = 0; i < game::constants::MAX_PLAYERS; i++)
@@ -215,6 +235,7 @@ void game::play_state::init_resources()
         const ff::input_mapping& mapping = !this->game_data.coop() ? *player_mapping[0].object() : *player_mapping[i ? 2 : 1].object();
         this->player_input[i] = std::make_unique<ff::input_event_provider>(mapping, std::move(devices));
     }
-
-    this->renderer.init_resources();
 }
+
+void game::play_state::init_resources()
+{}

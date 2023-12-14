@@ -84,6 +84,27 @@ size_t game::game_data::score_for_tile(game::tile_type tile_type) const
     }
 }
 
+size_t game::game_data::default_lives() const
+{
+    switch (this->game_diff)
+    {
+        case game::game_diff::baby:
+            return 5;
+
+        case game::game_diff::easy:
+            return 4;
+
+        default:
+            debug_fail();
+            [[fallthrough]];
+        case game::game_diff::normal:
+            return 3;
+
+        case game::game_diff::hard:
+            return 2;
+    }
+}
+
 ff::fixed_int game::game_data::player_speed(bool press_speed) const
 {
     return press_speed

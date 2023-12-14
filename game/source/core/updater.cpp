@@ -82,11 +82,19 @@ void game::updater::update(game::play_level& play)
     {
         game::player_data& player = play.game_data->players[play.game_data->current_player + i];
         player.state.advance_time();
-        player.speed_bank += play.game_data->player_speed(player.flags.press_speed);
 
-        for (; player.speed_bank >= 1_f; player.speed_bank--)
+        switch (player.state)
         {
-            this->update_player(play, player);
+            case game::player_state::playing:
+                for (player.speed_bank += play.game_data->player_speed(player.flags.press_speed); player.speed_bank >= 1_f; player.speed_bank--)
+                {
+                    this->update_player(play, player);
+                }
+                break;
+
+            case game::player_state::dying:
+                player.state = game::player_state::dead;
+                break;
         }
     }
 
@@ -201,6 +209,11 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
                     case game::tile_type::panel1:
                         player.flags.collected = true;
                         play.level().tile(tile.cast<size_t>(), game::tile_type::panel0);
+                        break;
+
+                    case game::tile_type::bomb:
+                        player.flags.collected = true;
+                        player.state = game::player_state::dying;
                         break;
                 }
 

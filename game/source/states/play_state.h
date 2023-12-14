@@ -27,6 +27,8 @@ namespace game
         void find_next_player();
         void init_from_title();
         void init_playing();
+        void on_reload_resources();
+        void init_playing_resources();
         void init_resources();
 
         game::audio audio;

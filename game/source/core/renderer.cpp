@@ -2,6 +2,15 @@
 #include "source/core/game.h"
 #include "source/core/renderer.h"
 
+static ff::point_float tile_index_to_center(size_t index)
+{
+    return
+    {
+        static_cast<float>(index % game::constants::TILE_COUNT_X * game::constants::TILE_SIZE_X + game::constants::TILE_SIZE_X / 2),
+        static_cast<float>(index / game::constants::TILE_COUNT_X * game::constants::TILE_SIZE_Y + game::constants::TILE_SIZE_Y / 2)
+    };
+}
+
 game::renderer::renderer()
 {
     this->init_resources();
@@ -56,14 +65,16 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                 break;
 
             case game::tile_type::bomb:
+                {
+                    ff::point_float center = ::tile_index_to_center(i);
+                    draw.draw_palette_outline_circle(center, 6.0f, 245, 2.0f, true);
+                }
                 break;
         }
 
         if (sprite)
         {
-            transform.position.x = static_cast<float>(i % game::constants::TILE_COUNT_X * game::constants::TILE_SIZE_X + game::constants::TILE_SIZE_X / 2);
-            transform.position.y = static_cast<float>(i / game::constants::TILE_COUNT_X * game::constants::TILE_SIZE_Y + game::constants::TILE_SIZE_Y / 2);
-
+            transform.position = ::tile_index_to_center(i);
             draw.draw_sprite(sprite->sprite_data(), transform);
         }
     }
@@ -76,20 +87,22 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
             break;
 
         case game::game_state::winning:
-            render_player = play.state_counter() < game::constants::STATE_WINNING_TIME / 2;
+            render_player = play.state_counter() < game::constants::STATE_GAME_WINNING_TIME / 2;
             break;
     }
 
     if (render_player)
     {
-        for (const game::player_data& player : play.game_data->players)
+        for (size_t i = 0; i < play.game_data->current_player_count(); i++)
         {
+            const game::player_data& player = play.game_data->players[i + play.game_data->current_player];
             ff::sprite_base* sprite{};
 
             switch (player.state)
             {
                 case game::player_state::playing:
-                    sprite = this->ship.object().get(); // [game::math::dir_to_index(player.dir)] .object().get();
+                case game::player_state::dying:
+                    sprite = this->ship.object().get();
                     break;
             }
 
@@ -97,7 +110,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
             {
                 transform.position = player.pos.cast<float>();
                 transform.rotation = game::dir_to_degrees<float>(player.dir);
+
+                ff::dxgi::palette_base* palette = ff::game::app_state_base::get().palette(player.index);
+                draw.push_palette_remap(palette->index_remap(), palette->index_remap_hash());
                 draw.draw_sprite(sprite->sprite_data(), transform);
+                draw.pop_palette_remap();
             }
         }
     }

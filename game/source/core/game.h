@@ -183,6 +183,7 @@ namespace game
         size_t total_player_count() const;
         size_t current_player_count() const;
         size_t score_for_tile(game::tile_type tile_type) const;
+        size_t default_lives() const;
         ff::fixed_int player_speed(bool press_speed) const;
         game::player_status& player_status() const;
         game::level_data& level() const;
