@@ -24,7 +24,7 @@ namespace game
         virtual ff::state* child_state(size_t index) override;
 
     private:
-        void find_next_player();
+        bool find_next_player();
         void init_from_title();
         void init_playing();
         void on_reload_resources();

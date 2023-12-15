@@ -86,14 +86,15 @@ void game::updater::update(game::play_level& play)
         switch (player.state)
         {
             case game::player_state::playing:
-                for (player.speed_bank += play.game_data->player_speed(player.flags.press_speed); player.speed_bank >= 1_f; player.speed_bank--)
+                for (player.speed_bank += play.game_data->player_speed(player.flags.press_speed);
+                    player.speed_bank >= 1_f && player.state == game::player_state::playing; player.speed_bank--)
                 {
                     this->update_player(play, player);
                 }
                 break;
 
             case game::player_state::dying:
-                player.state = game::player_state::dead;
+                player.state.set_at(game::player_state::dead, game::constants::STATE_PLAYER_DYING_TIME);
                 break;
         }
     }
@@ -198,30 +199,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         {
             if (!player.flags.collected)
             {
-                game::tile_type tile_type = play.level().tile(tile.cast<size_t>());
-                switch (tile_type)
-                {
-                    case game::tile_type::panel0:
-                        player.flags.collected = true;
-                        play.level().tile(tile.cast<size_t>(), game::tile_type::none);
-                        break;
-
-                    case game::tile_type::panel1:
-                        player.flags.collected = true;
-                        play.level().tile(tile.cast<size_t>(), game::tile_type::panel0);
-                        break;
-
-                    case game::tile_type::bomb:
-                        player.flags.collected = true;
-                        player.state = game::player_state::dying;
-                        break;
-                }
-
-                if (player.flags.collected)
-                {
-                    play.audio->play_collect(tile_type);
-                    this->add_score(play, player, tile_type);
-                }
+                this->player_hit_tile(play, player, tile.cast<size_t>());
             }
         }
         else
@@ -229,6 +207,32 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
             player.flags.collected = false;
         }
     }
+}
+
+void game::updater::player_hit_tile(game::play_level& play, game::player_data& player, ff::point_size tile)
+{
+    const game::tile_type tile_type = play.level().tile(tile);
+    switch (tile_type)
+    {
+        case game::tile_type::panel0:
+            play.level().tile(tile.cast<size_t>(), game::tile_type::none);
+            break;
+
+        case game::tile_type::panel1:
+            play.level().tile(tile.cast<size_t>(), game::tile_type::panel0);
+            break;
+
+        case game::tile_type::bomb:
+            player.state = game::player_state::dying;
+            break;
+
+        default:
+            return;
+    }
+
+    player.flags.collected = true;
+    play.audio->play_collect(tile_type);
+    this->add_score(play, player, tile_type);
 }
 
 void game::updater::add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type)

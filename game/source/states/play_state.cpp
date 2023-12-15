@@ -85,7 +85,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::dead:
-            this->find_next_player();
+            this->game_data.state = this->find_next_player() ? game::game_state::play_init : game::game_state::game_over;
             break;
 
         case game::game_state::game_over:
@@ -135,7 +135,7 @@ ff::state* game::play_state::child_state(size_t index)
     }
 }
 
-void game::play_state::find_next_player()
+bool game::play_state::find_next_player()
 {
     if (!this->game_data.coop())
     {
@@ -144,26 +144,23 @@ void game::play_state::find_next_player()
             size_t index = (this->game_data.current_player + i) % this->game_data.total_player_count();
             game::player_data& player = this->game_data.players[index];
 
-            if (!player.status->lives)
-            {
-                player.state = game::player_state::game_over;
-            }
-
             if (player.state != game::player_state::game_over)
             {
-                player.status->lives--;
-                this->game_data.current_player = index;
-                this->game_data.state = game::game_state::play_init;
-                break;
+                if (!player.status->lives)
+                {
+                    player.state = game::player_state::game_over;
+                }
+                else
+                {
+                    player.status->lives--;
+                    this->game_data.current_player = index;
+                    return true;
+                }
             }
         }
-
     }
 
-    if (this->game_data.state != game::game_state::play_init)
-    {
-        this->game_data.state = game::game_state::game_over;
-    }
+    return false;
 }
 
 void game::play_state::init_from_title()
