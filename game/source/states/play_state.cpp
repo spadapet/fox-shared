@@ -11,6 +11,7 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
         (game_diff == game::game_diff::none) ? game::game_diff::normal : game_diff,
         (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
     }
+    , play_level{ &this->game_data, &this->audio }
     , resource_connection(ff::game::app_state_base::get().reload_resources_sink().connect(std::bind(&game::play_state::on_reload_resources, this)))
     , title_page_vm(Noesis::MakePtr<game::title_page_view_model>(this->game_data))
     , title_page(Noesis::MakePtr<game::title_page>(this->title_page_vm))
@@ -56,7 +57,6 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
     {
         case game::game_state::play_init_from_title:
             this->init_from_title();
-            this->game_data.state = game::game_state::play_init;
             break;
 
         case game::game_state::play_init:
@@ -76,8 +76,7 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::win:
-            this->game_data.state = game::game_state::play_init;
-            this->game_data.player_status().level++;
+            this->init_next_level();
             break;
 
         case game::game_state::dying:
@@ -85,7 +84,11 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             break;
 
         case game::game_state::dead:
-            this->game_data.state = this->find_next_player() ? game::game_state::play_init : game::game_state::game_over;
+            this->find_next_player();
+            break;
+
+        case game::game_state::game_over_ready:
+            this->game_data.state.set_at(game::game_state::game_over, game::constants::STATE_GAME_OVER_TIME);
             break;
 
         case game::game_state::game_over:
@@ -135,50 +138,58 @@ ff::state* game::play_state::child_state(size_t index)
     }
 }
 
-bool game::play_state::find_next_player()
+void game::play_state::find_next_player()
 {
     if (!this->game_data.coop())
     {
+        if (!this->game_data.player_status().lives)
+        {
+            game::player_data& player = this->game_data.players[this->game_data.current_player];
+            player.state = game::player_state::game_over;
+            // TODO: Consider showing "enter high score" screen
+        }
+
         for (size_t i = 1; i <= this->game_data.total_player_count(); i++)
         {
             size_t index = (this->game_data.current_player + i) % this->game_data.total_player_count();
             game::player_data& player = this->game_data.players[index];
 
-            if (player.state != game::player_state::game_over)
+            if (player.status->lives)
             {
-                if (!player.status->lives)
-                {
-                    player.state = game::player_state::game_over;
-                }
-                else
-                {
-                    player.status->lives--;
-                    this->game_data.current_player = index;
-                    return true;
-                }
+                player.status->lives--;
+                this->game_data.current_player = index;
+                this->game_data.state = game::game_state::play_init;
+                return;
             }
         }
     }
 
-    return false;
+    this->game_data.state = game::game_state::game_over_ready;
 }
 
 void game::play_state::init_from_title()
 {
+    this->game_data.state = game::game_state::play_init;
+    this->game_data.current_player = 0;
+
     for (size_t i = 0; i < this->game_data.total_player_count(); i++)
     {
         game::player_data& player = this->game_data.players[i];
         player.index = i;
         player.status = &this->game_data.statuses[i * !this->game_data.coop()];
         player.level = &this->game_data.levels[i * !this->game_data.coop()];
-        player.state = (i < this->game_data.total_player_count()) ? game::player_state::playing : game::player_state::none;
+        player.state = game::player_state::playing;
     }
 
-    for (game::player_status& status : this->game_data.statuses)
+    for (size_t i = 0; i < this->game_data.total_player_count(); i += this->game_data.current_player_count())
     {
+        game::player_status& status = this->game_data.statuses[i];
         status.level = 0;
-        status.lives = this->game_data.default_lives() - 1;
+        status.lives = this->game_data.default_lives() - (i ? 0 : 1);
         status.score = 0;
+
+        game::level_data& level = this->game_data.levels[i];
+        level = game::get_level(this->game_data.game_type, this->game_data.game_diff, status.level);
     }
 
     this->init_playing_resources();
@@ -186,15 +197,20 @@ void game::play_state::init_from_title()
 
 void game::play_state::init_playing()
 {
+    this->game_data.state = game::game_state::play_ready;
+
     for (size_t i = 0; i < this->game_data.current_player_count(); i++)
     {
         game::player_data& player = this->game_data.players[this->game_data.current_player + i];
         player.init_playing(this->game_data, i);
     }
+}
 
-    this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, this->game_data.player_status().level);
-    this->play_level = { &this->game_data, &this->audio };
-    this->game_data.state = game::game_state::play_ready;
+void game::play_state::init_next_level()
+{
+    size_t level = ++this->game_data.player_status().level;
+    this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, level);
+    this->game_data.state = game::game_state::play_init;
 }
 
 void game::play_state::on_reload_resources()

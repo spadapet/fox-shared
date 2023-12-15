@@ -27,7 +27,6 @@ void game::player_data::init_playing(const game::game_data& game, size_t current
     this->press = {};
     this->speed_bank = {};
     this->flags.all = {};
-
 }
 
 bool game::game_data::coop() const

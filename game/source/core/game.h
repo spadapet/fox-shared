@@ -37,6 +37,7 @@ namespace game
         win,
         dying,
         dead,
+        game_over_ready,
         game_over,
     };
 
@@ -95,35 +96,33 @@ namespace game
             return this->state;
         }
 
-        void set(T new_state)
+        bool set(T new_state)
         {
             if (this->state != new_state)
             {
                 this->state = new_state;
                 this->state_counter = 0;
+                return true;
             }
+
+            return false;
         }
 
-        void ensure(T new_state)
+        bool set_at(T new_state, size_t at_least_counter)
         {
-            if (this->state != new_state)
+            if (this->state_counter >= at_least_counter)
             {
                 this->set(new_state);
+                return true;
             }
+
+            return false;
         }
 
         void advance_time()
         {
             this->state_counter++;
             this->total_counter++;
-        }
-
-        void set_at(T new_state, size_t at_least_counter)
-        {
-            if (this->state_counter >= at_least_counter)
-            {
-                this->set(new_state);
-            }
         }
     };
 

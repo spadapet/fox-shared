@@ -99,8 +99,10 @@ void game::updater::update(game::play_level& play)
         }
     }
 
-    this->check_win(play);
-    this->check_dead(play);
+    if (!this->check_dead(play))
+    {
+        this->check_win(play);
+    }
 }
 
 void game::updater::update_player(game::play_level& play, game::player_data& player)
@@ -240,7 +242,7 @@ void game::updater::add_score(game::play_level& play, game::player_data& player,
     player.status->score += play.game_data->score_for_tile(tile_type);
 }
 
-void game::updater::check_win(game::play_level& play)
+bool game::updater::check_win(game::play_level& play)
 {
     for (game::tile_type tile_type : play.level().tiles)
     {
@@ -248,14 +250,15 @@ void game::updater::check_win(game::play_level& play)
         {
             case game::tile_type::panel0:
             case game::tile_type::panel1:
-                return;
+                return false;
         }
     }
 
     play.game_data->state = game::game_state::winning;
+    return true;
 }
 
-void game::updater::check_dead(game::play_level& play)
+bool game::updater::check_dead(game::play_level& play)
 {
     bool found_alive = false;
 
@@ -275,5 +278,8 @@ void game::updater::check_dead(game::play_level& play)
     if (!found_alive)
     {
         play.game_data->state = game::game_state::dying;
+        return true;
     }
+
+    return false;
 }
