@@ -16,6 +16,7 @@ namespace game
 
     private:
         void update_player(game::play_level& play, game::player_data& player);
+        void update_shooter(game::play_level& play, game::shooter_data& shooter);
         void player_hit_tile(game::play_level& play, game::player_data& player, ff::point_size tile);
         void add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type);
         bool check_win(game::play_level& play);

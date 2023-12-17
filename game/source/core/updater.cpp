@@ -105,7 +105,10 @@ void game::updater::update(game::play_level& play)
 
     for (game::shooter_data& shooter : play.game_data->shooters)
     {
-
+        for (shooter.speed_bank += play.game_data->shooter_speed(); shooter.speed_bank >= 1_f; shooter.speed_bank--)
+        {
+            this->update_
+        }
     }
 
     if (!this->check_dead(play))
@@ -236,6 +239,13 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         {
             player.flags.collected = false;
         }
+    }
+}
+
+void game::updater::update_shooter(game::play_level& play, game::shooter_data& shooter)
+{
+    switch (shooter.dir)
+    {
     }
 }
 

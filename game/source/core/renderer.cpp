@@ -84,8 +84,8 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                 y >= game::constants::MOVABLE_TILES.top && y < game::constants::MOVABLE_TILES.bottom)
             {
                 ff::point_float center = ::tile_to_center(x, y);
-                draw.draw_palette_line(center - ff::point_float(3, 0), center + ff::point_float(2, 0), 255 - 14, 1.0f, true);
-                draw.draw_palette_line(center - ff::point_float(0, 3), center + ff::point_float(0, 2), 255 - 14, 1.0f, true);
+                draw.draw_palette_line(center - ff::point_float(2, 0), center + ff::point_float(1, 0), 255 - 14, 1.0f, true);
+                draw.draw_palette_line(center - ff::point_float(0, 2), center + ff::point_float(0, 1), 255 - 14, 1.0f, true);
             }
 
             if (anim)
@@ -133,8 +133,8 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                 anim->draw_frame(draw, transform, 0.0f);
                 draw.pop_palette();
 
-                draw.draw_palette_line(transform.position - ff::point_float(3, 0), transform.position + ff::point_float(2, 0), 255 - 14, 1.0f, true);
-                draw.draw_palette_line(transform.position - ff::point_float(0, 3), transform.position + ff::point_float(0, 2), 255 - 14, 1.0f, true);
+                //draw.draw_palette_line(transform.position - ff::point_float(3, 0), transform.position + ff::point_float(2, 0), 255 - 14, 1.0f, true);
+                //draw.draw_palette_line(transform.position - ff::point_float(0, 3), transform.position + ff::point_float(0, 2), 255 - 14, 1.0f, true);
             }
         }
 
