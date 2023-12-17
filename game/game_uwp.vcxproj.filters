@@ -47,9 +47,6 @@
     <ClCompile Include="source\core\constants.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\dir.cpp">
-      <Filter>source\core</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -81,9 +78,6 @@
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\constants.h">
-      <Filter>source\core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\dir.h">
       <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -257,6 +251,8 @@
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(NoesisDll)" />
+    <None Include="$(WinPixDll)" />
     <None Include="$(NoesisDll)" />
     <None Include="$(WinPixDll)" />
     <None Include="$(NoesisDll)" />

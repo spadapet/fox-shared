@@ -25,13 +25,15 @@ void game::updater::update_player_input(
         {
             player.flags.ignore_press_x = true;
 
-            if (player.dir == game::dir::right)
+            switch (player.dir)
             {
-                press_right = false;
-            }
-            else
-            {
-                press_left = false;
+                case game::dir::right:
+                    press_right = false;
+                    break;
+
+                case game::dir::left:
+                    press_left = false;
+                    break;
             }
         }
     }
@@ -51,13 +53,15 @@ void game::updater::update_player_input(
         {
             player.flags.ignore_press_y = true;
 
-            if (player.dir == game::dir::down)
+            switch (player.dir)
             {
-                press_down = false;
-            }
-            else
-            {
-                press_up = false;
+                case game::dir::down:
+                    press_down = false;
+                    break;
+
+                case game::dir::up:
+                    press_up = false;
+                    break;
             }
         }
     }
@@ -99,6 +103,11 @@ void game::updater::update(game::play_level& play)
         }
     }
 
+    for (game::shooter_data& shooter : play.game_data->shooters)
+    {
+
+    }
+
     if (!this->check_dead(play))
     {
         this->check_win(play);
@@ -114,7 +123,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
 
     const bool was_facing_x = game::dir_is_horizontal(player.dir);
     const bool was_facing_y = game::dir_is_vertical(player.dir);
-    const bool can_turn =
+    const bool can_turn = (player.dir == game::dir::none) ||
         (player.dir == game::dir::right && player.pos.x >= tile_center.x && player.pos.x - tile_center.x <= game::constants::TILE_TURN_PAST_CENTER) ||
         (player.dir == game::dir::left && player.pos.x <= tile_center.x && tile_center.x - player.pos.x <= game::constants::TILE_TURN_PAST_CENTER) ||
         (player.dir == game::dir::down && player.pos.y >= tile_center.y && player.pos.y - tile_center.y <= game::constants::TILE_TURN_PAST_CENTER) ||
@@ -125,7 +134,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
     {
         player.flags.turned = player.flags.turned && can_turn;
 
-        if (!set_dir && can_turn && was_facing_x && player.press.y && !player.flags.turned)
+        if (!set_dir && can_turn && !was_facing_y && player.press.y && !player.flags.turned)
         {
             int adjacent_row = (player.pos.y / tile_size.y) + player.press.y; // don't turn off the screen
             if (adjacent_row >= 0 && adjacent_row < tile_count.y)
@@ -136,7 +145,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
             }
         }
 
-        if (!set_dir && can_turn && was_facing_y && player.press.x && !player.flags.turned)
+        if (!set_dir && can_turn && !was_facing_x && player.press.x && !player.flags.turned)
         {
             int adjacent_col = (player.pos.x / tile_size.x) + player.press.x; // don't turn off the screen
             if (adjacent_col >= 0 && adjacent_col < tile_count.x)
@@ -176,18 +185,37 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
     {
         if (game::dir_is_horizontal(player.dir))
         {
-            player.pos.y = tile_center.y;
+            if (player.pos.y > tile_center.y)
+            {
+                player.pos.y--;
+            }
+            else if (player.pos.y < tile_center.y)
+            {
+                player.pos.y++;
+            }
         }
         else if (game::dir_is_vertical(player.dir))
         {
-            player.pos.x = tile_center.x;
+            if (player.pos.x > tile_center.x)
+            {
+                player.pos.x--;
+            }
+            else if (player.pos.x < tile_center.x)
+            {
+                player.pos.x++;
+            }
         }
     }
 
     // Keep inside the grid
     {
-        player.pos.x = ff::math::clamp(player.pos.x, tile_size.x / 2, (tile_count.x - 1) * tile_size.x + tile_size.x / 2);
-        player.pos.y = ff::math::clamp(player.pos.y, tile_size.y / 2, (tile_count.y - 1) * tile_size.y + tile_size.y / 2);
+        player.pos.x = ff::math::clamp(player.pos.x,
+            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.left),
+            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.right));
+
+        player.pos.y = ff::math::clamp(player.pos.y,
+            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.top),
+            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.bottom));
     }
 
     // Check for tile collection

@@ -37,6 +37,12 @@
         "size": [ 30, 18 ],
         "handle": [ 15, 9 ],
         "repeat": 2
+      },
+      "shooter": {
+        "file": "file:graphics/sprites.png",
+        "pos": [ 0, 54 ],
+        "size": [ 30, 18 ],
+        "handle": [ 15, 9 ]
       }
     }
   }

@@ -1,6 +1,18 @@
 #include "pch.h"
 #include "source/core/game.h"
 
+ff::point_int game::dir_to_point(game::dir dir)
+{
+    switch (dir)
+    {
+        case game::dir::right: return ff::point_int(1, 0);
+        case game::dir::up: return ff::point_int(0, -1);
+        case game::dir::left: return ff::point_int(-1, 0);
+        case game::dir::down: return ff::point_int(0, 1);
+        default: return ff::point_int();
+    }
+}
+
 game::tile_type game::level_data::tile(ff::point_size pos) const
 {
     return (pos.x < game::constants::TILE_COUNT_X && pos.y < game::constants::TILE_COUNT_Y)
@@ -23,7 +35,7 @@ void game::player_data::init_playing(const game::game_data& game, size_t current
         : game::player_state::playing;
 
     this->pos = game::constants::PLAYER_START[current_index];
-    this->dir = game::constants::PLAYER_START_DIR[current_index];
+    this->dir = game::dir::none;
     this->press = {};
     this->speed_bank = {};
     this->flags.all = {};
@@ -101,6 +113,27 @@ size_t game::game_data::default_lives() const
 
         case game::game_diff::hard:
             return 2;
+    }
+}
+
+ff::fixed_int game::game_data::shooter_speed() const
+{
+    switch (this->game_diff)
+    {
+        case game::game_diff::baby:
+            return game::constants::SHOOTER_SPEED_NORMAL;
+
+        case game::game_diff::easy:
+            return game::constants::SHOOTER_SPEED_NORMAL;
+
+        default:
+            debug_fail();
+            [[fallthrough]];
+        case game::game_diff::normal:
+            return game::constants::SHOOTER_SPEED_NORMAL;
+
+        case game::game_diff::hard:
+            return game::constants::SHOOTER_SPEED_NORMAL;
     }
 }
 

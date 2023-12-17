@@ -28,6 +28,7 @@ namespace game
         void init_from_title();
         void init_playing();
         void init_next_level();
+        void init_shooters();
         void on_reload_resources();
         void init_playing_resources();
         void init_resources();

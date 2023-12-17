@@ -1,7 +1,5 @@
 #pragma once
 
-#include "source/core/dir.h"
-
 namespace game::strings
 {
     extern const std::string_view ID_GAME_OPTIONS;
@@ -27,6 +25,7 @@ namespace game::input_events
 namespace game::constants
 {
     constexpr size_t MAX_PLAYERS = 2;
+    constexpr size_t MAX_SHOOTERS = 2;
     constexpr size_t RENDER_SIZE_X = 480; // 1920/4
     constexpr size_t RENDER_SIZE_Y = 270; // 1080/4
     constexpr size_t TILE_SIZE_X = 30;
@@ -39,14 +38,17 @@ namespace game::constants
 
     const ff::point_size RENDER_SIZE(RENDER_SIZE_X, RENDER_SIZE_Y);
     const ff::point_size TILE_SIZE(TILE_SIZE_X, TILE_SIZE_Y);
+    const ff::rect_size MOVABLE_TILES(2, 2, TILE_COUNT_X - 2, TILE_COUNT_Y - 2);
+    const ff::rect_size MOVABLE_AREA = MOVABLE_TILES * TILE_SIZE;
+    const ff::rect_size MOVABLE_AREA_CENTER_TILE = MOVABLE_AREA.deflate(TILE_SIZE / static_cast<size_t>(2));
 
-    const ff::fixed_int PLAYER_SPEED_SLOW = 1;
-    const ff::fixed_int PLAYER_SPEED_FAST = 2;
+    const ff::fixed_int SHOOTER_SPEED_NORMAL = 2;
+    const ff::fixed_int PLAYER_SPEED_SLOW = 1.25;
+    const ff::fixed_int PLAYER_SPEED_FAST = 2.5;
     constexpr int TILE_TURN_PAST_CENTER = 2;
     constexpr int TILE_COLLECT_NEAR_CENTER = 4;
 
     const ff::point_int PLAYER_START[2] = { { 255, 126 }, { 225, 126 } };
-    const game::dir PLAYER_START_DIR[2] = { game::dir::up, game::dir::down };
 
     constexpr size_t STATE_PLAY_READY_TIME = 90;
     constexpr size_t STATE_GAME_WINNING_TIME = 120;

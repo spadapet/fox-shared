@@ -23,7 +23,6 @@
     <ClCompile Include="source\assets\xaml.res.cpp" />
     <ClCompile Include="source\core\audio.cpp" />
     <ClCompile Include="source\core\constants.cpp" />
-    <ClCompile Include="source\core\dir.cpp" />
     <ClCompile Include="source\core\game.cpp" />
     <ClCompile Include="source\core\levels.cpp" />
     <ClCompile Include="source\core\particles.cpp" />
@@ -39,7 +38,6 @@
     </ClCompile>
     <ClInclude Include="source\core\audio.h" />
     <ClInclude Include="source\core\constants.h" />
-    <ClInclude Include="source\core\dir.h" />
     <ClInclude Include="source\core\game.h" />
     <ClInclude Include="source\core\levels.h" />
     <ClInclude Include="source\core\particles.h" />

@@ -50,9 +50,6 @@
     <ClCompile Include="source\assets\particles.res.cpp">
       <Filter>source\assets</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\dir.cpp">
-      <Filter>source\core</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -84,9 +81,6 @@
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\audio.h">
-      <Filter>source\core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\dir.h">
       <Filter>source\core</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,36 @@
 
 namespace game
 {
+    enum class dir
+    {
+        none,
+        right,
+        up,
+        left,
+        down,
+    };
+
+    template<class T>
+    constexpr T dir_to_degrees(game::dir dir)
+    {
+        return (dir != game::dir::none) * (static_cast<int>(dir) - 1) * static_cast<T>(90);
+    }
+
+    constexpr bool dir_is_horizontal(game::dir dir)
+    {
+        return dir == game::dir::left || dir == game::dir::right;
+    }
+
+    constexpr bool dir_is_vertical(game::dir dir)
+    {
+        return dir == game::dir::up || dir == game::dir::down;
+    }
+
+    ff::point_int dir_to_point(game::dir dir);
+}
+
+namespace game
+{
     class audio;
     struct game_data;
 
@@ -172,8 +202,17 @@ namespace game
         } flags;
     };
 
+    struct shooter_data
+    {
+        size_t index{};
+        game::dir dir{};
+        ff::point_int pos{};
+        ff::fixed_int speed_bank{};
+    };
+
     using player_status_array = typename std::array<game::player_status, game::constants::MAX_PLAYERS>;
     using player_array = typename std::array<game::player_data, game::constants::MAX_PLAYERS>;
+    using shooter_array = typename std::array<game::shooter_data, game::constants::MAX_SHOOTERS>;
     using level_array = typename std::array<game::level_data, game::constants::MAX_PLAYERS>;
 
     struct game_data
@@ -183,6 +222,7 @@ namespace game
         size_t current_player_count() const;
         size_t score_for_tile(game::tile_type tile_type) const;
         size_t default_lives() const;
+        ff::fixed_int shooter_speed() const;
         ff::fixed_int player_speed(bool press_speed) const;
         game::player_status& player_status() const;
         game::level_data& level() const;
@@ -193,6 +233,7 @@ namespace game
         game::level_array levels{};
         game::player_status_array statuses{};
         game::player_array players{};
+        game::shooter_array shooters{};
         size_t current_player{};
     };
 

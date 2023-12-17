@@ -14,7 +14,8 @@ namespace game
         void render(ff::dxgi::draw_base& draw, const game::play_level& play);
 
     private:
-        ff::auto_resource<ff::sprite_resource> ship;
-        ff::auto_resource<ff::sprite_resource> panel[2][2]; // type, power
+        ff::auto_resource<ff::animation_base> ship;
+        ff::auto_resource<ff::animation_base> panel[2][2]; // type, power
+        ff::auto_resource<ff::animation_base> shooter;
     };
 }
