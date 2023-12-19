@@ -218,13 +218,16 @@ void game::play_state::init_next_level()
 
 void game::play_state::init_shooters()
 {
-    this->game_data.shooters[0].index = 0;
-    this->game_data.shooters[0].dir = game::dir::right;
-    this->game_data.shooters[0].pos = game::constants::MOVABLE_AREA_CENTER_TILE.top_left().cast<int>() - ff::point_int(0, static_cast<int>(game::constants::TILE_SIZE_Y / 2));
+    this->game_data.shooters = {};
+    this->game_data.shots = {};
 
-    this->game_data.shooters[1].index = 1;
-    this->game_data.shooters[1].dir = game::dir::left;
-    this->game_data.shooters[1].pos = game::constants::MOVABLE_AREA_CENTER_TILE.bottom_right().cast<int>() + ff::point_int(0, static_cast<int>(game::constants::TILE_SIZE_Y / 2));
+    this->game_data.shooters[0].shot_dir = game::dir::down;
+    this->game_data.shooters[0].move_dir = game::dir::right;
+    this->game_data.shooters[0].pos = game::constants::MOVABLE_AREA.top_left() - ff::point_size(0, game::constants::TILE_SIZE_Y / 2).cast<int>();
+
+    this->game_data.shooters[1].shot_dir = game::dir::up;
+    this->game_data.shooters[1].move_dir = game::dir::left;
+    this->game_data.shooters[1].pos = game::constants::MOVABLE_AREA.bottom_right() + ff::point_size(0, game::constants::TILE_SIZE_Y / 2).cast<int>();
 }
 
 void game::play_state::on_reload_resources()
@@ -232,6 +235,7 @@ void game::play_state::on_reload_resources()
     this->init_playing_resources();
     this->init_resources();
     this->renderer.init_resources();
+    this->audio.init_resources();
 }
 
 void game::play_state::init_playing_resources()

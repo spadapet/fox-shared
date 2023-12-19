@@ -127,13 +127,30 @@ ff::fixed_int game::game_data::shooter_speed() const
             return game::constants::SHOOTER_SPEED_NORMAL;
 
         default:
-            debug_fail();
-            [[fallthrough]];
         case game::game_diff::normal:
             return game::constants::SHOOTER_SPEED_NORMAL;
 
         case game::game_diff::hard:
             return game::constants::SHOOTER_SPEED_NORMAL;
+    }
+}
+
+ff::fixed_int game::game_data::shot_speed() const
+{
+    switch (this->game_diff)
+    {
+        case game::game_diff::baby:
+            return game::constants::SHOT_SPEED_NORMAL;
+
+        case game::game_diff::easy:
+            return game::constants::SHOT_SPEED_NORMAL;
+
+        default:
+        case game::game_diff::normal:
+            return game::constants::SHOT_SPEED_NORMAL;
+
+        case game::game_diff::hard:
+            return game::constants::SHOT_SPEED_NORMAL;
     }
 }
 

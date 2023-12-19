@@ -96,8 +96,6 @@ namespace game
         bomb,
     };
 
-    using tile_array = typename std::array<game::tile_type, game::constants::TILE_COUNT_MEM>;
-
     template<class T, class = std::enable_if_t<std::is_enum_v<T>>>
     struct state_t
     {
@@ -156,6 +154,8 @@ namespace game
         }
     };
 
+    using tile_array = typename std::array<game::tile_type, game::constants::TILE_COUNT_MEM>;
+
     struct level_data
     {
         game::tile_type tile(ff::point_size pos) const;
@@ -204,7 +204,16 @@ namespace game
 
     struct shooter_data
     {
-        size_t index{};
+        game::dir shot_dir{};
+        game::dir move_dir{};
+        ff::point_int pos{};
+        ff::fixed_int speed_bank{};
+        size_t shot_counter{};
+        size_t shot_amount{};
+    };
+
+    struct shot_data
+    {
         game::dir dir{};
         ff::point_int pos{};
         ff::fixed_int speed_bank{};
@@ -213,6 +222,7 @@ namespace game
     using player_status_array = typename std::array<game::player_status, game::constants::MAX_PLAYERS>;
     using player_array = typename std::array<game::player_data, game::constants::MAX_PLAYERS>;
     using shooter_array = typename std::array<game::shooter_data, game::constants::MAX_SHOOTERS>;
+    using shot_array = typename std::array<game::shot_data, game::constants::MAX_SHOTS>;
     using level_array = typename std::array<game::level_data, game::constants::MAX_PLAYERS>;
 
     struct game_data
@@ -223,6 +233,7 @@ namespace game
         size_t score_for_tile(game::tile_type tile_type) const;
         size_t default_lives() const;
         ff::fixed_int shooter_speed() const;
+        ff::fixed_int shot_speed() const;
         ff::fixed_int player_speed(bool press_speed) const;
         game::player_status& player_status() const;
         game::level_data& level() const;
@@ -234,6 +245,7 @@ namespace game
         game::player_status_array statuses{};
         game::player_array players{};
         game::shooter_array shooters{};
+        game::shot_array shots{};
         size_t current_player{};
     };
 

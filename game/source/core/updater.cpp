@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "source/core/audio.h"
+#include "source/core/constants.h"
 #include "source/core/game.h"
 #include "source/core/updater.h"
 
@@ -98,7 +99,7 @@ void game::updater::update(game::play_level& play)
                 break;
 
             case game::player_state::dying:
-                player.state.set_at(game::player_state::dead, game::constants::STATE_PLAYER_DYING_TIME);
+                player.state.set_at(game::player_state::dead, play.game_data->coop() ? game::constants::STATE_PLAYER_DYING_TIME : 0);
                 break;
         }
     }
@@ -107,9 +108,19 @@ void game::updater::update(game::play_level& play)
     {
         for (shooter.speed_bank += play.game_data->shooter_speed(); shooter.speed_bank >= 1_f; shooter.speed_bank--)
         {
-            this->update_
+            this->update_shooter(play, shooter);
         }
     }
+
+    for (game::shot_data& shot : play.game_data->shots)
+    {
+        for (shot.speed_bank += play.game_data->shot_speed(); shot.speed_bank >= 1_f; shot.speed_bank--)
+        {
+            this->update_shot(play, shot);
+        }
+    }
+
+    this->check_hit(play);
 
     if (!this->check_dead(play))
     {
@@ -120,9 +131,8 @@ void game::updater::update(game::play_level& play)
 void game::updater::update_player(game::play_level& play, game::player_data& player)
 {
     const ff::point_int tile_count = ff::point_size(game::constants::TILE_COUNT_X, game::constants::TILE_COUNT_Y).cast<int>();
-    const ff::point_int tile_size = game::constants::TILE_SIZE.cast<int>();
-    ff::point_int tile = player.pos / tile_size;
-    ff::point_int tile_center = tile * tile_size + tile_size / 2;
+    ff::point_int tile = player.pos / game::constants::TILE_SIZE;
+    ff::point_int tile_center = tile * game::constants::TILE_SIZE + game::constants::TILE_SIZE / 2;
 
     const bool was_facing_x = game::dir_is_horizontal(player.dir);
     const bool was_facing_y = game::dir_is_vertical(player.dir);
@@ -139,7 +149,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
 
         if (!set_dir && can_turn && !was_facing_y && player.press.y && !player.flags.turned)
         {
-            int adjacent_row = (player.pos.y / tile_size.y) + player.press.y; // don't turn off the screen
+            int adjacent_row = (player.pos.y / game::constants::TILE_SIZE.y) + player.press.y; // don't turn off the screen
             if (adjacent_row >= 0 && adjacent_row < tile_count.y)
             {
                 player.dir = player.press.y > 0 ? game::dir::down : game::dir::up;
@@ -150,7 +160,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
 
         if (!set_dir && can_turn && !was_facing_x && player.press.x && !player.flags.turned)
         {
-            int adjacent_col = (player.pos.x / tile_size.x) + player.press.x; // don't turn off the screen
+            int adjacent_col = (player.pos.x / game::constants::TILE_SIZE.x) + player.press.x; // don't turn off the screen
             if (adjacent_col >= 0 && adjacent_col < tile_count.x)
             {
                 player.dir = player.press.x > 0 ? game::dir::right : game::dir::left;
@@ -213,18 +223,18 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
     // Keep inside the grid
     {
         player.pos.x = ff::math::clamp(player.pos.x,
-            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.left),
-            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.right));
+            game::constants::MOVABLE_AREA_CENTER_TILE.left,
+            game::constants::MOVABLE_AREA_CENTER_TILE.right);
 
         player.pos.y = ff::math::clamp(player.pos.y,
-            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.top),
-            static_cast<int>(game::constants::MOVABLE_AREA_CENTER_TILE.bottom));
+            game::constants::MOVABLE_AREA_CENTER_TILE.top,
+            game::constants::MOVABLE_AREA_CENTER_TILE.bottom);
     }
 
     // Check for tile collection
     {
-        tile = player.pos / tile_size;
-        tile_center = tile * tile_size + tile_size / 2;
+        tile = player.pos / game::constants::TILE_SIZE;
+        tile_center = tile * game::constants::TILE_SIZE + game::constants::TILE_SIZE / 2;
         ff::point_int center_distance = (player.pos - tile_center).abs();
 
         if (center_distance.x <= game::constants::TILE_COLLECT_NEAR_CENTER &&
@@ -244,8 +254,90 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
 
 void game::updater::update_shooter(game::play_level& play, game::shooter_data& shooter)
 {
-    switch (shooter.dir)
+    switch (shooter.move_dir)
     {
+        case game::dir::right:
+            if (++shooter.pos.x >= game::constants::MOVABLE_AREA.right)
+            {
+                shooter.move_dir = game::dir::left;
+            }
+            break;
+
+        case game::dir::left:
+            if (--shooter.pos.x <= game::constants::MOVABLE_AREA.left)
+            {
+                shooter.move_dir = game::dir::right;
+            }
+            break;
+    }
+
+    ff::point_int tile = shooter.pos / game::constants::TILE_SIZE;
+
+    if (shooter.pos.x - tile.x * game::constants::TILE_SIZE.x == game::constants::TILE_SIZE.x / 2)
+    {
+        if (shooter.shot_counter)
+        {
+            shooter.shot_counter--;
+        }
+
+        if (!shooter.shot_counter)
+        {
+            if (shooter.shot_amount)
+            {
+                shooter.shot_amount--;
+                this->add_shot(play, shooter.pos, shooter.shot_dir);
+            }
+            else
+            {
+                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(64));
+                shooter.shot_amount = ff::math::random_range(static_cast<size_t>(0), static_cast<size_t>(100));
+
+                if (shooter.shot_amount > 95)
+                {
+                    shooter.shot_amount = 7;
+                }
+                else if (shooter.shot_amount > 85)
+                {
+                    shooter.shot_amount = 5;
+                }
+                else if (shooter.shot_amount > 70)
+                {
+                    shooter.shot_amount = 3;
+                }
+                else if (shooter.shot_amount > 55)
+                {
+                    shooter.shot_amount = 2;
+                }
+                else if (shooter.shot_amount > 5)
+                {
+                    shooter.shot_amount = 1;
+                }
+                else
+                {
+                    shooter.shot_amount = 0;
+                }
+            }
+        }
+    }
+}
+
+void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
+{
+    switch (shot.dir)
+    {
+        case game::dir::down:
+            if (++shot.pos.y > static_cast<int>(game::constants::RENDER_SIZE_Y) + game::constants::TILE_SIZE_Y / 2)
+            {
+                shot = {};
+            }
+            break;
+
+        case game::dir::up:
+            if (++shot.pos.y < game::constants::TILE_SIZE / -2)
+            {
+                shot = {};
+            }
+            break;
     }
 }
 
@@ -255,11 +347,11 @@ void game::updater::player_hit_tile(game::play_level& play, game::player_data& p
     switch (tile_type)
     {
         case game::tile_type::panel0:
-            play.level().tile(tile.cast<size_t>(), game::tile_type::none);
+            play.level().tile(tile, game::tile_type::none);
             break;
 
         case game::tile_type::panel1:
-            play.level().tile(tile.cast<size_t>(), game::tile_type::panel0);
+            play.level().tile(tile, game::tile_type::panel0);
             break;
 
         case game::tile_type::bomb:
@@ -275,10 +367,28 @@ void game::updater::player_hit_tile(game::play_level& play, game::player_data& p
     this->add_score(play, player, tile_type);
 }
 
+void game::updater::add_shot(game::play_level& play, ff::point_int pos, game::dir dir)
+{
+    for (game::shot_data& shot : play.game_data->shots)
+    {
+        if (shot.dir == game::dir::none)
+        {
+            shot = {};
+            shot.dir = dir;
+            shot.pos = pos;
+            play.audio->play_shot();
+            break;
+        }
+    }
+}
+
 void game::updater::add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type)
 {
     player.status->score += play.game_data->score_for_tile(tile_type);
 }
+
+void game::updater::check_hit(game::play_level& play)
+{}
 
 bool game::updater::check_win(game::play_level& play)
 {

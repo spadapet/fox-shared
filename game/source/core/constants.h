@@ -26,6 +26,7 @@ namespace game::constants
 {
     constexpr size_t MAX_PLAYERS = 2;
     constexpr size_t MAX_SHOOTERS = 2;
+    constexpr size_t MAX_SHOTS = 16;
     constexpr size_t RENDER_SIZE_X = 480; // 1920/4
     constexpr size_t RENDER_SIZE_Y = 270; // 1080/4
     constexpr size_t TILE_SIZE_X = 30;
@@ -37,12 +38,13 @@ namespace game::constants
     constexpr size_t TILE_COUNT_MEM = TILE_COUNT_X * TILE_COUNT_MEM_Y;
 
     const ff::point_size RENDER_SIZE(RENDER_SIZE_X, RENDER_SIZE_Y);
-    const ff::point_size TILE_SIZE(TILE_SIZE_X, TILE_SIZE_Y);
     const ff::rect_size MOVABLE_TILES(2, 2, TILE_COUNT_X - 2, TILE_COUNT_Y - 2);
-    const ff::rect_size MOVABLE_AREA = MOVABLE_TILES * TILE_SIZE;
-    const ff::rect_size MOVABLE_AREA_CENTER_TILE = MOVABLE_AREA.deflate(TILE_SIZE / static_cast<size_t>(2));
+    const ff::point_int TILE_SIZE(static_cast<int>(TILE_SIZE_X), static_cast<int>(TILE_SIZE_Y));
+    const ff::rect_int MOVABLE_AREA = MOVABLE_TILES.cast<int>() * TILE_SIZE;
+    const ff::rect_int MOVABLE_AREA_CENTER_TILE = MOVABLE_AREA.deflate(TILE_SIZE / 2);
 
     const ff::fixed_int SHOOTER_SPEED_NORMAL = 2;
+    const ff::fixed_int SHOT_SPEED_NORMAL = 1.125;
     const ff::fixed_int PLAYER_SPEED_SLOW = 1.25;
     const ff::fixed_int PLAYER_SPEED_FAST = 2.5;
     constexpr int TILE_TURN_PAST_CENTER = 2;
