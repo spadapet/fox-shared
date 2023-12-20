@@ -130,7 +130,6 @@ void game::updater::update(game::play_level& play)
 
 void game::updater::update_player(game::play_level& play, game::player_data& player)
 {
-    const ff::point_int tile_count = ff::point_size(game::constants::TILE_COUNT_X, game::constants::TILE_COUNT_Y).cast<int>();
     ff::point_int tile = player.pos / game::constants::TILE_SIZE;
     ff::point_int tile_center = tile * game::constants::TILE_SIZE + game::constants::TILE_SIZE / 2;
 
@@ -150,7 +149,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         if (!set_dir && can_turn && !was_facing_y && player.press.y && !player.flags.turned)
         {
             int adjacent_row = (player.pos.y / game::constants::TILE_SIZE.y) + player.press.y; // don't turn off the screen
-            if (adjacent_row >= 0 && adjacent_row < tile_count.y)
+            if (adjacent_row >= 0 && adjacent_row < game::constants::TILE_COUNT_Y)
             {
                 player.dir = player.press.y > 0 ? game::dir::down : game::dir::up;
                 player.flags.turned = true;
@@ -161,7 +160,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         if (!set_dir && can_turn && !was_facing_x && player.press.x && !player.flags.turned)
         {
             int adjacent_col = (player.pos.x / game::constants::TILE_SIZE.x) + player.press.x; // don't turn off the screen
-            if (adjacent_col >= 0 && adjacent_col < tile_count.x)
+            if (adjacent_col >= 0 && adjacent_col < game::constants::TILE_COUNT_X)
             {
                 player.dir = player.press.x > 0 ? game::dir::right : game::dir::left;
                 player.flags.turned = true;
@@ -242,7 +241,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         {
             if (!player.flags.collected)
             {
-                this->player_hit_tile(play, player, tile.cast<size_t>());
+                this->player_hit_tile(play, player, tile);
             }
         }
         else
@@ -289,7 +288,7 @@ void game::updater::update_shooter(game::play_level& play, game::shooter_data& s
             }
             else
             {
-                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(64));
+                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(48));
                 shooter.shot_amount = ff::math::random_range(static_cast<size_t>(0), static_cast<size_t>(100));
 
                 if (shooter.shot_amount > 95)
@@ -333,7 +332,7 @@ void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
             break;
 
         case game::dir::up:
-            if (++shot.pos.y < game::constants::TILE_SIZE / -2)
+            if (--shot.pos.y < static_cast<int>(game::constants::TILE_SIZE_Y) / -2)
             {
                 shot = {};
             }
@@ -341,7 +340,7 @@ void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
     }
 }
 
-void game::updater::player_hit_tile(game::play_level& play, game::player_data& player, ff::point_size tile)
+void game::updater::player_hit_tile(game::play_level& play, game::player_data& player, ff::point_int tile)
 {
     const game::tile_type tile_type = play.level().tile(tile);
     switch (tile_type)

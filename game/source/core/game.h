@@ -158,8 +158,8 @@ namespace game
 
     struct level_data
     {
-        game::tile_type tile(ff::point_size pos) const;
-        void tile(ff::point_size pos, game::tile_type value);
+        game::tile_type tile(ff::point_int pos) const;
+        void tile(ff::point_int pos, game::tile_type value);
 
         size_t index{};
         size_t max_timer{};

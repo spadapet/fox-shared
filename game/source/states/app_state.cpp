@@ -7,7 +7,7 @@ constexpr int PALETTE_BLACK = 240;
 
 game::app_state::app_state()
     : ff::game::app_state_base(
-        ff::render_target(game::constants::RENDER_SIZE, &ff::dxgi::color_black(), ::PALETTE_BLACK),
+        ff::render_target(game::constants::RENDER_SIZE.cast<size_t>(), &ff::dxgi::color_black(), ::PALETTE_BLACK),
         {
             { "palette", "player_0", ::PALETTE_CYCLES_PER_SECOND },
             { "palette", "player_1", ::PALETTE_CYCLES_PER_SECOND },

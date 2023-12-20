@@ -5,12 +5,33 @@
     "res:type": "palette",
     "file": "file:graphics/palette.png",
     "remaps": {
-      "player_0": [
-      ],
-      "player_1": [
-        [ 254, 253 ], [ 250, 243 ]
-      ]
+      "player_0": [],
+      "player_1": [ [ 254, 253 ], [ 250, 243 ] ]
     }
+  },
+
+  "game_font_data": {
+    "res:type": "font_file",
+    "file": "file:xaml/fonts/SuperLegendBoy.ttf"
+  },
+
+  "game_font_small_data": {
+    "res:type": "font_file",
+    "file": "file:xaml/fonts/robotron_2084_small.ttf"
+  },
+
+  "game_font": {
+    "res:type": "font",
+    "data": "ref:game_font_data",
+    "size": 9,
+    "outline": 1
+  },
+
+  "game_font_small": {
+    "res:type": "font",
+    "data": "ref:game_font_small_data",
+    "size": 8,
+    "outline": 1
   },
 
   "sprites": {

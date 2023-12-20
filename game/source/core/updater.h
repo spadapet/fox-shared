@@ -19,7 +19,7 @@ namespace game
         void update_player(game::play_level& play, game::player_data& player);
         void update_shooter(game::play_level& play, game::shooter_data& shooter);
         void update_shot(game::play_level& play, game::shot_data& shot);
-        void player_hit_tile(game::play_level& play, game::player_data& player, ff::point_size tile);
+        void player_hit_tile(game::play_level& play, game::player_data& player, ff::point_int tile);
         void add_shot(game::play_level& play, ff::point_int pos, game::dir dir);
         void add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type);
         void check_hit(game::play_level& play);
