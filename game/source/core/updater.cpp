@@ -288,7 +288,7 @@ void game::updater::update_shooter(game::play_level& play, game::shooter_data& s
             }
             else
             {
-                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(48));
+                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(12)); // static_cast<size_t>(48));
                 shooter.shot_amount = ff::math::random_range(static_cast<size_t>(0), static_cast<size_t>(100));
 
                 if (shooter.shot_amount > 95)
@@ -387,7 +387,35 @@ void game::updater::add_score(game::play_level& play, game::player_data& player,
 }
 
 void game::updater::check_hit(game::play_level& play)
-{}
+{
+    constexpr int dist_hit_shot = 5;
+    constexpr int dist_hit_shot_squared = dist_hit_shot * dist_hit_shot;
+
+    for (size_t i = 0; i < play.game_data->current_player_count(); i++)
+    {
+        game::player_data& player = play.game_data->players[play.game_data->current_player + i];
+
+        if (player.state == game::player_state::playing)
+        {
+            const ff::rect_int player_rect = game::constants::PLAYER_HIT_BOX(player.index, player.dir) + player.pos;
+
+            for (game::shot_data& shot : play.game_data->shots)
+            {
+                if (shot.dir != game::dir::none)
+                {
+                    const ff::rect_int shot_rect = game::constants::SHOT_HIT_BOX + shot.pos;
+
+                    if (player_rect.intersects(shot_rect))
+                    {
+                        player.state = game::player_state::dying;
+                        play.audio->play_hit_shot();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
 
 bool game::updater::check_win(game::play_level& play)
 {

@@ -13,6 +13,7 @@ namespace game
 
         void play_collect(game::tile_type type);
         void play_shot();
+        void play_hit_shot();
 
     private:
     };

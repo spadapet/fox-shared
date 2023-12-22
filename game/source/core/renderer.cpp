@@ -123,7 +123,8 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         {
             if (shot.dir != game::dir::none)
             {
-                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 5, 246, 3);
+                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 246, 3);
+                //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
             }
         }
     }
@@ -164,8 +165,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
                 draw.pop_palette();
 
-                //draw.draw_palette_line(transform.position - ff::point_float(3, 0), transform.position + ff::point_float(2, 0), 255 - 14, 1.0f, true);
-                //draw.draw_palette_line(transform.position - ff::point_float(0, 3), transform.position + ff::point_float(0, 2), 255 - 14, 1.0f, true);
+                //draw.draw_palette_outline_rectangle((game::constants::PLAYER_HIT_BOX(player.index, player.dir) + player.pos).cast<ff::fixed_int>(), 247, 1);
             }
         }
     }

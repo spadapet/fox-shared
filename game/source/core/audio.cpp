@@ -17,3 +17,7 @@ void game::audio::play_collect(game::tile_type type)
 void game::audio::play_shot()
 {
 }
+
+void game::audio::play_hit_shot()
+{
+}
