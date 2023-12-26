@@ -5,14 +5,18 @@
 namespace res
 {
     void register_controls();
+    void register_game();
     void register_graphics();
+    void register_particles();
     void register_xaml();
 }
 
 static void register_global_resources()
 {
     ::res::register_controls();
+    ::res::register_game();
     ::res::register_graphics();
+    ::res::register_particles();
     ::res::register_xaml();
 
     Noesis::RegisterComponent<game::title_page>();

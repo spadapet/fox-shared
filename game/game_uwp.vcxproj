@@ -18,6 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="source\assets\controls.res.cpp" />
+    <ClCompile Include="source\assets\game.res.cpp" />
     <ClCompile Include="source\assets\graphics.res.cpp" />
     <ClCompile Include="source\assets\particles.res.cpp" />
     <ClCompile Include="source\assets\xaml.res.cpp" />
@@ -123,6 +124,11 @@
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.audio\ff.audio_uwp.vcxproj">
       <Project>{e3bf3073-8da5-4d8a-954b-9ce0bfc04a16}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResJson Include="assets\game.res.json">
+      <FileType>Document</FileType>
+    </ResJson>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>

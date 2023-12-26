@@ -1,0 +1,13 @@
+{
+  "res:namespace": "assets::game",
+
+  "levels": {
+    "res:type": "resource_values",
+    "global": {
+      "levels": [
+        { "res:import": "file:levels/level_001.json" },
+        { "res:import": "file:levels/level_002.json" }
+      ]
+    }
+  }
+}

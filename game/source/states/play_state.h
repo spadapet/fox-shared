@@ -2,6 +2,7 @@
 
 #include "source/core/audio.h"
 #include "source/core/game.h"
+#include "source/core/levels.h"
 #include "source/core/renderer.h"
 #include "source/core/updater.h"
 
@@ -34,6 +35,7 @@ namespace game
         void init_resources();
 
         game::audio audio;
+        game::levels levels;
         game::game_data game_data;
         game::play_level play_level;
         game::updater updater;

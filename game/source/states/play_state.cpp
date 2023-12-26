@@ -189,7 +189,7 @@ void game::play_state::init_from_title()
         status.score = 0;
 
         game::level_data& level = this->game_data.levels[i];
-        level = game::get_level(this->game_data.game_type, this->game_data.game_diff, status.level);
+        level = this->levels.get_level(this->game_data.game_type, this->game_data.game_diff, status.level);
     }
 
     this->init_playing_resources();
@@ -212,7 +212,7 @@ void game::play_state::init_playing()
 void game::play_state::init_next_level()
 {
     size_t level = ++this->game_data.player_status().level;
-    this->game_data.level() = game::get_level(this->game_data.game_type, this->game_data.game_diff, level);
+    this->game_data.level() = this->levels.get_level(this->game_data.game_type, this->game_data.game_diff, level);
     this->game_data.state = game::game_state::play_init;
 }
 
@@ -236,6 +236,7 @@ void game::play_state::on_reload_resources()
     this->init_resources();
     this->renderer.init_resources();
     this->audio.init_resources();
+    this->levels.init_resources();
 }
 
 void game::play_state::init_playing_resources()

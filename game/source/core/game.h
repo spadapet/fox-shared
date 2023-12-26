@@ -94,6 +94,8 @@ namespace game
         panel0,
         panel1,
         bomb,
+        points,
+        warp,
     };
 
     template<class T, class = std::enable_if_t<std::is_enum_v<T>>>
@@ -163,6 +165,9 @@ namespace game
 
         size_t index{};
         size_t max_timer{};
+        size_t max_moves{};
+        size_t timer{};
+        size_t moves{};
         game::level_type level_type{};
         game::tile_array tiles{};
     };

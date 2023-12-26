@@ -44,6 +44,7 @@ static game::level_data get_normal(size_t index)
     level.index = index;
     level.level_type = game::level_type::normal;
     level.max_timer = 120;
+    level.max_moves = 200;
 
     std::string_view tiles = ::level_tiles[index % _countof(::level_tiles)];
     assert(tiles.size() == game::constants::TILE_COUNT_X * game::constants::TILE_COUNT_Y * 2);
@@ -70,17 +71,108 @@ static game::level_data get_normal(size_t index)
     return level;
 }
 
-static game::level_data get_challenge(size_t index)
+game::levels::levels()
 {
-    return {};
+    this->init_resources();
 }
 
-static game::level_data get_bonus(size_t index)
+void game::levels::init_resources()
 {
-    return {};
+    this->levels_.clear();
+
+    ff::auto_resource<ff::resource_value_provider> level_provider_res = ff::global_resources::get("levels");
+    std::shared_ptr<ff::resource_value_provider> level_provider = level_provider_res.object();
+    assert_ret(level_provider);
+
+    std::vector<ff::value_ptr> level_values = level_provider->get_resource_value("levels")->get<std::vector<ff::value_ptr>>();
+    this->levels_.reserve(level_values.size());
+
+    for (ff::value_ptr level_value : level_values)
+    {
+        game::level_data level{};
+        ff::dict level_dict = level_value->get<ff::dict>();
+
+        for (ff::value_ptr prop_value : level_dict.get<std::vector<ff::value_ptr>>("properties"))
+        {
+            ff::dict prop_dict = prop_value->get<ff::dict>();
+            std::string prop_name =  prop_dict.get<std::string>("name");
+
+            if (prop_name == "moves")
+            {
+                level.max_moves = prop_dict.get<size_t>("value");
+            }
+            else if (prop_name == "timer")
+            {
+                level.max_timer = static_cast<size_t>(prop_dict.get<double>("value") * 60);
+            }
+        }
+
+        for (ff::value_ptr layer_value : level_dict.get<std::vector<ff::value_ptr>>("layers"))
+        {
+            ff::dict layer_dict = layer_value->get<ff::dict>();
+            std::string layer_type = layer_dict.get<std::string>("type");
+
+            if (layer_type == "tilelayer" &&
+                layer_dict.get<std::string>("compression").empty() &&
+                layer_dict.get<std::string>("encoding") == "base64" &&
+                layer_dict.get<int>("width") == game::constants::TILE_COUNT_X &&
+                layer_dict.get<int>("height") == game::constants::TILE_COUNT_Y &&
+                layer_dict.get<bool>("visible"))
+            {
+                const std::string& layer_data64 = layer_dict.get<std::string>("data");
+                std::shared_ptr<ff::data_base> layer_data = ff::compression::decode_base64(layer_data64);
+                if (layer_data->size() == game::constants::TILE_COUNT_X * game::constants::TILE_COUNT_Y * sizeof(int))
+                {
+                    const int* layer_ints = reinterpret_cast<const int*>(layer_data->data());
+                    for (int y = 0; y < game::constants::TILE_COUNT_Y; y++)
+                    {
+                        for (int x = 0; x < game::constants::TILE_COUNT_X; x++, layer_ints++)
+                        {
+                            game::tile_type tile = game::tile_type::none;
+
+                            switch (*layer_ints)
+                            {
+                                case 2:
+                                    tile = game::tile_type::panel0;
+                                    break;
+
+                                case 3:
+                                    tile = game::tile_type::panel1;
+                                    break;
+
+                                case 4:
+                                    tile = game::tile_type::bomb;
+                                    break;
+
+                                case 5:
+                                    tile = game::tile_type::points;
+                                    break;
+
+                                case 6:
+                                    tile = game::tile_type::warp;
+                                    break;
+
+                                default:
+                                    continue;
+                            }
+
+                            level.tile(ff::point_int(x, y), tile);
+                        }
+                    }
+                }
+            }
+            else if (layer_type == "objectgroup" && layer_dict.get<bool>("visible"))
+            {
+            }
+        }
+
+        this->levels_.push_back(std::move(level));
+    }
 }
 
-game::level_data game::get_level(game::game_type type, game::game_diff diff, size_t index)
+game::level_data game::levels::get_level(game::game_type type, game::game_diff diff, size_t index)
 {
-    return ::get_normal(index);
+    assert_ret_val(this->levels_.size(), game::level_data{});
+
+    return this->levels_[index % this->levels_.size()];
 }
