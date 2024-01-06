@@ -95,7 +95,10 @@ namespace game
         panel1,
         bomb,
         points,
-        warp,
+        warp0,
+        warp1,
+        warp2,
+        warp3,
     };
 
     template<class T, class = std::enable_if_t<std::is_enum_v<T>>>

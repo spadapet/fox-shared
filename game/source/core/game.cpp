@@ -90,6 +90,10 @@ size_t game::game_data::score_for_tile(game::tile_type tile_type) const
         case game::tile_type::panel1:
             return game::constants::SCORE_PANEL_1;
 
+        case game::tile_type::points:
+            return game::constants::SCORE_POINTS;
+            break;
+
         default:
             return 0;
     }

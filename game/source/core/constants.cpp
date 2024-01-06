@@ -18,7 +18,7 @@ const size_t game::input_events::ID_DEBUG_RENDER_TOGGLE = ff::stable_hash_func("
 const size_t game::input_events::ID_DEBUG_INVINCIBLE_TOGGLE = ff::stable_hash_func("invincible_toggle"sv);
 const size_t game::input_events::ID_DEBUG_COMPLETE_LEVEL = ff::stable_hash_func("complete_level"sv);
 
-const ff::rect_int& game::constants::PLAYER_HIT_BOX(size_t index, game::dir dir)
+const ff::rect_int& game::constants::player_hit_box(size_t index, game::dir dir)
 {
     switch (dir)
     {

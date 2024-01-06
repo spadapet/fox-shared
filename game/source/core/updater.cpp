@@ -131,7 +131,7 @@ void game::updater::update(game::play_level& play)
 void game::updater::update_player(game::play_level& play, game::player_data& player)
 {
     ff::point_int tile = player.pos / game::constants::TILE_SIZE;
-    ff::point_int tile_center = tile * game::constants::TILE_SIZE + game::constants::TILE_SIZE / 2;
+    ff::point_int tile_center = game::constants::tile_to_center(tile);
 
     const bool was_facing_x = game::dir_is_horizontal(player.dir);
     const bool was_facing_y = game::dir_is_vertical(player.dir);
@@ -233,7 +233,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
     // Check for tile collection
     {
         tile = player.pos / game::constants::TILE_SIZE;
-        tile_center = tile * game::constants::TILE_SIZE + game::constants::TILE_SIZE / 2;
+        tile_center = game::constants::tile_to_center(tile);
         ff::point_int center_distance = (player.pos - tile_center).abs();
 
         if (center_distance.x <= game::constants::TILE_COLLECT_NEAR_CENTER &&
@@ -325,14 +325,14 @@ void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
     switch (shot.dir)
     {
         case game::dir::down:
-            if (++shot.pos.y > static_cast<int>(game::constants::RENDER_SIZE_Y) + game::constants::TILE_SIZE_Y / 2)
+            if (++shot.pos.y > game::constants::RENDER_SIZE_Y + game::constants::TILE_SIZE_Y / 2)
             {
                 shot = {};
             }
             break;
 
         case game::dir::up:
-            if (--shot.pos.y < static_cast<int>(game::constants::TILE_SIZE_Y) / -2)
+            if (--shot.pos.y < game::constants::TILE_SIZE_Y / -2)
             {
                 shot = {};
             }
@@ -343,6 +343,8 @@ void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
 void game::updater::player_hit_tile(game::play_level& play, game::player_data& player, ff::point_int tile)
 {
     const game::tile_type tile_type = play.level().tile(tile);
+    game::tile_type warp_to_type = game::tile_type::none;
+
     switch (tile_type)
     {
         case game::tile_type::panel0:
@@ -353,12 +355,44 @@ void game::updater::player_hit_tile(game::play_level& play, game::player_data& p
             play.level().tile(tile, game::tile_type::panel0);
             break;
 
+        case game::tile_type::points:
+            play.level().tile(tile, game::tile_type::none);
+            break;
+
+        case game::tile_type::warp0: warp_to_type = game::tile_type::warp1; break;
+        case game::tile_type::warp1: warp_to_type = game::tile_type::warp2; break;
+        case game::tile_type::warp2: warp_to_type = game::tile_type::warp3; break;
+        case game::tile_type::warp3: warp_to_type = game::tile_type::warp0; break;
+
         case game::tile_type::bomb:
             player.state = game::player_state::dying;
             break;
 
         default:
             return;
+    }
+
+    if (warp_to_type != game::tile_type::none)
+    {
+        ff::point_int dest_pos{};
+
+        for (ff::point_int tile_pos(0, 0); tile_pos.y < game::constants::TILE_COUNT_Y; tile_pos.y++)
+        {
+            for (tile_pos.x = 0; tile_pos.x < game::constants::TILE_COUNT_X; tile_pos.x++)
+            {
+                game::tile_type type = play.level().tile(tile_pos);
+
+                if (type == warp_to_type || (type == game::tile_type::warp0 && !dest_pos))
+                {
+                    dest_pos = game::constants::tile_to_center(tile_pos);
+                }
+            }
+        }
+
+        if (dest_pos)
+        {
+            player.pos = dest_pos;
+        }
     }
 
     player.flags.collected = true;
@@ -397,7 +431,7 @@ void game::updater::check_hit(game::play_level& play)
 
         if (player.state == game::player_state::playing)
         {
-            const ff::rect_int player_rect = game::constants::PLAYER_HIT_BOX(player.index, player.dir) + player.pos;
+            const ff::rect_int player_rect = game::constants::player_hit_box(player.index, player.dir) + player.pos;
 
             for (game::shot_data& shot : play.game_data->shots)
             {

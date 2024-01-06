@@ -119,6 +119,7 @@ void game::levels::init_resources()
                 layer_dict.get<int>("height") == game::constants::TILE_COUNT_Y &&
                 layer_dict.get<bool>("visible"))
             {
+                int warp_count = 0;
                 const std::string& layer_data64 = layer_dict.get<std::string>("data");
                 std::shared_ptr<ff::data_base> layer_data = ff::compression::decode_base64(layer_data64);
                 if (layer_data->size() == game::constants::TILE_COUNT_X * game::constants::TILE_COUNT_Y * sizeof(int))
@@ -149,7 +150,13 @@ void game::levels::init_resources()
                                     break;
 
                                 case 6:
-                                    tile = game::tile_type::warp;
+                                    switch (warp_count++)
+                                    {
+                                        case 0: tile = game::tile_type::warp0; break;
+                                        case 1: tile = game::tile_type::warp1; break;
+                                        case 2: tile = game::tile_type::warp2; break;
+                                        case 3: tile = game::tile_type::warp3; break;
+                                    }
                                     break;
 
                                 default:

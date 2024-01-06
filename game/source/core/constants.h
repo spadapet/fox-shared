@@ -67,12 +67,25 @@ namespace game::constants
 
     constexpr size_t SCORE_PANEL_0 = 10;
     constexpr size_t SCORE_PANEL_1 = 20;
+    constexpr size_t SCORE_POINTS = 50;
 
     static const ff::rect_int PLAYER_HIT_BOX_RIGHT(-8, -3, 10, 3);
     static const ff::rect_int PLAYER_HIT_BOX_UP(-3, -10, 3, 8);
     static const ff::rect_int PLAYER_HIT_BOX_LEFT(-10, -3, 8, 3);
     static const ff::rect_int PLAYER_HIT_BOX_DOWN(-3, -8, 3, 10);
-    static const ff::rect_int SHOT_HIT_BOX(-5, -5, 5, 5);
+    static const ff::rect_int SHOT_HIT_BOX(-4, -4, 4, 4);
 
-    const ff::rect_int& PLAYER_HIT_BOX(size_t index, game::dir dir);
+    const ff::rect_int& player_hit_box(size_t index, game::dir dir);
+
+    template<class T = int>
+    ff::point_t<T> tile_to_center(int x, int y)
+    {
+        return ff::point_t<T>{ x* TILE_SIZE_X + TILE_SIZE_X / 2, y* TILE_SIZE_Y + TILE_SIZE_Y / 2 };
+    }
+
+    template<class T = int>
+    ff::point_t<T> tile_to_center(ff::point_int pos)
+    {
+        return game::constants::tile_to_center<T>(pos.x, pos.y);
+    }
 }

@@ -2,15 +2,6 @@
 #include "source/core/game.h"
 #include "source/core/renderer.h"
 
-static ff::point_fixed tile_to_center(int x, int y)
-{
-    return
-    {
-        x * game::constants::TILE_SIZE_X + game::constants::TILE_SIZE_X / 2,
-        y * game::constants::TILE_SIZE_Y + game::constants::TILE_SIZE_Y / 2
-    };
-}
-
 game::renderer::renderer()
 {
     this->init_resources();
@@ -67,8 +58,8 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
     if (render_score)
     {
-        this->draw_text(draw, ff::point_int(0, 1), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 254);
-        this->draw_text_small(draw, ff::point_int(0, 18), "SMALL TEXT", 254);
+        // this->draw_text(draw, ff::point_int(0, 1), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 254);
+        // this->draw_text_small(draw, ff::point_int(0, 18), "SMALL TEXT", 254);
     }
 
     if (render_tiles)
@@ -91,10 +82,29 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                         anim = this->panel[1][play.total_counter() / 32 % 2].object().get();
                         break;
 
+                    case game::tile_type::points:
+                        {
+                            // TODO: Use sprite animation
+                            ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
+                            draw.draw_palette_filled_circle(center, 3, 254);
+                        }
+                        break;
+
+                    case game::tile_type::warp0:
+                    case game::tile_type::warp1:
+                    case game::tile_type::warp2:
+                    case game::tile_type::warp3:
+                        {
+                            // TODO: Use sprite animation
+                            ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
+                            draw.draw_palette_outline_circle(center, 7, 242, 1);
+                        }
+                        break;
+
                     case game::tile_type::bomb:
                         {
                             // TODO: Use sprite animation
-                            ff::point_fixed center = ::tile_to_center(x, y);
+                            ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
                             draw.draw_palette_outline_circle(center, 6, 245, 2);
                         }
                         break;
@@ -103,14 +113,14 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                 if (x >= game::constants::MOVABLE_TILES.left && x < game::constants::MOVABLE_TILES.right &&
                     y >= game::constants::MOVABLE_TILES.top && y < game::constants::MOVABLE_TILES.bottom)
                 {
-                    ff::point_fixed center = ::tile_to_center(x, y);
+                    ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
                     draw.draw_palette_line(center - ff::point_fixed(2, 0), center + ff::point_fixed(1, 0), 255 - 14, 1);
                     draw.draw_palette_line(center - ff::point_fixed(0, 2), center + ff::point_fixed(0, 1), 255 - 14, 1);
                 }
 
                 if (anim)
                 {
-                    ff::dxgi::pixel_transform transform(::tile_to_center(x, y));
+                    ff::dxgi::pixel_transform transform(game::constants::tile_to_center<ff::fixed_int>(x, y));
                     anim->draw_frame(draw, transform, 0);
                 }
             }
@@ -124,7 +134,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
             if (shot.dir != game::dir::none)
             {
                 draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 246, 3);
-                //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
+#if DEBUG
+                draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
+#endif
             }
         }
     }
@@ -164,8 +176,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                 anim->draw_frame(draw, transform, 0.0f);
 
                 draw.pop_palette();
-
-                //draw.draw_palette_outline_rectangle((game::constants::PLAYER_HIT_BOX(player.index, player.dir) + player.pos).cast<ff::fixed_int>(), 247, 1);
+#if DEBUG
+                draw.draw_palette_outline_rectangle((game::constants::player_hit_box(player.index, player.dir) + player.pos).cast<ff::fixed_int>(), 247, 1);
+#endif
             }
         }
     }
