@@ -288,12 +288,12 @@ void game::updater::update_shooter(game::play_level& play, game::shooter_data& s
             }
             else
             {
-                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(12)); // static_cast<size_t>(48));
+                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(48)); // static_cast<size_t>(48));
                 shooter.shot_amount = ff::math::random_range(static_cast<size_t>(0), static_cast<size_t>(100));
 
                 if (shooter.shot_amount > 95)
                 {
-                    shooter.shot_amount = 7;
+                    shooter.shot_amount = 5;
                 }
                 else if (shooter.shot_amount > 85)
                 {

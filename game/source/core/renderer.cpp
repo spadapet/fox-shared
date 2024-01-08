@@ -58,8 +58,8 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
     if (render_score)
     {
-        // this->draw_text(draw, ff::point_int(0, 1), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 254);
-        // this->draw_text_small(draw, ff::point_int(0, 18), "SMALL TEXT", 254);
+        this->draw_text(draw, ff::point_int(0, 1), "SCORE: 1234", 254);
+        //this->draw_text_small(draw, ff::point_int(0, 18), "SMALL TEXT", 254);
     }
 
     if (render_tiles)
@@ -135,7 +135,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
             {
                 draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 246, 3);
 #if DEBUG
-                draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
+                //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
             }
         }
@@ -177,7 +177,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
                 draw.pop_palette();
 #if DEBUG
-                draw.draw_palette_outline_rectangle((game::constants::player_hit_box(player.index, player.dir) + player.pos).cast<ff::fixed_int>(), 247, 1);
+                //draw.draw_palette_outline_rectangle((game::constants::player_hit_box(player.index, player.dir) + player.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
             }
         }
