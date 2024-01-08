@@ -13,7 +13,8 @@ void game::updater::update_player_input(
     bool press_right,
     bool press_up,
     bool press_down,
-    bool press_speed)
+    bool press_speed,
+    bool press_shoot)
 {
     if (press_left && press_right)
     {
@@ -72,6 +73,7 @@ void game::updater::update_player_input(
     }
 
     player.flags.press_speed = press_speed;
+    player.flags.press_shoot = press_shoot;
 
     // Keep what was pressed before, unless a new direction is pressed
     ff::point_int press(press_right ? 1 : (press_left ? -1 : 0), press_down ? 1 : (press_up ? -1 : 0));
@@ -120,6 +122,14 @@ void game::updater::update(game::play_level& play)
         }
     }
 
+    for (game::shot_data& shot : play.game_data->player_shots)
+    {
+        for (shot.speed_bank += play.game_data->player_shot_speed(); shot.speed_bank >= 1_f; shot.speed_bank--)
+        {
+            this->update_shot(play, shot);
+        }
+    }
+
     this->check_hit(play);
 
     if (!this->check_dead(play))
@@ -149,7 +159,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         if (!set_dir && can_turn && !was_facing_y && player.press.y && !player.flags.turned)
         {
             int adjacent_row = (player.pos.y / game::constants::TILE_SIZE.y) + player.press.y; // don't turn off the screen
-            if (adjacent_row >= 0 && adjacent_row < game::constants::TILE_COUNT_Y)
+            if (adjacent_row >= game::constants::MOVABLE_TILES.top && adjacent_row < game::constants::MOVABLE_TILES.bottom)
             {
                 player.dir = player.press.y > 0 ? game::dir::down : game::dir::up;
                 player.flags.turned = true;
@@ -160,7 +170,7 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
         if (!set_dir && can_turn && !was_facing_x && player.press.x && !player.flags.turned)
         {
             int adjacent_col = (player.pos.x / game::constants::TILE_SIZE.x) + player.press.x; // don't turn off the screen
-            if (adjacent_col >= 0 && adjacent_col < game::constants::TILE_COUNT_X)
+            if (adjacent_col >= game::constants::MOVABLE_TILES.left && adjacent_col < game::constants::MOVABLE_TILES.right)
             {
                 player.dir = player.press.x > 0 ? game::dir::right : game::dir::left;
                 player.flags.turned = true;
@@ -249,6 +259,22 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
             player.flags.collected = false;
         }
     }
+
+    if (player.shoot_counter)
+    {
+        player.shoot_counter--;
+    }
+
+    if (player.flags.press_shoot)
+    {
+        player.flags.press_shoot = 0;
+
+        if (!player.shoot_counter)
+        {
+            player.shoot_counter = play.game_data->player_shot_time();
+            this->add_player_shot(play, player.pos, player.dir);
+        }
+    }
 }
 
 void game::updater::update_shooter(game::play_level& play, game::shooter_data& shooter)
@@ -288,7 +314,7 @@ void game::updater::update_shooter(game::play_level& play, game::shooter_data& s
             }
             else
             {
-                shooter.shot_counter = ff::math::random_range(static_cast<size_t>(1), static_cast<size_t>(48)); // static_cast<size_t>(48));
+                shooter.shot_counter = ff::math::random_range(1, 32); // static_cast<size_t>(48));
                 shooter.shot_amount = ff::math::random_range(static_cast<size_t>(0), static_cast<size_t>(100));
 
                 if (shooter.shot_amount > 95)
@@ -322,6 +348,12 @@ void game::updater::update_shooter(game::play_level& play, game::shooter_data& s
 
 void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
 {
+    if (shot.lifetime && !--shot.lifetime)
+    {
+        shot = {};
+        return;
+    }
+
     switch (shot.dir)
     {
         case game::dir::down:
@@ -333,6 +365,20 @@ void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
 
         case game::dir::up:
             if (--shot.pos.y < game::constants::TILE_SIZE_Y / -2)
+            {
+                shot = {};
+            }
+            break;
+
+        case game::dir::right:
+            if (++shot.pos.x > game::constants::RENDER_SIZE_X + game::constants::TILE_SIZE_X / 2)
+            {
+                shot = {};
+            }
+            break;
+
+        case game::dir::left:
+            if (--shot.pos.x < game::constants::TILE_SIZE_X / -2)
             {
                 shot = {};
             }
@@ -415,6 +461,22 @@ void game::updater::add_shot(game::play_level& play, ff::point_int pos, game::di
     }
 }
 
+void game::updater::add_player_shot(game::play_level& play, ff::point_int pos, game::dir dir)
+{
+    for (game::shot_data& shot : play.game_data->player_shots)
+    {
+        if (shot.dir == game::dir::none)
+        {
+            shot = {};
+            shot.dir = dir;
+            shot.pos = pos;
+            shot.lifetime = play.game_data->player_shot_lifetime();
+            play.audio->play_player_shot();
+            break;
+        }
+    }
+}
+
 void game::updater::add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type)
 {
     player.status->score += play.game_data->score_for_tile(tile_type);
@@ -422,9 +484,6 @@ void game::updater::add_score(game::play_level& play, game::player_data& player,
 
 void game::updater::check_hit(game::play_level& play)
 {
-    constexpr int dist_hit_shot = 5;
-    constexpr int dist_hit_shot_squared = dist_hit_shot * dist_hit_shot;
-
     for (size_t i = 0; i < play.game_data->current_player_count(); i++)
     {
         game::player_data& player = play.game_data->players[play.game_data->current_player + i];
@@ -442,7 +501,33 @@ void game::updater::check_hit(game::play_level& play)
                     if (player_rect.intersects(shot_rect))
                     {
                         player.state = game::player_state::dying;
-                        play.audio->play_hit_shot();
+                        play.audio->play_player_hit_shot();
+                        // TODO: Visual effect
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    for (game::shot_data& player_shot : play.game_data->player_shots)
+    {
+        if (player_shot.dir != game::dir::none)
+        {
+            const ff::rect_int player_shot_rect = game::constants::PLAYER_SHOT_HIT_BOX + player_shot.pos;
+
+            for (game::shot_data& shot : play.game_data->shots)
+            {
+                if (shot.dir != game::dir::none)
+                {
+                    const ff::rect_int shot_rect = game::constants::SHOT_HIT_BOX + shot.pos;
+
+                    if (player_shot_rect.intersects(shot_rect))
+                    {
+                        shot = {};
+                        player_shot = {};
+                        play.audio->play_shot_hit_shot();
+                        // TODO: Visual effect
                         break;
                     }
                 }

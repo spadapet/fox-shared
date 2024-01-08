@@ -18,6 +18,14 @@ void game::audio::play_shot()
 {
 }
 
-void game::audio::play_hit_shot()
+void game::audio::play_shot_hit_shot()
+{
+}
+
+void game::audio::play_player_shot()
+{
+}
+
+void game::audio::play_player_hit_shot()
 {
 }

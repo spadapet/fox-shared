@@ -36,6 +36,7 @@ void game::player_data::init_playing(const game::game_data& game, size_t current
 
     this->pos = game::constants::PLAYER_START[current_index];
     this->dir = game::dir::none;
+    this->shoot_counter = {};
     this->press = {};
     this->speed_bank = {};
     this->flags.all = {};
@@ -120,6 +121,16 @@ size_t game::game_data::default_lives() const
     }
 }
 
+size_t game::game_data::player_shot_time() const
+{
+    return 60;
+}
+
+size_t game::game_data::player_shot_lifetime() const
+{
+    return 90;
+}
+
 ff::fixed_int game::game_data::shooter_speed() const
 {
     switch (this->game_diff)
@@ -156,6 +167,11 @@ ff::fixed_int game::game_data::shot_speed() const
         case game::game_diff::hard:
             return game::constants::SHOT_SPEED_NORMAL;
     }
+}
+
+ff::fixed_int game::game_data::player_shot_speed() const
+{
+    return this->player_speed(true) * 2_f;
 }
 
 ff::fixed_int game::game_data::player_speed(bool press_speed) const

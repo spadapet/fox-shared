@@ -191,6 +191,7 @@ namespace game
         game::level_data* level{};
         game::state_t<game::player_state> state{};
         game::dir dir{};
+        size_t shoot_counter{};
         ff::point_int pos{};
         ff::point_int press{};
         ff::fixed_int speed_bank{};
@@ -200,6 +201,7 @@ namespace game
             struct
             {
                 bool press_speed : 1;
+                bool press_shoot : 1;
                 bool turned : 1;
                 bool collected : 1;
                 bool ignore_press_x : 1;
@@ -225,6 +227,7 @@ namespace game
         game::dir dir{};
         ff::point_int pos{};
         ff::fixed_int speed_bank{};
+        size_t lifetime{};
     };
 
     using player_status_array = typename std::array<game::player_status, game::constants::MAX_PLAYERS>;
@@ -240,8 +243,11 @@ namespace game
         size_t current_player_count() const;
         size_t score_for_tile(game::tile_type tile_type) const;
         size_t default_lives() const;
+        size_t player_shot_time() const;
+        size_t player_shot_lifetime() const;
         ff::fixed_int shooter_speed() const;
         ff::fixed_int shot_speed() const;
+        ff::fixed_int player_shot_speed() const;
         ff::fixed_int player_speed(bool press_speed) const;
         game::player_status& player_status() const;
         game::level_data& level() const;
@@ -254,6 +260,7 @@ namespace game
         game::player_array players{};
         game::shooter_array shooters{};
         game::shot_array shots{};
+        game::shot_array player_shots{};
         size_t current_player{};
     };
 

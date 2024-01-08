@@ -42,7 +42,8 @@ void game::play_state::advance_input()
                 input.digital_value(game::input_events::ID_RIGHT),
                 input.digital_value(game::input_events::ID_UP),
                 input.digital_value(game::input_events::ID_DOWN),
-                input.digital_value(game::input_events::ID_SPEED));
+                input.digital_value(game::input_events::ID_SPEED),
+                input.digital_value(game::input_events::ID_SHOOT));
         }
     }
 
@@ -220,6 +221,7 @@ void game::play_state::init_shooters()
 {
     this->game_data.shooters = {};
     this->game_data.shots = {};
+    this->game_data.player_shots = {};
 
     this->game_data.shooters[0].shot_dir = game::dir::down;
     this->game_data.shooters[0].move_dir = game::dir::right;

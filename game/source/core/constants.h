@@ -73,6 +73,7 @@ namespace game::constants
     static const ff::rect_int PLAYER_HIT_BOX_UP(-3, -10, 3, 8);
     static const ff::rect_int PLAYER_HIT_BOX_LEFT(-10, -3, 8, 3);
     static const ff::rect_int PLAYER_HIT_BOX_DOWN(-3, -8, 3, 10);
+    static const ff::rect_int PLAYER_SHOT_HIT_BOX(-4, -4, 4, 4);
     static const ff::rect_int SHOT_HIT_BOX(-4, -4, 4, 4);
 
     const ff::rect_int& player_hit_box(size_t index, game::dir dir);

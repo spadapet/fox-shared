@@ -42,6 +42,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
     bool render_score = true;
     bool render_tiles = true;
     bool render_player = true;
+    bool render_player_shots = true;
     bool render_shooters = true;
     bool render_shots = (play.game_data->state == game::game_state::playing);
 
@@ -141,6 +142,20 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         }
     }
 
+    if (render_player_shots)
+    {
+        for (const game::shot_data& shot : play.game_data->player_shots)
+        {
+            if (shot.dir != game::dir::none)
+            {
+                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 247, 3);
+#if DEBUG
+                //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
+#endif
+            }
+        }
+    }
+
     if (render_shooters)
     {
         for (const game::shooter_data& shooter : play.game_data->shooters)
@@ -174,6 +189,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                 int rotation = game::dir_to_degrees<int>((player.dir != game::dir::none) ? player.dir : (i ? game::dir::down : game::dir::up));
                 ff::dxgi::pixel_transform transform(player.pos.cast<ff::fixed_int>(), ff::point_fixed(1, 1), rotation);
                 anim->draw_frame(draw, transform, 0.0f);
+
+                if (!player.shoot_counter)
+                {
+                    draw.draw_palette_outline_circle(player.pos.cast<ff::fixed_int>(), 4_f, 243, 1_f);
+                }
 
                 draw.pop_palette();
 #if DEBUG

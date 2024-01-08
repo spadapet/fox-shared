@@ -12,7 +12,7 @@ namespace game
     public:
         updater();
 
-        void update_player_input(game::player_data& player, bool press_left, bool press_right, bool press_up, bool press_down, bool press_speed);
+        void update_player_input(game::player_data& player, bool press_left, bool press_right, bool press_up, bool press_down, bool press_speed, bool press_shoot);
         void update(game::play_level& play);
 
     private:
@@ -21,6 +21,7 @@ namespace game
         void update_shot(game::play_level& play, game::shot_data& shot);
         void player_hit_tile(game::play_level& play, game::player_data& player, ff::point_int tile);
         void add_shot(game::play_level& play, ff::point_int pos, game::dir dir);
+        void add_player_shot(game::play_level& play, ff::point_int pos, game::dir dir);
         void add_score(game::play_level& play, game::player_data& player, game::tile_type tile_type);
         void check_hit(game::play_level& play);
         bool check_win(game::play_level& play);
