@@ -262,6 +262,9 @@ namespace game
         game::shot_array shots{};
         game::shot_array player_shots{};
         size_t current_player{};
+
+        std::vector<std::shared_ptr<ff::audio_playing_base>> audio_playing{};
+        std::vector<std::shared_ptr<ff::animation_player_base>> animations_playing{};
     };
 
     struct play_level

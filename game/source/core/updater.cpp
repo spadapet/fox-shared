@@ -85,6 +85,19 @@ void game::updater::update_player_input(
 
 void game::updater::update(game::play_level& play)
 {
+    std::remove_if(play.game_data->audio_playing.begin(), play.game_data->audio_playing.end(),
+        [](auto& playing)
+        {
+            playing->advance();
+            return playing->stopped();
+        });
+
+    std::remove_if(play.game_data->animations_playing.begin(), play.game_data->animations_playing.end(),
+        [](auto& playing)
+        {
+            return !playing->advance_animation();
+        });
+
     for (size_t i = 0; i < play.game_data->current_player_count(); i++)
     {
         game::player_data& player = play.game_data->players[play.game_data->current_player + i];
