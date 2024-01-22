@@ -15,6 +15,8 @@ void game::renderer::init_resources()
     this->panel[1][0] = "sprites.panel1[0]"sv;
     this->panel[1][1] = "sprites.panel1[1]"sv;
     this->shooter = "sprites.shooter"sv;
+    this->player_shot = "sprites.player_shot"sv;
+    this->explosion = "sprites.explosion"sv;
     this->game_font = "game_font"sv;
     this->game_font_small = "game_font_small"sv;
 }
@@ -134,7 +136,10 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         {
             if (shot.dir != game::dir::none)
             {
-                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 246, 3);
+                if (shot.type == game::shot_type::shooter)
+                {
+                    draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 246, 3);
+                }
 #if DEBUG
                 //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
@@ -146,12 +151,20 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
     {
         for (const game::shot_data& shot : play.game_data->player_shots)
         {
-            if (shot.dir != game::dir::none)
+            if (shot.dir != game::dir::none && shot.type == game::shot_type::player)
             {
-                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 247, 3);
+                //draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 247, 3);
+                ff::dxgi::pixel_transform transform(shot.pos.cast<ff::fixed_int>());
+                this->player_shot->draw_frame(draw, transform, 0);
 #if DEBUG
                 //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
+            }
+
+            if (shot.type == game::shot_type::explosion)
+            {
+                ff::dxgi::pixel_transform transform(shot.pos.cast<ff::fixed_int>());
+                this->explosion->draw_frame(draw, transform, 0);
             }
         }
     }

@@ -64,6 +64,18 @@
         "pos": [ 0, 54 ],
         "size": [ 30, 18 ],
         "handle": [ 15, 9 ]
+      },
+      "player_shot": {
+        "file": "file:graphics/sprites.png",
+        "pos": [ 60, 54 ],
+        "size": [ 30, 18 ],
+        "handle": [ 15, 9 ]
+      },
+      "explosion": {
+        "file": "file:graphics/sprites.png",
+        "pos": [ 30, 54 ],
+        "size": [ 30, 18 ],
+        "handle": [ 15, 9 ]
       }
     }
   }

@@ -101,6 +101,14 @@ namespace game
         warp3,
     };
 
+    enum class shot_type
+    {
+        none,
+        shooter,
+        player,
+        explosion,
+    };
+
     template<class T, class = std::enable_if_t<std::is_enum_v<T>>>
     struct state_t
     {
@@ -224,6 +232,7 @@ namespace game
 
     struct shot_data
     {
+        game::shot_type type{};
         game::dir dir{};
         ff::point_int pos{};
         ff::fixed_int speed_bank{};

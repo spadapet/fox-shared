@@ -129,9 +129,12 @@ void game::updater::update(game::play_level& play)
 
     for (game::shot_data& shot : play.game_data->shots)
     {
-        for (shot.speed_bank += play.game_data->shot_speed(); shot.speed_bank >= 1_f; shot.speed_bank--)
+        if (shot.type == game::shot_type::shooter)
         {
-            this->update_shot(play, shot);
+            for (shot.speed_bank += play.game_data->shot_speed(); shot.speed_bank >= 1_f; shot.speed_bank--)
+            {
+                this->update_shot(play, shot);
+            }
         }
     }
 
@@ -367,6 +370,12 @@ void game::updater::update_shot(game::play_level& play, game::shot_data& shot)
         return;
     }
 
+    if (shot.type != game::shot_type::player &&
+        shot.type != game::shot_type::shooter)
+    {
+        return;
+    }
+
     switch (shot.dir)
     {
         case game::dir::down:
@@ -466,6 +475,7 @@ void game::updater::add_shot(game::play_level& play, ff::point_int pos, game::di
         if (shot.dir == game::dir::none)
         {
             shot = {};
+            shot.type = game::shot_type::shooter;
             shot.dir = dir;
             shot.pos = pos;
             play.audio->play_shot();
@@ -481,6 +491,7 @@ void game::updater::add_player_shot(game::play_level& play, ff::point_int pos, g
         if (shot.dir == game::dir::none)
         {
             shot = {};
+            shot.type = game::shot_type::player;
             shot.dir = dir;
             shot.pos = pos;
             shot.lifetime = play.game_data->player_shot_lifetime();
@@ -538,7 +549,8 @@ void game::updater::check_hit(game::play_level& play)
                     if (player_shot_rect.intersects(shot_rect))
                     {
                         shot = {};
-                        player_shot = {};
+                        player_shot.type = game::shot_type::explosion;
+                        player_shot.lifetime = 60;
                         play.audio->play_shot_hit_shot();
                         // TODO: Visual effect
                         break;

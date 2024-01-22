@@ -20,6 +20,8 @@ namespace game
         ff::auto_resource<ff::animation_base> ship;
         ff::auto_resource<ff::animation_base> panel[2][2]; // type, power
         ff::auto_resource<ff::animation_base> shooter;
+        ff::auto_resource<ff::animation_base> player_shot;
+        ff::auto_resource<ff::animation_base> explosion;
         ff::auto_resource<ff::sprite_font> game_font;
         ff::auto_resource<ff::sprite_font> game_font_small;
     };
