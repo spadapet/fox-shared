@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "graphics.res.id.h"
 #include "source/core/game.h"
 #include "source/core/renderer.h"
 
@@ -9,14 +10,14 @@ game::renderer::renderer()
 
 void game::renderer::init_resources()
 {
-    this->ship = "sprites.ship"sv;
-    this->panel[0][0] = "sprites.panel0[0]"sv;
-    this->panel[0][1] = "sprites.panel0[1]"sv;
-    this->panel[1][0] = "sprites.panel1[0]"sv;
-    this->panel[1][1] = "sprites.panel1[1]"sv;
-    this->shooter = "sprites.shooter"sv;
-    this->game_font = "game_font"sv;
-    this->game_font_small = "game_font_small"sv;
+    this->ship = assets::graphics::SPRITES_SHIP;
+    this->panel[0][0] = assets::graphics::SPRITES_PANEL0_0;
+    this->panel[0][1] = assets::graphics::SPRITES_PANEL0_1;
+    this->panel[1][0] = assets::graphics::SPRITES_PANEL1_0;
+    this->panel[1][1] = assets::graphics::SPRITES_PANEL1_1;
+    this->shooter = assets::graphics::SPRITES_SHOOTER;
+    this->game_font = assets::graphics::GAME_FONT;
+    this->game_font_small = assets::graphics::GAME_FONT_SMALL;
 }
 
 bool game::renderer::can_render(const game::play_level& play) const

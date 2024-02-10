@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "controls.res.id.h"
 #include "source/core/levels.h"
 #include "source/states/app_state.h"
 #include "source/states/play_state.h"
@@ -245,9 +246,9 @@ void game::play_state::init_playing_resources()
 {
     ff::auto_resource<ff::input_mapping> player_mapping[]
     {
-        "player_controls"sv,
-        "player_controls_right"sv,
-        "player_controls_left"sv,
+        assets::controls::PLAYER_CONTROLS,
+        assets::controls::PLAYER_CONTROLS_RIGHT,
+        assets::controls::PLAYER_CONTROLS_LEFT,
     };
 
     for (size_t i = 0; i < game::constants::MAX_PLAYERS; i++)

@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "graphics.res.id.h"
 #include "source/states/app_state.h"
 #include "source/states/play_state.h"
 
@@ -9,8 +10,8 @@ game::app_state::app_state()
     : ff::game::app_state_base(
         ff::render_target(game::constants::RENDER_SIZE.cast<size_t>(), &ff::dxgi::color_black(), ::PALETTE_BLACK),
         {
-            { "palette", "player_0", ::PALETTE_CYCLES_PER_SECOND },
-            { "palette", "player_1", ::PALETTE_CYCLES_PER_SECOND },
+            { std::string(assets::graphics::PALETTE), "player_0", ::PALETTE_CYCLES_PER_SECOND },
+            { std::string(assets::graphics::PALETTE), "player_1", ::PALETTE_CYCLES_PER_SECOND },
         })
 {}
 

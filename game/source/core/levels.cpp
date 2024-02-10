@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "game.res.id.h"
 #include "source/core/levels.h"
 
 std::string_view level_tiles[] =
@@ -80,8 +81,7 @@ void game::levels::init_resources()
 {
     this->levels_.clear();
 
-    ff::auto_resource<ff::resource_value_provider> level_provider_res = ff::global_resources::get("levels");
-    std::shared_ptr<ff::resource_value_provider> level_provider = level_provider_res.object();
+    std::shared_ptr<ff::resource_value_provider> level_provider = ff::get_resource<ff::resource_value_provider>(assets::game::LEVELS);
     assert_ret(level_provider);
 
     std::vector<ff::value_ptr> level_values = level_provider->get_resource_value("levels")->get<std::vector<ff::value_ptr>>();

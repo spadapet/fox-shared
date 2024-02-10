@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "source/core/game.h"
 #include "source/ui/title_page.xaml.h"
+#include "xaml.res.id.h"
 
 NS_IMPLEMENT_REFLECTION(game::title_page_view_model, "game.title_page_view_model")
 {
@@ -55,7 +56,7 @@ game::title_page::title_page()
 game::title_page::title_page(game::title_page_view_model* view_model)
     : view_model_(view_model)
 {
-    Noesis::GUI::LoadComponent(this, "title_page.xaml");
+    Noesis::GUI::LoadComponent(this, assets::xaml::TITLE_PAGE_XAML.data());
 }
 
 game::title_page_view_model* game::title_page::view_model() const
