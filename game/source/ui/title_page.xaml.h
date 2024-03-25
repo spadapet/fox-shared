@@ -4,7 +4,7 @@ namespace game
 {
     struct game_data;
 
-    class title_page_view_model : public ff::ui::notify_propety_changed_base
+    class title_page_view_model : public ff::ui::notify_property_changed_base
     {
     public:
         title_page_view_model() = default;
@@ -16,7 +16,7 @@ namespace game
         game::game_data* game_data{};
         Noesis::Ptr<Noesis::ICommand> play_command_;
 
-        NS_DECLARE_REFLECTION(game::title_page_view_model, ff::ui::notify_propety_changed_base);
+        NS_DECLARE_REFLECTION(game::title_page_view_model, ff::ui::notify_property_changed_base);
     };
 
     class title_page : public Noesis::UserControl
