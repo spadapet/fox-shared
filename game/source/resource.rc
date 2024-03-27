@@ -1,7 +1,7 @@
 #include <windows.h>
 #pragma code_page(1252)
 #define GAME_COMPANY "Peter Spada"
-#define GAME_NAME "Fox"
+#define GAME_NAME "Solar Fish"
 #define GAME_VERSION "1.0.0.0"
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US

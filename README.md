@@ -1,4 +1,4 @@
-# Fox
+# Solar Fish
 
 Four places to update GameName:
 

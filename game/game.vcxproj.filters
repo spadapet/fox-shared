@@ -129,4 +129,8 @@
       <Filter>source</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(NoesisDll)" />
+    <None Include="$(WinPixDll)" />
+  </ItemGroup>
 </Project>
