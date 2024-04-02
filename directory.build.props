@@ -4,6 +4,5 @@
   <PropertyGroup>
     <DevRoot Condition=" '$(DevRoot)' == '' ">$(MSBuildThisFileDirectory)</DevRoot>
   </PropertyGroup>
-  <Import Condition=" '$(SharedCppPropsImported)' == '' And '$(MSBuildProjectExtension)' == '.vcxproj' " Project="vendor\ff_game_library\build\cpp.props" />
-  <Import Condition=" '$(BasePropsImported)' == '' " Project="vendor\ff_game_library\build\base.props" />
+  <Import Project="vendor\ff_game_library\build\project.props" Condition=" '$(SharedProjectPropsImported)' == '' " />
 </Project>

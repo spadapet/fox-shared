@@ -12,9 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E1ABBA80
 		vendor\ff_game_library\build\cpp.props = vendor\ff_game_library\build\cpp.props
 		vendor\ff_game_library\build\cpp.targets = vendor\ff_game_library\build\cpp.targets
 		vendor\ff_game_library\build\cpp.xml = vendor\ff_game_library\build\cpp.xml
+		vendor\ff_game_library\build\cs.props = vendor\ff_game_library\build\cs.props
 		directory.build.props = directory.build.props
 		directory.build.targets = directory.build.targets
+		vendor\ff_game_library\build\project.props = vendor\ff_game_library\build\project.props
 		README.md = README.md
+		vendor\ff_game_library\build\wap.props = vendor\ff_game_library\build\wap.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}"
