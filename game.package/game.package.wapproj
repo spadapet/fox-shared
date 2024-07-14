@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\vendor\ff_game_library\build\base.props" />
-  <PropertyGroup>
-    <WapProjPath Condition="'$(WapProjPath)'==''">$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\</WapProjPath>
-  </PropertyGroup>
-  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.props" />
   <PropertyGroup>
     <ProjectGuid>3bfc3f1c-2860-488b-a31f-571bec09c239</ProjectGuid>
-    <TargetPlatformVersion>10.0.$(WinSdkRelease10).0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.$(WinSdkRelease10).0</TargetPlatformMinVersion>
-    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
-    <NoWarn>$(NoWarn);NU1702</NoWarn>
     <EntryPointProjectUniqueName>..\game\game.vcxproj</EntryPointProjectUniqueName>
   </PropertyGroup>
   <ItemGroup>
@@ -27,13 +20,11 @@
     <Content Include="Images\StoreLogo.png" />
     <Content Include="Images\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
-  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\game\game.vcxproj">
-      <Private>false</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\game\game.vcxproj" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.targets" />
 </Project>
