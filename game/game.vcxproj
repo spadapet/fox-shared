@@ -8,13 +8,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup>
     <AdditionalResJsonInputs>assets\xaml\**\*.xaml;assets\xaml\**\*.ttf;assets\xaml\**\*.png</AdditionalResJsonInputs>
+    <ResPackSingleContentFile>true</ResPackSingleContentFile>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="source\assets\controls.res.cpp" />
-    <ClCompile Include="source\assets\game.res.cpp" />
-    <ClCompile Include="source\assets\graphics.res.cpp" />
-    <ClCompile Include="source\assets\particles.res.cpp" />
-    <ClCompile Include="source\assets\xaml.res.cpp" />
     <ClCompile Include="source\core\game.cpp" />
     <ClCompile Include="source\core\audio.cpp" />
     <ClCompile Include="source\core\renderer.cpp" />

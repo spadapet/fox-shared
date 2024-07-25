@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "game.res.id.h"
+#include "game.assets.id.h"
 #include "source/core/levels.h"
 
 std::string_view level_tiles[] =
@@ -122,7 +122,7 @@ void game::levels::init_resources()
                 int warp_count = 0;
                 const std::string& layer_data64 = layer_dict.get<std::string>("data");
                 std::shared_ptr<ff::data_base> layer_data = ff::compression::decode_base64(layer_data64);
-                if (layer_data->size() == game::constants::TILE_COUNT_X * game::constants::TILE_COUNT_Y * sizeof(int))
+                if (layer_data->size() == static_cast<size_t>(game::constants::TILE_COUNT_X) * static_cast<size_t>(game::constants::TILE_COUNT_Y) * sizeof(int))
                 {
                     const int* layer_ints = reinterpret_cast<const int*>(layer_data->data());
                     for (int y = 0; y < game::constants::TILE_COUNT_Y; y++)

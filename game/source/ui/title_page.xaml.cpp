@@ -1,7 +1,7 @@
 #include "pch.h"
+#include "game.assets.id.h"
 #include "source/core/game.h"
 #include "source/ui/title_page.xaml.h"
-#include "xaml.res.id.h"
 
 NS_IMPLEMENT_REFLECTION(game::title_page_view_model, "game.title_page_view_model")
 {

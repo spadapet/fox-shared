@@ -8,15 +8,6 @@
     <ClCompile Include="source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\assets\controls.res.cpp">
-      <Filter>source\assets</Filter>
-    </ClCompile>
-    <ClCompile Include="source\assets\graphics.res.cpp">
-      <Filter>source\assets</Filter>
-    </ClCompile>
-    <ClCompile Include="source\assets\xaml.res.cpp">
-      <Filter>source\assets</Filter>
-    </ClCompile>
     <ClCompile Include="source\states\app_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
@@ -46,12 +37,6 @@
     </ClCompile>
     <ClCompile Include="source\core\audio.cpp">
       <Filter>source\core</Filter>
-    </ClCompile>
-    <ClCompile Include="source\assets\particles.res.cpp">
-      <Filter>source\assets</Filter>
-    </ClCompile>
-    <ClCompile Include="source\assets\game.res.cpp">
-      <Filter>source\assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +95,6 @@
     </Filter>
     <Filter Include="source">
       <UniqueIdentifier>{3865c5fa-f37c-4762-a844-5a4c43776d3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\assets">
-      <UniqueIdentifier>{e11d4ec2-38c4-4062-9160-8ad10da13950}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\states">
       <UniqueIdentifier>{4a1e5533-d803-41f1-85c6-baaa5e0f96cb}</UniqueIdentifier>

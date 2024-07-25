@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "graphics.res.id.h"
+#include "game.assets.id.h"
 #include "source/core/game.h"
 #include "source/core/renderer.h"
 

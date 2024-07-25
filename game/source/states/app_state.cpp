@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "graphics.res.id.h"
+#include "game.assets.id.h"
 #include "source/states/app_state.h"
 #include "source/states/play_state.h"
 

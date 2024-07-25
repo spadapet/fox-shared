@@ -2,22 +2,18 @@
 #include "source/states/app_state.h"
 #include "source/ui/title_page.xaml.h"
 
-namespace res
-{
-    void register_controls();
-    void register_game();
-    void register_graphics();
-    void register_particles();
-    void register_xaml();
-}
-
 static void register_global_resources()
 {
-    ::res::register_controls();
-    ::res::register_game();
-    ::res::register_graphics();
-    ::res::register_particles();
-    ::res::register_xaml();
+    // TODO: Make helper method to automatically load all assets from EXE's directory
+    std::filesystem::path assets_path = ff::filesystem::executable_path().parent_path() / "game.assets.pack";
+    std::shared_ptr<ff::data_base> assets_data = ff::filesystem::map_binary_file(assets_path);
+    assert(assets_data);
+
+    if (assets_data)
+    {
+        ff::data_reader assets_reader(assets_data);
+        ff::global_resources::add(assets_reader);
+    }
 
     Noesis::RegisterComponent<game::title_page>();
     Noesis::RegisterComponent<game::title_page_view_model>();
