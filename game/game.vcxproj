@@ -8,7 +8,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup>
     <AdditionalResJsonInputs>assets\xaml\**\*.xaml;assets\xaml\**\*.ttf;assets\xaml\**\*.png</AdditionalResJsonInputs>
-    <ResPackSingleContentFile>true</ResPackSingleContentFile>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="source\core\game.cpp" />
@@ -39,16 +38,19 @@
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\controls.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\graphics.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\particles.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\xaml.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
+    </ResJson>
+    <ResJson Include="assets\game.res.json">
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <Manifest Include="app.manifest" />
     <ResourceCompile Include="source\resource.rc" />
@@ -60,11 +62,6 @@
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.dx12\ff.dx12.vcxproj">
       <Project>{8670e093-edd1-451e-868e-acffb7258759}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResJson Include="assets\game.res.json">
-      <FileType>Document</FileType>
-    </ResJson>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>

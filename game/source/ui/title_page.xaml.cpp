@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "game.assets.id.h"
+#include "game.res.id.h"
 #include "source/core/game.h"
 #include "source/ui/title_page.xaml.h"
 
