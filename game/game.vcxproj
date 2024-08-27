@@ -62,6 +62,9 @@
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.dx12\ff.dx12.vcxproj">
       <Project>{8670e093-edd1-451e-868e-acffb7258759}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\vendor\ff_game_library\source\ff.ui\ff.ui.vcxproj">
+      <Project>{8147a742-08ac-49fd-8c51-3956e1a65e16}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>
