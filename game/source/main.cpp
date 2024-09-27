@@ -10,10 +10,7 @@ static void register_global_resources()
     Noesis::RegisterComponent<game::title_page_view_model>();
 }
 
-int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
+int WINAPI wWinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPWSTR, _In_ int)
 {
-    ff::game::init_params_t<game::app_state> params{};
-    params.register_global_resources = ::register_global_resources;
-
-    return ff::game::run(params);
+    return ff::game::run<game::app_state>(::register_global_resources);
 }
