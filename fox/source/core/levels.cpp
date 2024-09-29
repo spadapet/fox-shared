@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "game.res.id.h"
+#include "fox.res.id.h"
 #include "source/core/levels.h"
 
 std::string_view level_tiles[] =

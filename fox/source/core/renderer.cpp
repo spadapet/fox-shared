@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "game.res.id.h"
+#include "fox.res.id.h"
 #include "source/core/game.h"
 #include "source/core/renderer.h"
 

@@ -4,7 +4,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.props" />
   <PropertyGroup>
     <ProjectGuid>3bfc3f1c-2860-488b-a31f-571bec09c239</ProjectGuid>
-    <EntryPointProjectUniqueName>..\game\game.vcxproj</EntryPointProjectUniqueName>
+    <EntryPointProjectUniqueName>..\fox\fox.vcxproj</EntryPointProjectUniqueName>
   </PropertyGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -21,10 +21,10 @@
     <Content Include="Images\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\game\game.vcxproj" />
+    <ProjectReference Include="..\fox\fox.vcxproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.targets" />
 </Project>
