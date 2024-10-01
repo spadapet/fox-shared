@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "fox.res.id.h"
+#include "fox.resm.id.h"
 #include "source/core/game.h"
 #include "source/ui/title_page.xaml.h"
 
