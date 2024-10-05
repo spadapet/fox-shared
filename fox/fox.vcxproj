@@ -38,19 +38,19 @@
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\controls.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\graphics.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\particles.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\xaml.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\game.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <Manifest Include="app.manifest" />
     <ResourceCompile Include="source\resource.rc" />
