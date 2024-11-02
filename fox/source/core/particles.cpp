@@ -80,7 +80,7 @@ void game::particles::advance_now()
             p.angle += p.angle_vel;
             p.dist += p.dist_vel;
             p.spin += p.spin_vel;
-            p.timer += ff::constants::seconds_per_advance_f;
+            p.timer += ff::constants::seconds_per_advance<float>();
             i++;
         }
         else
