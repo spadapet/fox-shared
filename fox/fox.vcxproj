@@ -6,35 +6,32 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.default.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <PropertyGroup>
-    <AdditionalResJsonInputs>assets\xaml\**\*.xaml;assets\xaml\**\*.ttf;assets\xaml\**\*.png</AdditionalResJsonInputs>
-  </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="source\core\game.cpp" />
-    <ClCompile Include="source\core\audio.cpp" />
-    <ClCompile Include="source\core\renderer.cpp" />
-    <ClCompile Include="source\core\updater.cpp" />
-    <ClCompile Include="source\core\constants.cpp" />
-    <ClCompile Include="source\core\levels.cpp" />
-    <ClCompile Include="source\core\particles.cpp" />
-    <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\states\app_state.cpp" />
-    <ClCompile Include="source\states\play_state.cpp" />
-    <ClCompile Include="source\ui\title_page.xaml.cpp" />
+    <ClCompile Include="states\app_state.cpp" />
+    <ClCompile Include="states\play_state.cpp" />
+    <ClCompile Include="states\title_state.cpp" />
+    <ClInclude Include="core\audio.h" />
+    <ClInclude Include="core\constants.h" />
+    <ClInclude Include="core\game.h" />
+    <ClInclude Include="core\levels.h" />
+    <ClInclude Include="core\particles.h" />
+    <ClInclude Include="core\renderer.h" />
+    <ClInclude Include="core\updater.h" />
     <ClInclude Include="pch.h" />
+    <ClCompile Include="core\audio.cpp" />
+    <ClCompile Include="core\constants.cpp" />
+    <ClCompile Include="core\game.cpp" />
+    <ClCompile Include="core\levels.cpp" />
+    <ClCompile Include="core\particles.cpp" />
+    <ClCompile Include="core\renderer.cpp" />
+    <ClCompile Include="core\updater.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClInclude Include="source\core\game.h" />
-    <ClInclude Include="source\core\audio.h" />
-    <ClInclude Include="source\core\renderer.h" />
-    <ClInclude Include="source\core\updater.h" />
-    <ClInclude Include="source\core\constants.h" />
-    <ClInclude Include="source\core\levels.h" />
-    <ClInclude Include="source\core\particles.h" />
-    <ClInclude Include="source\states\app_state.h" />
-    <ClInclude Include="source\states\play_state.h" />
-    <ClInclude Include="source\ui\title_page.xaml.h" />
+    <ClInclude Include="states\app_state.h" />
+    <ClInclude Include="states\play_state.h" />
+    <ClInclude Include="states\title_state.h" />
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\controls.res.json">
@@ -46,27 +43,18 @@
     <ResJson Include="assets\particles.res.json">
       <Content>True</Content>
     </ResJson>
-    <ResJson Include="assets\xaml.res.json">
-      <Content>True</Content>
-    </ResJson>
     <ResJson Include="assets\game.res.json">
       <Content>True</Content>
     </ResJson>
     <Manifest Include="app.manifest" />
-    <ResourceCompile Include="source\resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.application\ff.application.vcxproj">
+    <ProjectReference Include="..\ff_game_library\source\ff.application\ff.application.vcxproj">
       <Project>{376073e9-ea4d-4513-941c-906ca968c6c3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.dx\ff.dx.vcxproj">
-      <Project>{0580ed07-bb8f-472a-94fc-e0ee4a79421d}</Project>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ItemDefinitionGroup>
-    <ClCompile>
-      <AdditionalIncludeDirectories>$(DevRoot)vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-  </ItemDefinitionGroup>
 </Project>

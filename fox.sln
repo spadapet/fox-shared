@@ -5,40 +5,45 @@ VisualStudioVersion = 17.0.31516.353
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fox", "fox\fox.vcxproj", "{C3A0AF9F-5AF7-471E-AE92-14032A8A9A94}"
 EndProject
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "fox.package", "fox.package\fox.package.wapproj", "{3BFC3F1C-2860-488B-A31F-571BEC09C239}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E1ABBA80-AB79-45AC-B565-C7E91FCA9339}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		vendor\ff_game_library\build\base.props = vendor\ff_game_library\build\base.props
-		vendor\ff_game_library\build\cpp.props = vendor\ff_game_library\build\cpp.props
-		vendor\ff_game_library\build\cpp.targets = vendor\ff_game_library\build\cpp.targets
-		vendor\ff_game_library\build\cpp.xml = vendor\ff_game_library\build\cpp.xml
-		vendor\ff_game_library\build\cs.props = vendor\ff_game_library\build\cs.props
+		ff_game_library\build\base.props = ff_game_library\build\base.props
+		ff_game_library\build\cpp.props = ff_game_library\build\cpp.props
+		ff_game_library\build\cpp.targets = ff_game_library\build\cpp.targets
+		ff_game_library\build\cpp.xml = ff_game_library\build\cpp.xml
+		ff_game_library\build\cs.props = ff_game_library\build\cs.props
 		directory.build.props = directory.build.props
 		directory.build.targets = directory.build.targets
-		vendor\ff_game_library\build\project.props = vendor\ff_game_library\build\project.props
+		ff_game_library\build\project.props = ff_game_library\build\project.props
 		README.md = README.md
-		vendor\ff_game_library\build\wap.props = vendor\ff_game_library\build\wap.props
+		ff_game_library\build\wap.props = ff_game_library\build\wap.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{C2584317-67DE-4871-8852-E896A3D3CAF0}"
+	ProjectSection(SolutionItems) = preProject
+		ff_game_library\include\ff.all.h = ff_game_library\include\ff.all.h
+		ff_game_library\include\ff.application.h = ff_game_library\include\ff.application.h
+		ff_game_library\include\ff.base.h = ff_game_library\include\ff.base.h
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.directxtex", "vendor\ff_game_library\vendor\ff.vendor.directxtex.vcxproj", "{5F0B3FD1-44D5-4524-8F61-E22098986A43}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "library", "library", "{BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.libpng", "vendor\ff_game_library\vendor\ff.vendor.libpng.vcxproj", "{7023AADB-413D-4C4E-B8A7-481484C943BA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.application", "ff_game_library\source\ff.application\ff.application.vcxproj", "{376073E9-EA4D-4513-941C-906CA968C6C3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.zlib", "vendor\ff_game_library\vendor\ff.vendor.zlib.vcxproj", "{D9B0464D-0E8C-48F0-98C8-FBD8BEF12BDC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.base", "ff_game_library\source\ff.base\ff.base.vcxproj", "{F89161F3-74E5-4B6B-9A53-6B97B83D1700}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.application", "vendor\ff_game_library\source\ff.application\ff.application.vcxproj", "{376073E9-EA4D-4513-941C-906CA968C6C3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{6F3D3FD9-7E5E-4E30-B6D0-6D5223A51F26}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.base", "vendor\ff_game_library\source\ff.base\ff.base.vcxproj", "{F89161F3-74E5-4B6B-9A53-6B97B83D1700}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.directxtex", "ff_game_library\vendor\ff.vendor.directxtex.vcxproj", "{5F0B3FD1-44D5-4524-8F61-E22098986A43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fox.xaml", "fox\assets\xaml\fox.xaml.csproj", "{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.libpng", "ff_game_library\vendor\ff.vendor.libpng.vcxproj", "{7023AADB-413D-4C4E-B8A7-481484C943BA}"
 EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "fox.package", "fox.package\fox.package.wapproj", "{3BFC3F1C-2860-488B-A31F-571BEC09C239}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.zlib", "ff_game_library\vendor\ff.vendor.zlib.vcxproj", "{D9B0464D-0E8C-48F0-98C8-FBD8BEF12BDC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.noesis_app", "vendor\ff_game_library\vendor\ff.vendor.noesis_app.vcxproj", "{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.dx", "vendor\ff_game_library\source\ff.dx\ff.dx.vcxproj", "{0580ED07-BB8F-472A-94FC-E0EE4A79421D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ff.vendor.imgui", "ff_game_library\vendor\ff.vendor.imgui.vcxproj", "{B89FF916-A65C-48BB-B134-B68FFB38C3A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,12 +88,6 @@ Global
 		{F89161F3-74E5-4B6B-9A53-6B97B83D1700}.Profile|x64.Build.0 = Profile|x64
 		{F89161F3-74E5-4B6B-9A53-6B97B83D1700}.Release|x64.ActiveCfg = Release|x64
 		{F89161F3-74E5-4B6B-9A53-6B97B83D1700}.Release|x64.Build.0 = Release|x64
-		{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}.Debug|x64.Build.0 = Debug|Any CPU
-		{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}.Profile|x64.ActiveCfg = Release|Any CPU
-		{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}.Profile|x64.Build.0 = Release|Any CPU
-		{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}.Release|x64.ActiveCfg = Release|Any CPU
-		{9DE37EFD-3DEA-4A46-9EE3-4B367BEDE6D7}.Release|x64.Build.0 = Release|Any CPU
 		{3BFC3F1C-2860-488B-A31F-571BEC09C239}.Debug|x64.ActiveCfg = Debug|x64
 		{3BFC3F1C-2860-488B-A31F-571BEC09C239}.Debug|x64.Build.0 = Debug|x64
 		{3BFC3F1C-2860-488B-A31F-571BEC09C239}.Debug|x64.Deploy.0 = Debug|x64
@@ -98,30 +97,25 @@ Global
 		{3BFC3F1C-2860-488B-A31F-571BEC09C239}.Release|x64.ActiveCfg = Release|x64
 		{3BFC3F1C-2860-488B-A31F-571BEC09C239}.Release|x64.Build.0 = Release|x64
 		{3BFC3F1C-2860-488B-A31F-571BEC09C239}.Release|x64.Deploy.0 = Release|x64
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}.Debug|x64.ActiveCfg = Debug|x64
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}.Debug|x64.Build.0 = Debug|x64
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}.Profile|x64.ActiveCfg = Profile|x64
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}.Profile|x64.Build.0 = Profile|x64
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}.Release|x64.ActiveCfg = Release|x64
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE}.Release|x64.Build.0 = Release|x64
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D}.Debug|x64.ActiveCfg = Debug|x64
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D}.Debug|x64.Build.0 = Debug|x64
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D}.Profile|x64.ActiveCfg = Profile|x64
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D}.Profile|x64.Build.0 = Profile|x64
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D}.Release|x64.ActiveCfg = Release|x64
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D}.Release|x64.Build.0 = Release|x64
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6}.Debug|x64.ActiveCfg = Debug|x64
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6}.Debug|x64.Build.0 = Debug|x64
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6}.Profile|x64.ActiveCfg = Profile|x64
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6}.Profile|x64.Build.0 = Profile|x64
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6}.Release|x64.ActiveCfg = Release|x64
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{5F0B3FD1-44D5-4524-8F61-E22098986A43} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
-		{7023AADB-413D-4C4E-B8A7-481484C943BA} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
-		{D9B0464D-0E8C-48F0-98C8-FBD8BEF12BDC} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
+		{5F0B3FD1-44D5-4524-8F61-E22098986A43} = {6F3D3FD9-7E5E-4E30-B6D0-6D5223A51F26}
+		{7023AADB-413D-4C4E-B8A7-481484C943BA} = {6F3D3FD9-7E5E-4E30-B6D0-6D5223A51F26}
+		{D9B0464D-0E8C-48F0-98C8-FBD8BEF12BDC} = {6F3D3FD9-7E5E-4E30-B6D0-6D5223A51F26}
 		{376073E9-EA4D-4513-941C-906CA968C6C3} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
 		{F89161F3-74E5-4B6B-9A53-6B97B83D1700} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
-		{31F28E6F-10BC-4A6D-B992-01FD42EDB7DE} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
-		{0580ED07-BB8F-472A-94FC-E0EE4A79421D} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
+		{B89FF916-A65C-48BB-B134-B68FFB38C3A6} = {6F3D3FD9-7E5E-4E30-B6D0-6D5223A51F26}
+		{6F3D3FD9-7E5E-4E30-B6D0-6D5223A51F26} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
+		{C2584317-67DE-4871-8852-E896A3D3CAF0} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C2C9693-764C-4050-BD33-0675E8192367}

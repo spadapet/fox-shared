@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\vendor\ff_game_library\build\base.props" />
+  <Import Project="..\ff_game_library\build\base.props" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\Microsoft.DesktopBridge.props" />
   <PropertyGroup>
     <ProjectGuid>3bfc3f1c-2860-488b-a31f-571bec09c239</ProjectGuid>

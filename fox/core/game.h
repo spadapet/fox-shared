@@ -1,6 +1,6 @@
 #pragma once
 
-#include "source/core/constants.h"
+#include "core/constants.h"
 
 namespace game
 {

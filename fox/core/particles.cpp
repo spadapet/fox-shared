@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "source/core/particles.h"
+#include "core/particles.h"
 
 game::particles::particles()
 {
@@ -94,7 +94,7 @@ void game::particles::advance_now()
     ::SetEvent(this->async_event);
 }
 
-uint16_t game::particles::add_group(const ff::dxgi::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations)
+uint16_t game::particles::add_group(const ff::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations)
 {
     game::particles::group_t group;
     DirectX::XMStoreFloat4x4(&group.matrix, transform.matrix());
@@ -129,7 +129,7 @@ const DirectX::XMFLOAT4X4& game::particles::matrix(uint16_t group_id) const
 
 void game::particles::render(ff::dxgi::draw_base& draw, uint8_t type)
 {
-    ff::dxgi::transform transform = ff::dxgi::transform::identity();
+    ff::transform transform = ff::transform::identity();
 
     for (const game::particles::particle_t& p : this->particles_async)
     {
@@ -277,7 +277,7 @@ size_t game::particles::spec_t::add(particles& particles, ff::point_fixed pos, i
         return max_life;
     }
 
-    uint16_t group_id = particles.add_group(ff::dxgi::pixel_transform(pos, scale * options.scale, rotate + options.rotate), effect_id, count, this->animations);
+    uint16_t group_id = particles.add_group(ff::pixel_transform(pos, scale * options.scale, rotate + options.rotate), effect_id, count, this->animations);
 
     for (int i = 0; i < count; i++)
     {

@@ -1,7 +1,7 @@
 #include "pch.h"
+#include "core/game.h"
+#include "core/renderer.h"
 #include "fox.resm.id.h"
-#include "source/core/game.h"
-#include "source/core/renderer.h"
 
 game::renderer::renderer()
 {
@@ -122,7 +122,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
                 if (anim)
                 {
-                    ff::dxgi::pixel_transform transform(game::constants::tile_to_center<ff::fixed_int>(x, y));
+                    ff::pixel_transform transform(game::constants::tile_to_center<ff::fixed_int>(x, y));
                     anim->draw_frame(draw, transform, 0);
                 }
             }
@@ -162,7 +162,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         for (const game::shooter_data& shooter : play.game_data->shooters)
         {
             ff::animation_base* anim = this->shooter.object().get();
-            ff::dxgi::pixel_transform transform(shooter.pos.cast<ff::fixed_int>(), ff::point_fixed(1, 1), game::dir_to_degrees<int>(shooter.shot_dir) + 90);
+            ff::pixel_transform transform(shooter.pos.cast<ff::fixed_int>(), ff::point_fixed(1, 1), game::dir_to_degrees<int>(shooter.shot_dir) + 90);
             anim->draw_frame(draw, transform, 0.0f);
         }
     }
@@ -184,11 +184,11 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
             if (anim)
             {
-                ff::dxgi::palette_base* palette = ff::game::app_state_base::get().palette(player.index);
+                ff::dxgi::palette_base* palette = ff::game::root_state_base::get().palette(player.index);
                 draw.push_palette(palette);
 
                 int rotation = game::dir_to_degrees<int>((player.dir != game::dir::none) ? player.dir : (i ? game::dir::down : game::dir::up));
-                ff::dxgi::pixel_transform transform(player.pos.cast<ff::fixed_int>(), ff::point_fixed(1, 1), rotation);
+                ff::pixel_transform transform(player.pos.cast<ff::fixed_int>(), ff::point_fixed(1, 1), rotation);
                 anim->draw_frame(draw, transform, 0.0f);
 
                 if (!player.shoot_counter)
@@ -207,12 +207,12 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
 void game::renderer::draw_text(ff::dxgi::draw_base& draw, ff::point_int pos, std::string_view text, int color, int outline_color)
 {
-    ff::dxgi::transform transform(pos.cast<float>(), ff::point_float(1, 1), 0, color);
+    ff::transform transform(pos.cast<float>(), ff::point_float(1, 1), 0, color);
     this->game_font->draw_text(&draw, text, transform, outline_color);
 }
 
 void game::renderer::draw_text_small(ff::dxgi::draw_base& draw, ff::point_int pos, std::string_view text, int color, int outline_color)
 {
-    ff::dxgi::transform transform(pos.cast<float>(), ff::point_float(1, 1), 0, color);
+    ff::transform transform(pos.cast<float>(), ff::point_float(1, 1), 0, color);
     this->game_font_small->draw_text(&draw, text, transform, outline_color);
 }

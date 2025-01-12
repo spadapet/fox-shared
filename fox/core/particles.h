@@ -76,7 +76,7 @@ namespace game
         struct group_t
         {
             DirectX::XMFLOAT4X4 matrix;
-            ff::dxgi::pixel_transform transform;
+            ff::pixel_transform transform;
             int refs;
             int effect_id;
             std::vector<std::shared_ptr<ff::animation_base>> animations;
@@ -128,7 +128,7 @@ namespace game
         void advance_block();
         void advance_now();
 
-        uint16_t add_group(const ff::dxgi::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations);
+        uint16_t add_group(const ff::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations);
         void release_group(uint16_t group_id);
         const DirectX::XMFLOAT4X4& matrix(uint16_t group_id) const;
 

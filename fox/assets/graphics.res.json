@@ -12,12 +12,12 @@
 
   "game_font_data": {
     "res:type": "font_file",
-    "file": "file:xaml/fonts/SuperLegendBoy.ttf"
+    "file": "file:fonts/SuperLegendBoy.ttf"
   },
 
   "game_font_small_data": {
     "res:type": "font_file",
-    "file": "file:xaml/fonts/robotron_2084_small.ttf"
+    "file": "file:fonts/robotron_2084_small.ttf"
   },
 
   "game_font": {

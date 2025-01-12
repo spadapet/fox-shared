@@ -4,5 +4,5 @@
   <PropertyGroup>
     <DevRoot Condition=" '$(DevRoot)' == '' ">$(MSBuildThisFileDirectory)</DevRoot>
   </PropertyGroup>
-  <Import Project="vendor\ff_game_library\build\project.props" Condition=" '$(SharedProjectPropsImported)' == '' " />
+  <Import Project="ff_game_library\build\project.props" Condition=" '$(SharedProjectPropsImported)' == '' " />
 </Project>

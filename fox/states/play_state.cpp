@@ -1,9 +1,9 @@
 #include "pch.h"
+#include "core/levels.h"
 #include "fox.resm.id.h"
-#include "source/core/levels.h"
-#include "source/states/app_state.h"
-#include "source/states/play_state.h"
-#include "source/ui/title_page.xaml.h"
+#include "states/app_state.h"
+#include "states/play_state.h"
+#include "states/title_state.h"
 
 game::play_state::play_state(game::game_type game_type, game::game_diff game_diff)
     : game_data
@@ -13,10 +13,7 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
         (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
     }
     , play_level{ &this->game_data, &this->audio }
-    , resource_connection(ff::game::app_state_base::get().reload_resources_sink().connect(std::bind(&game::play_state::on_reload_resources, this)))
-    , title_page_vm(Noesis::MakePtr<game::title_page_view_model>(this->game_data))
-    , title_page(Noesis::MakePtr<game::title_page>(this->title_page_vm))
-    , title_state(std::make_shared<ff::ui_view_state>(std::make_shared<ff::ui_view>(this->title_page)))
+    , title_state{ std::make_shared<game::title_state>(this->game_data) }
 {
     this->init_resources();
 }
@@ -107,7 +104,7 @@ void game::play_state::render(ff::dxgi::command_context_base& context, ff::rende
     {
         ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
         ff::dxgi::depth_base& depth = targets.depth(context);
-        if (ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, &depth))
+        if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, &depth))
         {
             this->renderer.render(*draw, this->play_level);
         }
@@ -233,7 +230,7 @@ void game::play_state::init_shooters()
     this->game_data.shooters[1].pos = game::constants::MOVABLE_AREA.bottom_right() + ff::point_size(0, game::constants::TILE_SIZE_Y / 2).cast<int>();
 }
 
-void game::play_state::on_reload_resources()
+void game::play_state::load_resources()
 {
     this->init_playing_resources();
     this->init_resources();

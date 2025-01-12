@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "source/core/audio.h"
-#include "source/core/constants.h"
-#include "source/core/game.h"
-#include "source/core/updater.h"
+#include "core/audio.h"
+#include "core/constants.h"
+#include "core/game.h"
+#include "core/updater.h"
 
 game::updater::updater()
 {}
@@ -244,11 +244,11 @@ void game::updater::update_player(game::play_level& play, game::player_data& pla
 
     // Keep inside the grid
     {
-        player.pos.x = ff::math::clamp(player.pos.x,
+        player.pos.x = std::clamp(player.pos.x,
             game::constants::MOVABLE_AREA_CENTER_TILE.left,
             game::constants::MOVABLE_AREA_CENTER_TILE.right);
 
-        player.pos.y = ff::math::clamp(player.pos.y,
+        player.pos.y = std::clamp(player.pos.y,
             game::constants::MOVABLE_AREA_CENTER_TILE.top,
             game::constants::MOVABLE_AREA_CENTER_TILE.bottom);
     }

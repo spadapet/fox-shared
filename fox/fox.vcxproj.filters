@@ -5,71 +5,69 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="source\main.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="core\audio.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\states\app_state.cpp">
-      <Filter>source\states</Filter>
+    <ClCompile Include="core\constants.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\constants.cpp">
-      <Filter>source\core</Filter>
+    <ClCompile Include="core\game.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\states\play_state.cpp">
-      <Filter>source\states</Filter>
+    <ClCompile Include="core\levels.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\game.cpp">
-      <Filter>source\core</Filter>
+    <ClCompile Include="core\particles.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\renderer.cpp">
-      <Filter>source\core</Filter>
+    <ClCompile Include="core\renderer.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\updater.cpp">
-      <Filter>source\core</Filter>
+    <ClCompile Include="core\updater.cpp">
+      <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\levels.cpp">
-      <Filter>source\core</Filter>
+    <ClCompile Include="states\app_state.cpp">
+      <Filter>states</Filter>
     </ClCompile>
-    <ClCompile Include="source\ui\title_page.xaml.cpp">
-      <Filter>source\ui</Filter>
+    <ClCompile Include="states\play_state.cpp">
+      <Filter>states</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\particles.cpp">
-      <Filter>source\core</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\audio.cpp">
-      <Filter>source\core</Filter>
+    <ClCompile Include="states\title_state.cpp">
+      <Filter>states</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="source\states\app_state.h">
-      <Filter>source\states</Filter>
+    <ClInclude Include="core\audio.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\constants.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="core\constants.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\states\play_state.h">
-      <Filter>source\states</Filter>
+    <ClInclude Include="core\game.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\game.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="core\levels.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\renderer.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="core\particles.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\updater.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="core\renderer.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\levels.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="core\updater.h">
+      <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="source\ui\title_page.xaml.h">
-      <Filter>source\ui</Filter>
+    <ClInclude Include="states\app_state.h">
+      <Filter>states</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\particles.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="states\play_state.h">
+      <Filter>states</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\audio.h">
-      <Filter>source\core</Filter>
+    <ClInclude Include="states\title_state.h">
+      <Filter>states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +75,6 @@
       <Filter>assets</Filter>
     </ResJson>
     <ResJson Include="assets\graphics.res.json">
-      <Filter>assets</Filter>
-    </ResJson>
-    <ResJson Include="assets\xaml.res.json">
       <Filter>assets</Filter>
     </ResJson>
     <ResJson Include="assets\particles.res.json">
@@ -93,26 +88,18 @@
     <Filter Include="assets">
       <UniqueIdentifier>{95c949a2-413e-4ad4-8200-77d656de6b2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source">
-      <UniqueIdentifier>{3865c5fa-f37c-4762-a844-5a4c43776d3f}</UniqueIdentifier>
+    <Filter Include="core">
+      <UniqueIdentifier>{8c501a47-a839-454c-8f3f-b1f7eb05cd2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\states">
-      <UniqueIdentifier>{4a1e5533-d803-41f1-85c6-baaa5e0f96cb}</UniqueIdentifier>
+    <Filter Include="states">
+      <UniqueIdentifier>{bc5d638a-2903-4699-819c-4e3277d037b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\core">
-      <UniqueIdentifier>{f220505d-ef78-4b7e-85c3-c1595f042aa9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\ui">
-      <UniqueIdentifier>{8e3b6ed4-1af9-4caa-b2b4-8e51a3b5ac7b}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="source\resource.rc">
-      <Filter>source</Filter>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(NoesisDll)" />
     <None Include="$(WinPixDll)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
 </Project>

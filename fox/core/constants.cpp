@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "source/core/constants.h"
-#include "source/core/game.h"
+#include "core/constants.h"
+#include "core/game.h"
 
 const std::string_view game::strings::ID_GAME_OPTIONS = "game_options";
 

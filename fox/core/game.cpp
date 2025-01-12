@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "source/core/game.h"
+#include "core/game.h"
 
 ff::point_int game::dir_to_point(game::dir dir)
 {
