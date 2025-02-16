@@ -88,7 +88,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                         {
                             // TODO: Use sprite animation
                             ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
-                            draw.draw_palette_filled_circle(center, 3, 254);
+                            ff::color color(254);
+                            ff::dxgi::pixel_endpoint_t point{center, &color, 3};
+                            draw.draw_circle(point);
                         }
                         break;
 
@@ -99,7 +101,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                         {
                             // TODO: Use sprite animation
                             ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
-                            draw.draw_palette_outline_circle(center, 7, 242, 1);
+                            ff::color color(242);
+                            ff::dxgi::pixel_endpoint_t point{ center, &color, 7 };
+                            draw.draw_circle(point, 1);
                         }
                         break;
 
@@ -107,7 +111,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                         {
                             // TODO: Use sprite animation
                             ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
-                            draw.draw_palette_outline_circle(center, 6, 245, 2);
+                            ff::color color(245);
+                            ff::dxgi::pixel_endpoint_t point{ center, &color, 6 };
+                            draw.draw_circle(point, 2);
                         }
                         break;
                 }
@@ -116,8 +122,8 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                     y >= game::constants::MOVABLE_TILES.top && y < game::constants::MOVABLE_TILES.bottom)
                 {
                     ff::point_fixed center = game::constants::tile_to_center<ff::fixed_int>(x, y);
-                    draw.draw_palette_line(center - ff::point_fixed(2, 0), center + ff::point_fixed(1, 0), 255 - 14, 1);
-                    draw.draw_palette_line(center - ff::point_fixed(0, 2), center + ff::point_fixed(0, 1), 255 - 14, 1);
+                    draw.draw_line(center - ff::point_fixed(2, 0), center + ff::point_fixed(1, 0), 255 - 14, 1);
+                    draw.draw_line(center - ff::point_fixed(0, 2), center + ff::point_fixed(0, 1), 255 - 14, 1);
                 }
 
                 if (anim)
@@ -135,7 +141,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         {
             if (shot.dir != game::dir::none)
             {
-                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 246, 3);
+                ff::color color(246);
+                ff::dxgi::pixel_endpoint_t point{ shot.pos.cast<ff::fixed_int>(), &color, 6};
+                draw.draw_circle(point, 3);
 #if DEBUG
                 //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
@@ -149,7 +157,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
         {
             if (shot.dir != game::dir::none)
             {
-                draw.draw_palette_outline_circle(shot.pos.cast<ff::fixed_int>(), 6, 247, 3);
+                ff::color color(247);
+                ff::dxgi::pixel_endpoint_t point{ shot.pos.cast<ff::fixed_int>(), &color, 6 };
+                draw.draw_circle(point, 3);
 #if DEBUG
                 //draw.draw_palette_outline_rectangle((game::constants::SHOT_HIT_BOX + shot.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
@@ -193,7 +203,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
                 if (!player.shoot_counter)
                 {
-                    draw.draw_palette_outline_circle(player.pos.cast<ff::fixed_int>(), 4_f, 243, 1_f);
+                    ff::color color(243);
+                    ff::dxgi::pixel_endpoint_t point{ player.pos.cast<ff::fixed_int>(), &color, 4 };
+                    draw.draw_circle(point, 1);
                 }
 
                 draw.pop_palette();

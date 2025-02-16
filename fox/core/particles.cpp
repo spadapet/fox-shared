@@ -145,7 +145,7 @@ void game::particles::render(ff::dxgi::draw_base& draw, uint8_t type)
 
             if (p.is_color())
             {
-                draw.draw_palette_filled_rectangle(ff::rect_float(pos.x - p.size, pos.y - p.size, pos.x + p.size, pos.y + p.size), p.color_);
+                draw.draw_rectangle(ff::rect_float(pos.x - p.size, pos.y - p.size, pos.x + p.size, pos.y + p.size), p.color_);
             }
             else
             {
