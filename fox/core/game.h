@@ -152,7 +152,7 @@ namespace game
             return false;
         }
 
-        void advance_time()
+        void update()
         {
             this->state_counter++;
             this->total_counter++;

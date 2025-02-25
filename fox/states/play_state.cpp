@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "core/levels.h"
 #include "fox.resm.id.h"
-#include "states/app_state.h"
 #include "states/play_state.h"
-#include "states/title_state.h"
+
+constexpr float PALETTE_CYCLES_PER_SECOND = 0.25f;
+constexpr int PALETTE_BLACK = 240;
 
 game::play_state::play_state(game::game_type game_type, game::game_diff game_diff)
     : game_data
@@ -13,7 +14,7 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
         (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
     }
     , play_level{ &this->game_data, &this->audio }
-    , title_state{ std::make_shared<game::title_state>(this->game_data) }
+    , depth(ff::dxgi::create_depth({}))
 {
     this->init_resources();
 }
@@ -23,13 +24,13 @@ game::play_state::~play_state()
     // Just needed because of include files for smart pointer destruction
 }
 
-void game::play_state::advance_input()
+void game::play_state::input()
 {
     if (this->game_data.state == game::game_state::playing)
     {
         for (const auto& input : this->player_input)
         {
-            input->advance();
+            input->update();
         }
 
         for (game::player_data& player : this->game_data.players)
@@ -44,16 +45,20 @@ void game::play_state::advance_input()
                 input.digital_value(game::input_events::ID_SHOOT));
         }
     }
-
-    ff::state::advance_input();
 }
 
-std::shared_ptr<ff::state> game::play_state::advance_time()
+void game::play_state::update()
 {
-    this->game_data.state.advance_time();
+    this->game_data.state.update();
 
     switch (this->game_data.state)
     {
+        case game::game_state::title:
+            this->game_data.game_type = game::game_type::one_player;
+            this->game_data.game_diff = game::game_diff::normal;
+            this->game_data.state = game::game_state::play_init_from_title;
+            break;
+
         case game::game_state::play_init_from_title:
             this->init_from_title();
             break;
@@ -94,46 +99,22 @@ std::shared_ptr<ff::state> game::play_state::advance_time()
             this->game_data.state = game::game_state::title;
             break;
     }
-
-    return ff::state::advance_time();
 }
 
-void game::play_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
+void game::play_state::render_offscreen(ff::dxgi::command_context_base& context)
+{
+}
+
+void game::play_state::render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target)
 {
     if (this->renderer.can_render(this->play_level))
     {
-        ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
-        ff::dxgi::depth_base& depth = targets.depth(context);
-        if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, &depth))
+        if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, this->depth.get()))
         {
+            draw->push_palette(this->palette[0].get());
             this->renderer.render(*draw, this->play_level);
+            draw->pop_palette();
         }
-    }
-
-    ff::state::render(context, targets);
-}
-
-size_t game::play_state::child_state_count()
-{
-    switch (this->game_data.state)
-    {
-        case game::game_state::title:
-            return 1;
-
-        default:
-            return 0;
-    }
-}
-
-ff::state* game::play_state::child_state(size_t index)
-{
-    switch (this->game_data.state)
-    {
-        case game::game_state::title:
-            return this->title_state.get();
-
-        default:
-            return nullptr;
     }
 }
 
@@ -230,13 +211,23 @@ void game::play_state::init_shooters()
     this->game_data.shooters[1].pos = game::constants::MOVABLE_AREA.bottom_right() + ff::point_size(0, game::constants::TILE_SIZE_Y / 2).cast<int>();
 }
 
-void game::play_state::load_resources()
+void game::play_state::init_resources()
 {
+    ff::auto_resource<ff::palette_data> palette_data = assets::graphics::PALETTE;
+
     this->init_playing_resources();
-    this->init_resources();
     this->renderer.init_resources();
     this->audio.init_resources();
     this->levels.init_resources();
+
+    // Delay blocking on palette_data until after other resources are loaded
+    this->palette[0] = std::make_unique<ff::palette_cycle>(palette_data.object(), "player_0", ::PALETTE_CYCLES_PER_SECOND);
+    this->palette[1] = std::make_unique<ff::palette_cycle>(palette_data.object(), "player_1", ::PALETTE_CYCLES_PER_SECOND);
+}
+
+bool game::play_state::debug_command(size_t id)
+{
+    return false;
 }
 
 void game::play_state::init_playing_resources()
@@ -268,6 +259,3 @@ void game::play_state::init_playing_resources()
         this->player_input[i] = std::make_unique<ff::input_event_provider>(mapping, std::move(devices));
     }
 }
-
-void game::play_state::init_resources()
-{}

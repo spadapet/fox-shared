@@ -8,22 +8,18 @@
 
 namespace game
 {
-    class title_state;
-
-    class play_state : public ff::state
+    class play_state
     {
     public:
         play_state(game::game_type game_type = game::game_type::none, game::game_diff game_diff = game::game_diff::none);
-        virtual ~play_state() override;
+        ~play_state();
 
-        void load_resources();
-
-        // ff::state
-        virtual void advance_input() override;
-        virtual std::shared_ptr<ff::state> advance_time() override;
-        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
-        virtual size_t child_state_count() override;
-        virtual ff::state* child_state(size_t index) override;
+        void init_resources();
+        bool debug_command(size_t id);
+        void input();
+        void update();
+        void render_offscreen(ff::dxgi::command_context_base& context);
+        void render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target);
 
     private:
         void find_next_player();
@@ -32,7 +28,6 @@ namespace game
         void init_next_level();
         void init_shooters();
         void init_playing_resources();
-        void init_resources();
 
         game::audio audio;
         game::levels levels;
@@ -41,7 +36,10 @@ namespace game
         game::updater updater;
         game::renderer renderer;
 
-        std::shared_ptr<game::title_state> title_state;
         std::unique_ptr<ff::input_event_provider> player_input[game::constants::MAX_PLAYERS];
+        std::unique_ptr<ff::palette_cycle> palette[game::constants::MAX_PLAYERS];
+
+        // rendering
+        std::shared_ptr<ff::dxgi::depth_base> depth;
     };
 }

@@ -27,13 +27,7 @@
     <ClCompile Include="core\updater.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="states\app_state.cpp">
-      <Filter>states</Filter>
-    </ClCompile>
     <ClCompile Include="states\play_state.cpp">
-      <Filter>states</Filter>
-    </ClCompile>
-    <ClCompile Include="states\title_state.cpp">
       <Filter>states</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,13 +54,7 @@
     <ClInclude Include="core\updater.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="states\app_state.h">
-      <Filter>states</Filter>
-    </ClInclude>
     <ClInclude Include="states\play_state.h">
-      <Filter>states</Filter>
-    </ClInclude>
-    <ClInclude Include="states\title_state.h">
       <Filter>states</Filter>
     </ClInclude>
   </ItemGroup>

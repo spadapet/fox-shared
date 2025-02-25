@@ -194,8 +194,9 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
 
             if (anim)
             {
-                ff::dxgi::palette_base* palette = ff::game::root_state_base::get().palette(player.index);
-                draw.push_palette(palette);
+                // TODO: Somehow get palettes (pass in?)
+                //ff::dxgi::palette_base* palette = ff::game::root_state_base::get().palette(player.index);
+                //draw.push_palette(palette);
 
                 int rotation = game::dir_to_degrees<int>((player.dir != game::dir::none) ? player.dir : (i ? game::dir::down : game::dir::up));
                 ff::pixel_transform transform(player.pos.cast<ff::fixed_int>(), ff::point_fixed(1, 1), rotation);
@@ -208,7 +209,7 @@ void game::renderer::render(ff::dxgi::draw_base& draw, const game::play_level& p
                     draw.draw_circle(point, 1);
                 }
 
-                draw.pop_palette();
+                //draw.pop_palette();
 #if DEBUG
                 //draw.draw_palette_outline_rectangle((game::constants::player_hit_box(player.index, player.dir) + player.pos).cast<ff::fixed_int>(), 247, 1);
 #endif
