@@ -19,7 +19,7 @@ namespace game
         void input();
         void update();
         void render_offscreen(ff::dxgi::command_context_base& context);
-        void render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target);
+        void render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth);
 
     private:
         void find_next_player();
@@ -38,8 +38,5 @@ namespace game
 
         std::unique_ptr<ff::input_event_provider> player_input[game::constants::MAX_PLAYERS];
         std::unique_ptr<ff::palette_cycle> palette[game::constants::MAX_PLAYERS];
-
-        // rendering
-        std::shared_ptr<ff::dxgi::depth_base> depth;
     };
 }

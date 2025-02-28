@@ -14,7 +14,6 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
         (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
     }
     , play_level{ &this->game_data, &this->audio }
-    , depth(ff::dxgi::create_depth({}))
 {
     this->init_resources();
 }
@@ -105,11 +104,11 @@ void game::play_state::render_offscreen(ff::dxgi::command_context_base& context)
 {
 }
 
-void game::play_state::render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target)
+void game::play_state::render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
     if (this->renderer.can_render(this->play_level))
     {
-        if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, this->depth.get()))
+        if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, &depth))
         {
             draw->push_palette(this->palette[0].get());
             this->renderer.render(*draw, this->play_level);
