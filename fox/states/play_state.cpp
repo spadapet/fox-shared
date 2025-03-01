@@ -5,6 +5,7 @@
 
 constexpr float PALETTE_CYCLES_PER_SECOND = 0.25f;
 constexpr int PALETTE_BLACK = 240;
+static const ff::color COLOR_BLACK(::PALETTE_BLACK);
 
 game::play_state::play_state(game::game_type game_type, game::game_diff game_diff)
     : game_data
@@ -14,6 +15,9 @@ game::play_state::play_state(game::game_type game_type, game::game_diff game_dif
         (game_type == game::game_type::none) ? game::game_state::title : game::game_state::play_init_from_title,
     }
     , play_level{ &this->game_data, &this->audio }
+    , texture_low(ff::dxgi::create_render_texture(game::constants::RENDER_SIZE.cast<size_t>(), DXGI_FORMAT_R8_UINT, 1, 1, 1, &::COLOR_BLACK))
+    , target_low(ff::dxgi::create_target_for_texture(this->texture_low.dxgi_texture()))
+    , depth_low(ff::dxgi::create_depth(game::constants::RENDER_SIZE.cast<size_t>()))
 {
     this->init_resources();
 }
@@ -102,18 +106,30 @@ void game::play_state::update()
 
 void game::play_state::render_offscreen(ff::dxgi::command_context_base& context)
 {
+    check_ret(this->renderer.can_render(this->play_level));
+    check_ret(this->target_low->begin_render(context, &::COLOR_BLACK));
+
+    if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, *this->target_low, this->depth_low.get()))
+    {
+        this->renderer.render(*draw, this->play_level);
+    }
+
+    this->target_low->end_render(context);
 }
 
 void game::play_state::render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    if (this->renderer.can_render(this->play_level))
+    check_ret(this->renderer.can_render(this->play_level));
+
+    ff::viewport viewport(game::constants::RENDER_SIZE.cast<size_t>());
+    ff::rect_float view_rect = viewport.view(target.size().logical_scaled_size<size_t>()).cast<float>();
+
+    if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, &depth))
     {
-        if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, &depth))
-        {
-            draw->push_palette(this->palette[0].get());
-            this->renderer.render(*draw, this->play_level);
-            draw->pop_palette();
-        }
+        ff::point_float view_scale = view_rect.size() / game::constants::RENDER_SIZE.cast<float>();
+        draw->push_palette(this->palette[0].get());
+        draw->draw_sprite(this->texture_low.sprite_data(), ff::transform(view_rect.top_left(), view_scale));
+        draw->pop_palette();
     }
 }
 

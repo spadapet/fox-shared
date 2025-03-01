@@ -38,5 +38,9 @@ namespace game
 
         std::unique_ptr<ff::input_event_provider> player_input[game::constants::MAX_PLAYERS];
         std::unique_ptr<ff::palette_cycle> palette[game::constants::MAX_PLAYERS];
+
+        ff::texture texture_low; // low resolution palette texture
+        std::shared_ptr<ff::dxgi::target_base> target_low;
+        std::shared_ptr<ff::dxgi::depth_base> depth_low;
     };
 }
