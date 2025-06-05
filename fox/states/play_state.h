@@ -19,7 +19,7 @@ namespace game
         void input();
         void update();
         void render_offscreen(ff::dxgi::command_context_base& context);
-        void render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth);
+        void render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target);
 
     private:
         void find_next_player();

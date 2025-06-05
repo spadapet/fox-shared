@@ -117,14 +117,14 @@ void game::play_state::render_offscreen(ff::dxgi::command_context_base& context)
     this->target_low->end_render(context);
 }
 
-void game::play_state::render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
+void game::play_state::render(ff::dxgi::command_context_base& context, ff::dxgi::target_base& target)
 {
     check_ret(this->renderer.can_render(this->play_level));
 
     ff::viewport viewport(game::constants::RENDER_SIZE.cast<size_t>());
     ff::rect_float view_rect = viewport.view(target.size().logical_scaled_size<size_t>()).cast<float>();
 
-    if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, &depth))
+    if (ff::dxgi::draw_ptr draw = ff::dxgi::global_draw_device().begin_draw(context, target, nullptr))
     {
         ff::point_float view_scale = view_rect.size() / game::constants::RENDER_SIZE.cast<float>();
         draw->push_palette(this->palette[0].get());
